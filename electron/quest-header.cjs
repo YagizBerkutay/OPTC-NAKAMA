@@ -47,7 +47,8 @@ function sameQuestHeader(a,b,samePixels){
    }
    const ux=xs[startI].x,vx=ys[startJ].x-shift;
    const uw=xs[i-1].x+xs[i-1].width-ux,vw=ys[j-1].x+ys[j-1].width-ys[startJ].x;
-   if(u!==v||Math.abs(ux-vx)>2||Math.abs(uw-vw)>3)return false;
+   // Allow minor OCR split differences and render jitter (up to 5px instead of 2px)
+   if(u!==v||Math.abs(ux-vx)>5||Math.abs(uw-vw)>6)return false;
   }
   return i===xs.length&&j===ys.length;
  });

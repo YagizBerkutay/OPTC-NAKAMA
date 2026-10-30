@@ -90,10 +90,20 @@ function joinMarquee(a,b){
   }
   for(const [prefix,suffix]of [[a,b],[b,a]]){
     const x=mapped(prefix),y=mapped(suffix);
-    for(let n=Math.min(x.key.length,y.key.length);n>=14;n--){
-      if(x.key.slice(-n)!==y.key.slice(0,n))continue;
+    for(let n=Math.min(x.key.length,y.key.length);n>=12;n--){
+      const tailX=x.key.slice(-n),headY=y.key.slice(0,n);
+      let diff=0;
+      for(let k=0;k<n;k++){
+        if(tailX[k]!==headY[k]){
+          // Allow common OCR confusion pairs (0/o, 1/l/i, rn/m, etc.)
+          const c1=tailX[k],c2=headY[k];
+          const similar=(c1==='o'&&c2==='0')||(c1==='0'&&c2==='o')||(c1==='l'&&c2==='1')||(c1==='1'&&c2==='l')||(c1==='i'&&c2==='l')||(c1==='l'&&c2==='i');
+          if(!similar&&++diff>1)break;
+        }
+      }
+      if(diff>1)continue;
       const overlap=prefix.slice(x.ends[x.key.length-n-1]||0);
-      if((overlap.match(/[a-z]+/gi)||[]).length<3)continue;
+      if((overlap.match(/[a-z]+/gi)||[]).length<2)continue;
       return prefix+suffix.slice(y.ends[n-1]);
     }
   }
