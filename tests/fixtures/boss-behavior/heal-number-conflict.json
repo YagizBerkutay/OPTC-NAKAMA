@@ -1,0 +1,696 @@
+{
+  "runId": "c2feeb64-0105-479b-8f96-1ee4a797d8c7",
+  "time": "2026-10-20T16:46:28.916Z",
+  "page": 7,
+  "retry": 2,
+  "body": {
+    "left": 98,
+    "top": 418,
+    "width": 705,
+    "height": 846
+  },
+  "evidence": {
+    "shift": 392,
+    "score": 0.8946731234866828,
+    "support": 739,
+    "bands": 4,
+    "verified": true
+  },
+  "existing": [
+    {
+      "kind": "heading",
+      "text": "BEHAVIOR",
+      "position": {
+        "top": 1185,
+        "height": 29.5,
+        "left": 357.5,
+        "page": 1,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 1,
+      "variant": "",
+      "text": "BATTLE 1",
+      "position": {
+        "top": -627.5,
+        "height": 26,
+        "left": 359.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "starting",
+      "label": "STARTING STATE Land of wano Official",
+      "text": "STARTING STATE Land of wano Official",
+      "position": {
+        "top": -563,
+        "height": 20,
+        "left": 292.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "3 turn(s) Tap-Timino Barrier (PERFECT 2 time(s))))))))))))))))",
+      "marquee": {
+        "complete": false,
+        "samples": 2
+      },
+      "position": {
+        "top": -496.5,
+        "height": 27,
+        "left": 179,
+        "page": 2,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "starting",
+      "label": "STARTING STATE Land of wano Official",
+      "text": "STARTING STATE Land of wano Official",
+      "position": {
+        "top": -415.25,
+        "height": 20.25,
+        "left": 292.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "3 turn(s) Tap-Timino Barrier (PERFECT 2 time(s))))))))))))))))",
+      "marquee": {
+        "complete": false,
+        "samples": 2
+      },
+      "position": {
+        "top": -348.5,
+        "height": 26.5,
+        "left": 179,
+        "page": 2,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "starting",
+      "label": "STARTING STATE Land of wano Official",
+      "text": "STARTING STATE Land of wano Official",
+      "position": {
+        "top": -267.5,
+        "height": 20.25,
+        "left": 292.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "3 turn(s) Tap-Timino Barrier (PERFECT 2 time(s))))))))))))))))",
+      "marquee": {
+        "complete": false,
+        "samples": 3
+      },
+      "position": {
+        "top": -201,
+        "height": 27,
+        "left": 177,
+        "page": 2,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı",
+      "text": "PREEMPTIVE",
+      "position": {
+        "top": -122.25,
+        "height": 26.25,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "98 turn(s) Chain Multiplier Max. 1.1 x",
+      "position": {
+        "top": -54.5,
+        "height": 27,
+        "left": 178,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 2,
+      "variant": "",
+      "text": "BATTLE 2",
+      "position": {
+        "top": 68,
+        "height": 26.5,
+        "left": 360,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "starting",
+      "label": "STARTING STATE Land of wano Official",
+      "text": "STARTING STATE Land of wano Official",
+      "position": {
+        "top": 132.5,
+        "height": 20.25,
+        "left": 292.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "3 turn(s) Slot Barrier ([DEX] Slots 1 time(s",
+      "marquee": {
+        "complete": true,
+        "samples": 3
+      },
+      "position": {
+        "top": 199,
+        "height": 27,
+        "left": 189,
+        "page": 2,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "starting",
+      "label": "STARTING STATE Land of wano Official",
+      "text": "STARTING STATE Land of wano Official",
+      "position": {
+        "top": 280.5,
+        "height": 20,
+        "left": 292.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "3 turn(s) Slot Barrier ([DEX] Slots 1 time(s",
+      "marquee": {
+        "complete": true,
+        "samples": 3
+      },
+      "position": {
+        "top": 346.5,
+        "height": 27.5,
+        "left": 189,
+        "page": 2,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "defeated",
+      "label": "Yenilince",
+      "text": "DEFEATED",
+      "position": {
+        "top": 428,
+        "height": 21.25,
+        "page": 2,
+        "edge": true,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Percentage damage 90% of current HP",
+      "position": {
+        "top": 497,
+        "height": 24.5,
+        "left": 177.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 3,
+      "variant": "",
+      "text": "BATTLE 3",
+      "position": {
+        "top": 616,
+        "height": 26.5,
+        "left": 360,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "defeated",
+      "label": "Yenilince",
+      "text": "DEFEATED",
+      "position": {
+        "top": 680.25,
+        "height": 21.25,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Percentage damage 90% of current HP",
+      "position": {
+        "top": 749,
+        "height": 24.5,
+        "left": 177.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 4,
+      "variant": "",
+      "text": "BATTLE 4",
+      "position": {
+        "top": 868,
+        "height": 26.5,
+        "left": 360,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı",
+      "text": "PREEMPTIVE",
+      "position": {
+        "top": 930.5,
+        "height": 25,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "to [Unfavorable] Slots",
+      "marquee": {
+        "complete": true,
+        "samples": 2
+      },
+      "position": {
+        "top": 998.5,
+        "height": 27,
+        "left": 456.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "7 turn(s) Top-Row , Middle-Row Bind",
+      "position": {
+        "top": 1054,
+        "height": 27,
+        "left": 178,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "98 turn(s) Heal 400000 HP at end of turn",
+      "position": {
+        "top": 1110.5,
+        "height": 26.5,
+        "left": 178,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "a turn(s) Reduce damage taken 99%",
+      "marquee": {
+        "complete": false,
+        "samples": 1
+      },
+      "position": {
+        "top": 1166.5,
+        "height": 26.5,
+        "left": 177,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    }
+  ],
+  "before": [
+    {
+      "kind": "event",
+      "trigger": "defeated",
+      "label": "Yenilince",
+      "text": "DEFEATED",
+      "position": {
+        "top": 428,
+        "height": 21.25,
+        "page": 2,
+        "edge": true,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Percentage damage 90% of current HP",
+      "position": {
+        "top": 497,
+        "height": 24.5,
+        "left": 177.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 3,
+      "variant": "",
+      "text": "BATTLE 3",
+      "position": {
+        "top": 616,
+        "height": 26.5,
+        "left": 360,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "defeated",
+      "label": "Yenilince",
+      "text": "DEFEATED",
+      "position": {
+        "top": 680.25,
+        "height": 21.25,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Percentage damage 90% of current HP",
+      "position": {
+        "top": 749,
+        "height": 24.5,
+        "left": 177.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 4,
+      "variant": "",
+      "text": "BATTLE 4",
+      "position": {
+        "top": 868,
+        "height": 26.5,
+        "left": 360,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı",
+      "text": "PREEMPTIVE",
+      "position": {
+        "top": 930.5,
+        "height": 25,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "to [Unfavorable] Slots",
+      "marquee": {
+        "complete": true,
+        "samples": 2
+      },
+      "position": {
+        "top": 998.5,
+        "height": 27,
+        "left": 456.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "7 turn(s) Top-Row , Middle-Row Bind",
+      "position": {
+        "top": 1054,
+        "height": 27,
+        "left": 178,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "98 turn(s) Heal 400000 HP at end of turn",
+      "position": {
+        "top": 1110.5,
+        "height": 26.5,
+        "left": 178,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "a turn(s) Reduce damage taken 99%",
+      "marquee": {
+        "complete": false,
+        "samples": 1
+      },
+      "position": {
+        "top": 1166.5,
+        "height": 26.5,
+        "left": 177,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    }
+  ],
+  "after": [
+    {
+      "kind": "battle",
+      "number": 4,
+      "variant": "",
+      "text": "BATTLE 4",
+      "position": {
+        "top": 476,
+        "height": 26.5,
+        "left": 360,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı",
+      "text": "PREEMPTIVE",
+      "position": {
+        "top": 540.25,
+        "height": 21.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "to [Unfavora",
+      "marquee": {
+        "complete": false,
+        "samples": 3
+      },
+      "position": {
+        "top": 606.5,
+        "height": 27,
+        "left": 603,
+        "page": 3,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "line",
+      "text": "7 turn(s) Top-Row Middle-Row Bind",
+      "position": {
+        "top": 661.5,
+        "height": 27,
+        "left": 178,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "98 turn(s) Heal 000000 HP at end of turn",
+      "position": {
+        "top": 718,
+        "height": 27,
+        "left": 178,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "a turn(s) Reduce damage taken 99%",
+      "marquee": {
+        "complete": false,
+        "samples": 1
+      },
+      "position": {
+        "top": 774,
+        "height": 27,
+        "left": 177,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 5,
+      "variant": "",
+      "text": "BATTLE 5",
+      "position": {
+        "top": 897,
+        "height": 26,
+        "left": 360,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı",
+      "text": "PREEMPTIVE",
+      "position": {
+        "top": 959,
+        "height": 25.25,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "QCK type change",
+      "position": {
+        "top": 1030,
+        "height": 24.5,
+        "left": 177.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "98 turn(s) Delay Immunity",
+      "position": {
+        "top": 1082.5,
+        "height": 27,
+        "left": 178,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "2 turn(s) Remove SFX",
+      "position": {
+        "top": 1138.5,
+        "height": 27,
+        "left": 179,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "a turn(s) ATK Down",
+      "marquee": {
+        "complete": false,
+        "samples": 1
+      },
+      "position": {
+        "top": 1195,
+        "height": 26.5,
+        "left": 177,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    }
+  ]
+}

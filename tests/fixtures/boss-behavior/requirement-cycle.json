@@ -1,0 +1,20 @@
+{
+  "button": {
+    "text": "REQUIREMENT",
+    "x": 516,
+    "y": 1094,
+    "width": 144,
+    "height": 41
+  },
+  "identity": {
+    "title": "Clash!! CP-9: Six King Pistol",
+    "difficulty": 10
+  },
+  "crop": {
+    "left": 97,
+    "top": 1001,
+    "width": 618,
+    "height": 77
+  },
+  "count": 26
+}

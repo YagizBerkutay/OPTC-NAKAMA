@@ -1,0 +1,92 @@
+import { _electron as electron } from 'playwright';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { DatabaseSync } from 'node:sqlite';
+
+const profile = path.resolve('.local/planning-test-' + Date.now());
+fs.mkdirSync(profile, { recursive: true });
+const original = JSON.parse(fs.readFileSync('.local/box-before-040.json', 'utf8'));
+const db = new DatabaseSync(path.join(profile, 'nakama.sqlite'));
+db.exec('CREATE TABLE state(id INTEGER PRIMARY KEY,payload TEXT NOT NULL);');
+db.prepare('INSERT INTO state VALUES(1,?)').run(JSON.stringify(original)); db.close();
+const packaged = process.argv.includes('--packaged');
+let app;
+const report = { box: original.box.length, packaged, scenarios: {}, errors: [] };
+const sourceData = JSON.parse(fs.readFileSync('public/data/planner.json', 'utf8'));
+async function assertLegalCrews(page) {
+  const crews = await page.locator('.plan-result').evaluateAll(cards => cards.map(card => [...card.querySelectorAll('.plan-slot')].filter(slot => !slot.querySelector('.slot').textContent.includes('ARKADAŞ')).map(slot => slot.querySelector('.avatar small').textContent.replace('#', ''))));
+  for (const ids of crews) {
+    assert.ok(ids.length >= 5 && ids.length <= 8);
+    const families = ids.flatMap(id => sourceData.units[id].families);
+    assert.equal(new Set(families).size, families.length, 'Duplicate character identity: ' + ids.join(','));
+  }
+}
+try {
+  app = await electron.launch({ executablePath: path.resolve(packaged ? 'release/win-unpacked/OPTC Nakama.exe' : 'node_modules/electron/dist/electron.exe'), args: packaged ? ['--disable-gpu'] : ['.', '--disable-gpu'], env: { ...process.env, OPTC_TEST_PROFILE: profile }, timeout: 60000 });
+  const page = await app.firstWindow();
+  page.on('pageerror', e => report.errors.push(e.message));
+  await page.getByRole('heading', { name: 'Rotanı belirle.' }).waitFor();
+  const before = JSON.parse(await page.evaluate(() => window.nakama.load()));
+  await page.locator('nav').getByRole('button', { name: 'Pirate Rumble' }).click();
+  await page.getByRole('button', { name: 'En güçlü Rumble kadrolarını kur' }).click({ timeout: 30000 });
+  await page.locator('[data-scenario="power"] .plan-result').first().waitFor({ timeout: 60000 });
+  assert.equal(await page.locator('[data-scenario="current"] .plan-result .plan-crew.five .plan-slot').count(), 15);
+  assert.equal(await page.locator('[data-scenario="power"] .plan-result').first().locator('.reserves .plan-slot').count(),3);
+  await page.locator('[data-scenario="power"] .plan-result').first().scrollIntoViewIfNeeded();
+  await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
+  fs.writeFileSync('.local/rumble-040-ui.png',Buffer.from(await app.evaluate(async({BrowserWindow})=>(await BrowserWindow.getAllWindows()[0].webContents.capturePage()).toPNG().toString('base64')),'base64'));
+  for (const scenario of ['current', 'power', 'evolve']) assert.ok(await page.locator(`[data-scenario="${scenario}"] .plan-result`).count());
+  await assertLegalCrews(page);
+  report.scenarios.rumble = await page.locator('.scenario-heading h2').allTextContents();
+  await page.locator('nav').getByRole('button', { name: 'Boss planı' }).click();
+  await page.waitForFunction(()=>document.querySelector('.guide-import [role="status"]').textContent.includes('yüklendi')||document.querySelector('.guide-import [role="status"]').textContent.includes('alındı'),undefined,{timeout:45000});
+  assert.ok((await page.getByLabel('Hazır boss').inputValue()).startsWith('guide-'));
+  await page.waitForFunction(()=>document.querySelector('[aria-label="Online boss rehberi"]').options.length>10);
+  const guides=await page.getByLabel('Online boss rehberi').locator('option').count();assert.ok(guides>20);report.guides=guides-1;
+  await page.getByLabel('Online boss rehberi').selectOption('https://onepiecetreasurecruise.fr/Arene/Fransuke.html');
+  await page.waitForFunction(()=>document.querySelector('.stage-list').textContent.includes('Fransuké'),undefined,{timeout:30000});
+  assert.ok((await page.locator('.stage-list').innerText()).includes('Zorojuro'));
+  await page.getByLabel('Online boss rehberi').selectOption('https://onepiecetreasurecruise.fr/Arene/Mihawk.html');
+  await page.waitForFunction(()=>document.querySelector('.stage-list').textContent.includes('Doflamingo'),undefined,{timeout:30000});
+  assert.ok((await page.locator('.stage-list').innerText()).includes('Doflamingo'));
+  await page.getByRole('button', { name: 'Bu bossa göre otomatik kadro kur' }).click();
+  await page.locator('[data-scenario="power"] .plan-result').first().waitFor({ timeout: 90000 });
+  assert.ok(await page.locator('.schedule').count());
+  await assertLegalCrews(page);
+  report.scenarios.boss = await page.locator('.scenario-heading h2').allTextContents();
+  await page.locator('nav').getByRole('button', { name: 'Otomatik kadrolar' }).click();
+  await page.getByLabel('Takım türü').selectOption('Fighter');
+  await page.getByRole('button', { name: 'En iyi kadroları oluştur', exact: true }).click();
+  await page.locator('[data-scenario="evolve"] .plan-result').first().waitFor({ timeout: 60000 });
+  assert.ok(await page.locator('[data-scenario="evolve"] .evolution-recipes').count());
+  assert.equal(await page.locator('[data-scenario="power"] .evolution-recipes').count(), 0);
+  await assertLegalCrews(page);
+  report.scenarios.fighter = await page.locator('.scenario-heading h2').allTextContents();
+  const slots = await page.locator('[data-scenario="evolve"] .plan-result').first().locator('.plan-slot').evaluateAll(slots => slots.map(s => ({ width: s.getBoundingClientRect().width, text: s.textContent })));
+  assert.ok(slots.every(s => s.width >= 85 && s.text.includes('Fighter')));
+  await page.locator('[data-scenario="evolve"] .plan-result').first().scrollIntoViewIfNeeded();
+  await page.waitForFunction(() => [...document.querySelector('[data-scenario="evolve"] .plan-result').querySelectorAll('img')].every(image => image.complete && image.naturalWidth > 0), undefined, { timeout: 30000 });
+  const images = await page.locator('[data-scenario="evolve"] .plan-result').first().locator('img').evaluateAll(images => images.map(i => ({ src: i.src, loaded: i.complete && i.naturalWidth > 0 })));
+  assert.ok(images.every(i => i.loaded));
+  report.images = images;
+  const fighterShot = await app.evaluate(async ({ BrowserWindow }) => (await BrowserWindow.getAllWindows()[0].webContents.capturePage()).toPNG().toString('base64'));
+  fs.writeFileSync('.local/planner-fighter-ui.png', Buffer.from(fighterShot, 'base64'));
+  await page.getByRole('button', { name: '13 tip / sınıf takımını birlikte öner' }).click();
+  await page.locator('.category-result').last().waitFor({ timeout: 120000 });
+  assert.equal(await page.locator('.category-result').count(), 13);
+  await assertLegalCrews(page);
+  report.categories = await page.locator('.category-result>summary').allTextContents();
+  const after = JSON.parse(await page.evaluate(() => window.nakama.load()));
+  assert.deepEqual(after, before);
+  assert.equal(await page.evaluate(async () => { try { await window.nakama.openExternal('file:///C:/Windows/System32/cmd.exe'); return false; } catch { return true; } }), true);
+  assert.equal(await page.evaluate(async () => { try { await window.nakama.openExternal('https://example.com'); return false; } catch { return true; } }), true);
+  assert.deepEqual(report.errors, []);
+  // Capture this app's own rendered page; no emulator or desktop state is touched.
+  await page.locator('nav').getByRole('button', { name: 'Otomatik kadrolar' }).click();
+  const shot = await app.evaluate(async ({ BrowserWindow }) => (await BrowserWindow.getAllWindows()[0].webContents.capturePage()).toPNG().toString('base64'));
+  fs.writeFileSync('.local/planner-ui.png', Buffer.from(shot, 'base64'));
+  report.success = true;
+  fs.writeFileSync('.local/planner-desktop-result.json', JSON.stringify(report, null, 2));
+  console.log(JSON.stringify(report, null, 2));
+} finally { await app?.close(); }

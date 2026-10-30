@@ -1,0 +1,519 @@
+{
+  "lines": [
+    {
+      "text": "7:51",
+      "words": [
+        {
+          "y": 10,
+          "height": 16,
+          "width": 38.5,
+          "text": "7:51",
+          "x": 12
+        }
+      ]
+    },
+    {
+      "text": "Clash!! CP-9: Six King Pistol",
+      "words": [
+        {
+          "y": 178.5,
+          "height": 26.5,
+          "width": 117,
+          "text": "Clash!!",
+          "x": 198
+        },
+        {
+          "y": 178.5,
+          "height": 26.5,
+          "width": 95,
+          "text": "CP-9:",
+          "x": 332
+        },
+        {
+          "y": 178.5,
+          "height": 26.5,
+          "width": 55,
+          "text": "Six",
+          "x": 443
+        },
+        {
+          "y": 178.5,
+          "height": 32,
+          "width": 74,
+          "text": "King",
+          "x": 513
+        },
+        {
+          "y": 178.5,
+          "height": 26.5,
+          "width": 100,
+          "text": "Pistol",
+          "x": 602
+        }
+      ]
+    },
+    {
+      "text": "Difficulty 1 ()",
+      "words": [
+        {
+          "y": 269,
+          "height": 34,
+          "width": 149,
+          "text": "Difficulty",
+          "x": 298.5
+        },
+        {
+          "y": 268,
+          "height": 31,
+          "width": 11.5,
+          "text": "1",
+          "x": 533
+        },
+        {
+          "y": 268,
+          "height": 32,
+          "width": 24,
+          "text": "()",
+          "x": 564.5
+        }
+      ]
+    },
+    {
+      "text": "QUEST INFO",
+      "words": [
+        {
+          "y": 348,
+          "height": 24.5,
+          "width": 102,
+          "text": "QUEST",
+          "x": 188.5
+        },
+        {
+          "y": 348.5,
+          "height": 24,
+          "width": 69.5,
+          "text": "INFO",
+          "x": 303.5
+        }
+      ]
+    },
+    {
+      "text": "QUEST GUIDE",
+      "words": [
+        {
+          "y": 348,
+          "height": 25,
+          "width": 102.5,
+          "text": "QUEST",
+          "x": 515
+        },
+        {
+          "y": 348,
+          "height": 25,
+          "width": 94,
+          "text": "GUIDE",
+          "x": 629
+        }
+      ]
+    },
+    {
+      "text": "98 turn(s) Chain Multiplier Growth Rate x C",
+      "words": [
+        {
+          "y": 465,
+          "height": 20.5,
+          "width": 35.5,
+          "text": "98",
+          "x": 178
+        },
+        {
+          "y": 461.5,
+          "height": 27,
+          "width": 88.5,
+          "text": "turn(s)",
+          "x": 227
+        },
+        {
+          "y": 465,
+          "height": 20.5,
+          "width": 73.5,
+          "text": "Chain",
+          "x": 327
+        },
+        {
+          "y": 465,
+          "height": 23.5,
+          "width": 132,
+          "text": "Multiplier",
+          "x": 411
+        },
+        {
+          "y": 465,
+          "height": 20.5,
+          "width": 95.5,
+          "text": "Growth",
+          "x": 553.5
+        },
+        {
+          "y": 465,
+          "height": 20.5,
+          "width": 59,
+          "text": "Rate",
+          "x": 659
+        },
+        {
+          "y": 471,
+          "height": 14.5,
+          "width": 14.5,
+          "text": "x",
+          "x": 730
+        },
+        {
+          "y": 465,
+          "height": 20.5,
+          "width": 14,
+          "text": "C",
+          "x": 754.5
+        }
+      ]
+    },
+    {
+      "text": "Retreat",
+      "words": [
+        {
+          "y": 520,
+          "height": 20.5,
+          "width": 100.5,
+          "text": "Retreat",
+          "x": 177.5
+        }
+      ]
+    },
+    {
+      "text": "BATTLE 2",
+      "words": [
+        {
+          "y": 639,
+          "height": 26,
+          "width": 143.5,
+          "text": "BATTLE",
+          "x": 359.5
+        },
+        {
+          "y": 639,
+          "height": 26,
+          "width": 20,
+          "text": "2",
+          "x": 519
+        }
+      ]
+    },
+    {
+      "text": "cannoneer Apprentice",
+      "words": [
+        {
+          "y": 706,
+          "height": 20.5,
+          "width": 143,
+          "text": "cannoneer",
+          "x": 293
+        },
+        {
+          "y": 705.5,
+          "height": 25,
+          "width": 148,
+          "text": "Apprentice",
+          "x": 446.5
+        }
+      ]
+    },
+    {
+      "text": "3 turn(s) Tap-Timino Barrier (GOOD 1 timel",
+      "words": [
+        {
+          "y": 773.5,
+          "height": 20.5,
+          "width": 15,
+          "text": "3",
+          "x": 179
+        },
+        {
+          "y": 769.5,
+          "height": 27,
+          "width": 88.5,
+          "text": "turn(s)",
+          "x": 207
+        },
+        {
+          "y": 773,
+          "height": 23.5,
+          "width": 150.5,
+          "text": "Tap-Timino",
+          "x": 307
+        },
+        {
+          "y": 773,
+          "height": 21,
+          "width": 100,
+          "text": "Barrier",
+          "x": 468.5
+        },
+        {
+          "y": 770,
+          "height": 26.5,
+          "width": 89,
+          "text": "(GOOD",
+          "x": 578.5
+        },
+        {
+          "y": 773.5,
+          "height": 20.5,
+          "width": 9.5,
+          "text": "1",
+          "x": 683
+        },
+        {
+          "y": 773,
+          "height": 21,
+          "width": 60,
+          "text": "timel",
+          "x": 708.5
+        }
+      ]
+    },
+    {
+      "text": "Ensign",
+      "words": [
+        {
+          "y": 853.5,
+          "height": 25,
+          "width": 86,
+          "text": "Ensign",
+          "x": 415.5
+        }
+      ]
+    },
+    {
+      "text": "3 turn(s) Tap-Timino Barrier (PERFECT 2 t",
+      "words": [
+        {
+          "y": 921,
+          "height": 20.5,
+          "width": 15,
+          "text": "3",
+          "x": 179
+        },
+        {
+          "y": 917.5,
+          "height": 27,
+          "width": 88.5,
+          "text": "turn(s)",
+          "x": 207
+        },
+        {
+          "y": 921,
+          "height": 23.5,
+          "width": 150.5,
+          "text": "Tap-Timino",
+          "x": 307
+        },
+        {
+          "y": 921,
+          "height": 21,
+          "width": 100,
+          "text": "Barrier",
+          "x": 468.5
+        },
+        {
+          "y": 917.5,
+          "height": 27,
+          "width": 136.5,
+          "text": "(PERFECT",
+          "x": 578.5
+        },
+        {
+          "y": 921,
+          "height": 20.5,
+          "width": 15,
+          "text": "2",
+          "x": 727
+        },
+        {
+          "y": 921,
+          "height": 21,
+          "width": 10,
+          "text": "t",
+          "x": 755
+        }
+      ]
+    },
+    {
+      "text": "Apprentice",
+      "words": [
+        {
+          "y": 1001.5,
+          "height": 25,
+          "width": 147.5,
+          "text": "Apprentice",
+          "x": 408.5
+        }
+      ]
+    },
+    {
+      "text": "3 turn(s) Tap-Timino Barrier (GREAT 1 timi",
+      "words": [
+        {
+          "y": 1069,
+          "height": 20.5,
+          "width": 15,
+          "text": "3",
+          "x": 179
+        },
+        {
+          "y": 1065.5,
+          "height": 27,
+          "width": 88.5,
+          "text": "turn(s)",
+          "x": 207
+        },
+        {
+          "y": 1069,
+          "height": 23.5,
+          "width": 150.5,
+          "text": "Tap-Timino",
+          "x": 307
+        },
+        {
+          "y": 1069,
+          "height": 20.5,
+          "width": 100,
+          "text": "Barrier",
+          "x": 468.5
+        },
+        {
+          "y": 1065.5,
+          "height": 27,
+          "width": 105.5,
+          "text": "(GREAT",
+          "x": 578.5
+        },
+        {
+          "y": 1069,
+          "height": 20.5,
+          "width": 9.5,
+          "text": "1",
+          "x": 698.5
+        },
+        {
+          "y": 1069,
+          "height": 20.5,
+          "width": 44.5,
+          "text": "timi",
+          "x": 724
+        }
+      ]
+    },
+    {
+      "text": "BATTLE 3",
+      "words": [
+        {
+          "y": 1186.5,
+          "height": 26.5,
+          "width": 143.5,
+          "text": "BATTLE",
+          "x": 359.5
+        },
+        {
+          "y": 1187,
+          "height": 26,
+          "width": 19.5,
+          "text": "3",
+          "x": 519
+        }
+      ]
+    },
+    {
+      "text": "DDCCLADTIUC",
+      "words": [
+        {
+          "y": 1251,
+          "height": 12.5,
+          "width": 158,
+          "text": "DDCCLADTIUC",
+          "x": 117.5
+        }
+      ]
+    },
+    {
+      "text": "ADVENTURE;",
+      "words": [
+        {
+          "y": 1440,
+          "height": 20.5,
+          "width": 142,
+          "text": "ADVENTURE;",
+          "x": 27
+        }
+      ]
+    },
+    {
+      "text": "0K",
+      "words": [
+        {
+          "y": 1333,
+          "height": 20.5,
+          "width": 38.5,
+          "text": "0K",
+          "x": 431
+        }
+      ]
+    },
+    {
+      "text": "TOME'",
+      "words": [
+        {
+          "y": 1433,
+          "height": 27,
+          "width": 95,
+          "text": "TOME'",
+          "x": 404.5
+        }
+      ]
+    },
+    {
+      "text": "TAVERN",
+      "words": [
+        {
+          "y": 1437.5,
+          "height": 21,
+          "width": 103.5,
+          "text": "TAVERN",
+          "x": 576
+        }
+      ]
+    },
+    {
+      "text": "s RUMBLE—",
+      "words": [
+        {
+          "y": 1452.5,
+          "height": 7.5,
+          "width": 8,
+          "text": "s",
+          "x": 732
+        },
+        {
+          "y": 1449.5,
+          "height": 19.5,
+          "width": 125.5,
+          "text": "RUMBLE—",
+          "x": 753.5
+        }
+      ]
+    }
+  ],
+  "width": 900,
+  "height": 1600,
+  "text": "7:51\nClash!! CP-9: Six King Pistol\nDifficulty 1 ()\nQUEST INFO\nQUEST GUIDE\n98 turn(s) Chain Multiplier Growth Rate x C\nRetreat\nBATTLE 2\ncannoneer Apprentice\n3 turn(s) Tap-Timino Barrier (GOOD 1 timel\nEnsign\n3 turn(s) Tap-Timino Barrier (PERFECT 2 t\nApprentice\n3 turn(s) Tap-Timino Barrier (GREAT 1 timi\nBATTLE 3\nDDCCLADTIUC\nADVENTURE;\n0K\nTOME'\nTAVERN\ns RUMBLE—",
+  "corrections": 0
+}

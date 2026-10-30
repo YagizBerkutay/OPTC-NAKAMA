@@ -1,0 +1,52 @@
+import { _electron as electron } from 'playwright';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import { DatabaseSync } from 'node:sqlite';
+const packaged = process.argv.includes('--packaged');
+const profile = path.resolve('.local/material-test-' + Date.now());
+fs.mkdirSync(profile, { recursive: true });
+const actual = new DatabaseSync(path.join(process.env.APPDATA, 'optc-nakama/nakama.sqlite'), { readOnly: true });
+const original = JSON.parse(actual.prepare('SELECT payload FROM state WHERE id=1').get().payload); actual.close();
+const db = new DatabaseSync(path.join(profile, 'nakama.sqlite')); db.exec('CREATE TABLE state(id INTEGER PRIMARY KEY,payload TEXT NOT NULL)'); db.prepare('INSERT INTO state VALUES(1,?)').run(JSON.stringify(original)); db.close();
+const report = { packaged, box: original.box.length, errors: [] };
+let app;
+try {
+  app = await electron.launch({ executablePath: path.resolve(packaged ? 'release/win-unpacked/OPTC Nakama.exe' : 'node_modules/electron/dist/electron.exe'), args: packaged ? ['--disable-gpu'] : ['.', '--disable-gpu'], env: { ...process.env, OPTC_TEST_PROFILE: profile }, timeout: 60000 });
+  const page = await app.firstWindow(); page.on('pageerror', e => report.errors.push(e.message));
+  await page.getByRole('heading', { name: 'Rotanı belirle.' }).waitFor();
+  const before = JSON.parse(await page.evaluate(() => window.nakama.load()));
+  await page.locator('nav').getByRole('button', { name: 'Pirate Rumble', exact: true }).click();
+  await page.getByLabel('MuMu kurallarını otomatik oku').uncheck();
+  await page.getByRole('button', { name: 'En güçlü Rumble kadrolarını kur', exact: true }).click();
+  await page.locator('[data-scenario="evolve"] .plan-result').first().waitFor({ timeout: 120000 });
+  assert.equal(await page.locator('[data-scenario="current"] .material-item').count(), 0);
+  assert.equal(await page.locator('[data-scenario="power"] .material-item').count(), 0);
+  const odens = page.locator('[data-scenario="evolve"] [data-material="3519-skull"]');
+  assert.ok(await odens.count() > 0, 'Real box evolved plans should include Oden');
+  const oden = odens.first();
+  assert.ok((await oden.innerText()).includes('5×'));
+  assert.ok((await oden.innerText()).includes('Kizuna Clash → Exchange → Kizuna Shop'));
+  assert.ok((await oden.innerText()).includes('Kizuna Insignia'));
+  assert.ok((await oden.innerText()).includes('Kizuna Tickets farklıdır'));
+  await oden.locator('img').evaluate(i => { i.loading = 'eager'; });
+  await page.waitForFunction(() => [...document.querySelectorAll('[data-material="3519-skull"] img')].some(i => i.complete && i.naturalWidth > 0));
+  const history = oden.locator('.material-history');
+  assert.ok(!await history.evaluate(d => d.open));
+  await history.locator('summary').click();
+  assert.ok((await history.innerText()).includes('Blackbeard → Kizuna Exchange'));
+  await history.locator('summary').click();
+  await oden.scrollIntoViewIfNeeded();
+  // Reveal and capture the actual material card in an isolated test window.
+  await app.evaluate(({ BrowserWindow }) => { const w = BrowserWindow.getAllWindows()[0]; w.showInactive(); });
+  await page.waitForTimeout(300);
+  const image = await page.screenshot(); fs.writeFileSync('.local/evolution-materials-054-ui.png', image);
+  assert.equal(await page.locator('.version').innerText(), 'OTOMATİK KADROLAR · v0.5.4');
+  assert.deepEqual(JSON.parse(await page.evaluate(() => window.nakama.load())), before);
+  assert.deepEqual(report.errors, []);
+  report.success = true; report.oden = await oden.innerText(); report.materials = await page.locator('[data-scenario="evolve"] .material-item').count();
+  console.log(JSON.stringify(report, null, 2));
+} finally {
+  fs.writeFileSync('.local/materials-desktop-result.json', JSON.stringify(report, null, 2));
+  await app?.close();
+}

@@ -1,0 +1,1020 @@
+{
+  "runId": "a613a292-070c-4fc3-af75-472961857601",
+  "time": "2026-10-12T19:35:26.636Z",
+  "page": 10,
+  "retry": 2,
+  "body": {
+    "left": 98,
+    "top": 418,
+    "width": 705,
+    "height": 846
+  },
+  "evidence": {
+    "shift": 223,
+    "score": 0.8938953488372093,
+    "support": 615,
+    "bands": 6,
+    "verified": true
+  },
+  "existing": [
+    {
+      "kind": "heading",
+      "text": "BEHAVIOR",
+      "position": {
+        "top": 1185,
+        "height": 29.5,
+        "left": 357.5,
+        "page": 1,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 1,
+      "variant": "",
+      "text": "BATTLE 1",
+      "position": {
+        "top": -1760,
+        "height": 26.5,
+        "left": 359.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı",
+      "text": "PREEMPTIVE",
+      "position": {
+        "top": -1698.25,
+        "height": 26.25,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Percentage damage 50% of current HP",
+      "position": {
+        "top": -1626.5,
+        "height": 24.5,
+        "left": 177.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "29 turn(s) Recovery Amount x 0.2",
+      "position": {
+        "top": -1574,
+        "height": 27,
+        "left": 179,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 3,
+      "variant": "",
+      "text": "BATTLE 3",
+      "position": {
+        "top": -1451.5,
+        "height": 26,
+        "left": 360,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "starting",
+      "label": "STARTING STATE Gunner",
+      "text": "STARTING STATE Gunner",
+      "position": {
+        "top": -1384.5,
+        "height": 20.5,
+        "left": 397,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "10 turn(s) Tap-Timino Barrier (PERFECT a time(s))))))))))))",
+      "marquee": {
+        "complete": true,
+        "samples": 3
+      },
+      "position": {
+        "top": -1320.5,
+        "height": 27,
+        "left": 177,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı",
+      "text": "PREEMPTIVE",
+      "position": {
+        "top": -1241.75,
+        "height": 25.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Percentage damage 30% of current HP",
+      "position": {
+        "top": -1170.5,
+        "height": 25,
+        "left": 177.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "98 turn(s) Lock Target",
+      "position": {
+        "top": -1118,
+        "height": 27,
+        "left": 178,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 4,
+      "variant": "1",
+      "text": "BATTLE 4-1",
+      "position": {
+        "top": -995.5,
+        "height": 26,
+        "left": 340.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı",
+      "text": "PREEMPTIVE",
+      "position": {
+        "top": -933.75,
+        "height": 26.25,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "2 turn(s) Immunity",
+      "position": {
+        "top": -866,
+        "height": 27,
+        "left": 179,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "turn(s) Non-Normal Attacks deal 1 damage",
+      "marquee": {
+        "complete": true,
+        "samples": 2
+      },
+      "position": {
+        "top": -808.5,
+        "height": 27,
+        "left": 182,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "19 turn(s) Special Use Limit 3 time(s)",
+      "position": {
+        "top": -753.5,
+        "height": 27,
+        "left": 181.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Retreat",
+      "position": {
+        "top": -693.5,
+        "height": 20.5,
+        "left": 177.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "defeated",
+      "label": "Yenilince",
+      "text": "DEFEATED",
+      "position": {
+        "top": -614.75,
+        "height": 21.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "20000 damage",
+      "position": {
+        "top": -545.5,
+        "height": 25,
+        "left": 179,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 4,
+      "variant": "2",
+      "text": "BATTLE 4-2",
+      "position": {
+        "top": -426.5,
+        "height": 26,
+        "left": 340.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı",
+      "text": "PREEMPTIVE",
+      "position": {
+        "top": -365.75,
+        "height": 27.75,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "2 turn(s) Immunity",
+      "position": {
+        "top": -297,
+        "height": 27,
+        "left": 179,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "a turn(s) Non-Normal Attacks deal 1 damao",
+      "marquee": {
+        "complete": false,
+        "samples": 4
+      },
+      "position": {
+        "top": -239.5,
+        "height": 27,
+        "left": 182,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "19 turn(s) Special Use Limit 3 time(s)",
+      "position": {
+        "top": -184.5,
+        "height": 27,
+        "left": 181.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Retreat",
+      "position": {
+        "top": -124.5,
+        "height": 20.5,
+        "left": 177.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "defeated",
+      "label": "Yenilince",
+      "text": "DEFEATED",
+      "position": {
+        "top": -45.75,
+        "height": 21.25,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "20000 damage",
+      "position": {
+        "top": 23,
+        "height": 24,
+        "left": 179,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 5,
+      "variant": "",
+      "text": "BATTLE 5",
+      "position": {
+        "top": 142.5,
+        "height": 26,
+        "left": 359.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı · STR type",
+      "text": "PREEMPTIVE STR type",
+      "position": {
+        "top": 209.5,
+        "height": 20,
+        "left": 508,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Remove Beneficial Effects",
+      "position": {
+        "top": 275.5,
+        "height": 21,
+        "left": 177.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "98 turn(s) Delay Immunity",
+      "position": {
+        "top": 324,
+        "height": 35.5,
+        "left": 178,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "98 turn(s) Delay Immunity",
+      "position": {
+        "top": 328.5,
+        "height": 26.5,
+        "left": 178,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "1 2 turn(s) Top-Right Despair",
+      "position": {
+        "top": 384.5,
+        "height": 27,
+        "left": 181.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Top-Row Special Reverse 3 turn(s)",
+      "position": {
+        "top": 440.5,
+        "height": 27,
+        "left": 177.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "to [STR] Slots",
+      "marquee": {
+        "complete": false,
+        "samples": 3
+      },
+      "position": {
+        "top": 497.5,
+        "height": 27,
+        "left": 594.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "line",
+      "text": "3 turn(s) 6000 damage Burn",
+      "position": {
+        "top": 549,
+        "height": 36.5,
+        "left": 179,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı · If TOD-Rioht is DEX QCK PSY INT",
+      "text": "PREEMPTIVE If TOD-Rioht is DEX QCK PSY INT",
+      "marquee": {
+        "complete": true,
+        "samples": 3
+      },
+      "position": {
+        "top": 639.5,
+        "height": 20.5,
+        "left": 436.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Remove Beneficial Effects",
+      "position": {
+        "top": 704,
+        "height": 21,
+        "left": 177.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "98 turn(s) Delay Immunity",
+      "position": {
+        "top": 757,
+        "height": 26.5,
+        "left": 178,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "1 2 turn(s) Top-Right Despair",
+      "position": {
+        "top": 813,
+        "height": 27,
+        "left": 181.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "to [STR] Slots",
+      "marquee": {
+        "complete": false,
+        "samples": 4
+      },
+      "position": {
+        "top": 870.5,
+        "height": 27,
+        "left": 595,
+        "page": 2,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "line",
+      "text": "3 turn(s) 6000 damage Burn",
+      "position": {
+        "top": 925.5,
+        "height": 27,
+        "left": 179,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "interrupt",
+      "label": "INTERRUPTION lain Multiplier Boost (Add.)",
+      "text": "INTERRUPTION lain Multiplier Boost (Add.)",
+      "marquee": {
+        "complete": false,
+        "samples": 2
+      },
+      "position": {
+        "top": 1001.5,
+        "height": 28.25,
+        "left": 292,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Beneficial Slots , Set Chain Multipl",
+      "marquee": {
+        "complete": false,
+        "samples": 5
+      },
+      "position": {
+        "top": 1012,
+        "height": 23.5,
+        "left": 292,
+        "page": 2,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Until 1 time(s)",
+      "position": {
+        "top": 1073.5,
+        "height": 27,
+        "left": 177.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "1 turn(s) Damage Barrier (1000000 damao",
+      "marquee": {
+        "complete": false,
+        "samples": 2
+      },
+      "position": {
+        "top": 1131,
+        "height": 26.5,
+        "left": 181.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "line",
+      "text": "99 turn(s) ATK Up, Reduce Action Turns",
+      "position": {
+        "top": 1186,
+        "height": 26.5,
+        "left": 178,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    }
+  ],
+  "before": [
+    {
+      "kind": "line",
+      "text": "Top-Row Special Reverse 3 turn(s)",
+      "position": {
+        "top": 440.5,
+        "height": 27,
+        "left": 177.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "to [STR] Slots",
+      "marquee": {
+        "complete": false,
+        "samples": 3
+      },
+      "position": {
+        "top": 497.5,
+        "height": 27,
+        "left": 594.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "line",
+      "text": "3 turn(s) 6000 damage Burn",
+      "position": {
+        "top": 549,
+        "height": 36.5,
+        "left": 179,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı · DEX QCK PSY INT type",
+      "text": "PREEMPTIVE DEX QCK PSY INT type",
+      "marquee": {
+        "complete": true,
+        "samples": 3
+      },
+      "position": {
+        "top": 639.5,
+        "height": 20.5,
+        "left": 436.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Remove Beneficial Effects",
+      "position": {
+        "top": 704,
+        "height": 21,
+        "left": 177.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "98 turn(s) Delay Immunity",
+      "position": {
+        "top": 757,
+        "height": 26.5,
+        "left": 178,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "12 turn(s) Top-Right Despair",
+      "position": {
+        "top": 813,
+        "height": 27,
+        "left": 181.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "to [STR] Slots",
+      "marquee": {
+        "complete": false,
+        "samples": 4
+      },
+      "position": {
+        "top": 870.5,
+        "height": 27,
+        "left": 595,
+        "page": 2,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "line",
+      "text": "3 turn(s) 6000 damage Burn",
+      "position": {
+        "top": 925.5,
+        "height": 27,
+        "left": 179,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "interrupt",
+      "label": "INTERRUPTION lain Multiplier Boost (Add.)",
+      "text": "INTERRUPTION lain Multiplier Boost (Add.)",
+      "marquee": {
+        "complete": false,
+        "samples": 2
+      },
+      "position": {
+        "top": 1001.5,
+        "height": 28.25,
+        "left": 292,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Beneficial Slots , Set Chain Multipl",
+      "marquee": {
+        "complete": false,
+        "samples": 5
+      },
+      "position": {
+        "top": 1012,
+        "height": 23.5,
+        "left": 292,
+        "page": 2,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Until 1 time(s)",
+      "position": {
+        "top": 1073.5,
+        "height": 27,
+        "left": 177.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "1 turn(s) Damage Barrier (1000000 damao",
+      "marquee": {
+        "complete": false,
+        "samples": 2
+      },
+      "position": {
+        "top": 1131,
+        "height": 26.5,
+        "left": 181.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "line",
+      "text": "99 turn(s) ATK Up, Reduce Action Turns",
+      "position": {
+        "top": 1186,
+        "height": 26.5,
+        "left": 178,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    }
+  ],
+  "after": [
+    {
+      "kind": "line",
+      "text": "11",
+      "marquee": {
+        "complete": false,
+        "samples": 5
+      },
+      "position": {
+        "top": 418,
+        "height": 21,
+        "left": 235.5,
+        "page": 3,
+        "edge": true,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Remove Beneficial Effects",
+      "position": {
+        "top": 481,
+        "height": 20.5,
+        "left": 177.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "98 turn(s) Delay Immunity",
+      "position": {
+        "top": 529,
+        "height": 36.5,
+        "left": 178,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "12 turn(s) Top-Right Despair",
+      "position": {
+        "top": 590,
+        "height": 26.5,
+        "left": 181.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "[RCV]",
+      "marquee": {
+        "complete": false,
+        "samples": 2
+      },
+      "position": {
+        "top": 647.5,
+        "height": 27,
+        "left": 418.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "3 turn(s) 6000 damage Burn",
+      "position": {
+        "top": 698.5,
+        "height": 37,
+        "left": 179,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "interrupt",
+      "label": "INTERRUPTION Damage , ATK Boost , Slot",
+      "text": "INTERRUPTION Damage , ATK Boost , Slot",
+      "position": {
+        "top": 782.25,
+        "height": 25.5,
+        "left": 292.25,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Effect Boost/BeneficiaI Slots , S",
+      "marquee": {
+        "complete": false,
+        "samples": 5
+      },
+      "position": {
+        "top": 789,
+        "height": 20.5,
+        "left": 594,
+        "page": 3,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Until 1 time(s)",
+      "position": {
+        "top": 850.5,
+        "height": 26.5,
+        "left": 177.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "1 turn(s) Damage Barrier (1000000 damao",
+      "marquee": {
+        "complete": false,
+        "samples": 1
+      },
+      "position": {
+        "top": 907.5,
+        "height": 27,
+        "left": 181,
+        "page": 3,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "line",
+      "text": "99 turn(s) ATK Up, Reduce Action Turns",
+      "position": {
+        "top": 962.5,
+        "height": 27,
+        "left": 178,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "defeated",
+      "label": "Yenilince",
+      "text": "DEFEATED",
+      "position": {
+        "top": 1045,
+        "height": 21.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Self Heal HP to",
+      "position": {
+        "top": 1114,
+        "height": 20.5,
+        "left": 177.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    }
+  ]
+}

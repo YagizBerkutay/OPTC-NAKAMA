@@ -1,0 +1,173 @@
+{
+  "event": "Pirate Alliance Kizuna Clash!! Vs. Koala",
+  "startsAt": "2026-10-21T03:00:00.000Z",
+  "endsAt": "2026-10-25T13:59:00.000Z",
+  "verifiedAt": "2026-10-23",
+  "profiles": [
+    {
+      "difficulty": 7,
+      "enemyType": "QCK",
+      "minLevel": 1,
+      "maxLevel": 150,
+      "evidence": "Global Assist List TIPS at7★ QCK Lv1, inspected without accepting an Assist or entering a fight. Complete BEHAVIOR list, no level branches. Unconditional class-targeted CD/SS/VS10, no Super-only orb grant. Stage2/3 agree with active notice14775's7★/13★ enemy-gimmick equivalence. Native assist-qck7 pages3–7, 2026-10-23 UTC.",
+      "stages": [
+        [
+          "Reduce Special Charge by 10 turns for Free Spirit, Cerebral, Powerhouse; Super Switch requirement reduction 10; VS requirement reduction 10",
+          "Retreat"
+        ],
+        [
+          "Non-Normal Attacks deal 1 damage",
+          "Full Immunity",
+          "2 turn(s) Slot Damage Reduction 50% for STR DEX QCK PSY INT",
+          "1 turn(s) Slot Lock",
+          "Change all Slots to [RCV] Slots",
+          "2 turn(s) Slot Barrier (DEX 1 time(s))"
+        ],
+        [
+          "Non-Normal Attacks deal 1 damage",
+          "Immune to instant defeat Specials",
+          "Percentage damage resistance 100%",
+          "Full Immunity except Increased Damage Taken",
+          "Weakness Class: Free Spirit",
+          "7 turn(s) Left-Column Bind",
+          "3 turn(s) Paralysis",
+          "Change [RCV] Slots to [BLOCK] Slots",
+          "1 turn(s) Tap-Timing Barrier (GREAT 2 time(s))",
+          "Interrupt - when NAO is not active (every time):",
+          "Non-Normal Attacks deal 1 damage",
+          "Full HP Recovery",
+          "99 turn(s) Silence",
+          "Beneficial Effects (including Super Type / Super Class) / Accumulated Values Removal"
+        ]
+      ]
+    },
+    {
+      "difficulty": 3,
+      "enemyType": "QCK",
+      "minLevel": 1,
+      "maxLevel": 100,
+      "evidence": "Global QUEST GUIDE at3★ Lv1: complete BEHAVIOR list, BATTLE1/2/3, no level branches. All-crew CD/SS/VS10, stage2 slot lock1 and DEX1 barrier1, stage3 left-column Bind4 and Paralysis1, no GREAT barrier. Native inspect-3 pages2–6, 2026-10-23.",
+      "stages": [
+        [
+          "Reduce Special Charge by 10 turns for STR DEX QCK PSY INT; Super Switch requirement reduction 10; VS requirement reduction 10",
+          "Retreat"
+        ],
+        [
+          "Non-Normal Attacks deal 1 damage",
+          "Full Immunity",
+          "1 turn(s) Slot Lock",
+          "Change all Slots to [RCV] Slots",
+          "1 turn(s) Slot Barrier (DEX 1 time(s))"
+        ],
+        [
+          "Non-Normal Attacks deal 1 damage",
+          "Immune to instant defeat Specials",
+          "Percentage damage resistance 100%",
+          "Full Immunity except Increased Damage Taken",
+          "Weakness Class: Free Spirit",
+          "4 turn(s) Left-Column Bind",
+          "1 turn(s) Paralysis",
+          "Change [RCV] Slots to [BLOCK] Slots",
+          "Interrupt - when NAO is not active (every time):",
+          "Non-Normal Attacks deal 1 damage",
+          "Full HP Recovery",
+          "99 turn(s) Silence",
+          "Beneficial Effects (including Super Type / Super Class) / Accumulated Values Removal"
+        ]
+      ]
+    },
+    {
+      "difficulty": 7,
+      "enemyType": "INT",
+      "minLevel": 1,
+      "maxLevel": 150,
+      "evidence": "Global QUEST GUIDE at7★ Lv4: complete BEHAVIOR list, BATTLE1/2/3, no level branches. Opening DEX/PSY CD/SS/VS10, no conditional ATK grant. Stage2/3 match13★ enemy gimmicks as stated by the active Global notice14775. Native inspect-7 pages2–8, 2026-10-23.",
+      "stages": [
+        [
+          "Reduce Special Charge by 10 turns for DEX PSY; Super Switch requirement reduction 10; VS requirement reduction 10",
+          "Retreat"
+        ],
+        [
+          "Non-Normal Attacks deal 1 damage",
+          "Full Immunity",
+          "Reduce crew's current HP by 50%",
+          "2 turn(s) Resilience",
+          "1 turn(s) Territory",
+          "Change all Slots to [BLOCK] Slots"
+        ],
+        [
+          "Non-Normal Attacks deal 1 damage",
+          "Immune to instant defeat Specials",
+          "Percentage damage resistance 100%",
+          "Weakness Class: Cerebral",
+          "When crew HP is below 70%:",
+          "Full Immunity",
+          "1 turn(s) Damage Nullification",
+          "2 turn(s) DEF Up x 1000000",
+          "2 turn(s) Slot Damage Reduction 30% for STR DEX QCK PSY INT RAINBOW RCV TND",
+          "4 turn(s) Threshold Damage Reduction (damage over 10000 reduced by 99%)",
+          "4 turn(s) ATK 70% Down",
+          "Change all Slots to [RCV] Slots",
+          "Otherwise:",
+          "Full Immunity except Increased Damage Taken",
+          "1 turn(s) Damage Nullification",
+          "2 turn(s) DEF Up x 1000000",
+          "2 turn(s) Slot Damage Reduction 30% for RAINBOW RCV TND",
+          "Change all Slots to [RCV] Slots",
+          "Interrupt - when NAO is not active (every time):",
+          "Non-Normal Attacks deal 1 damage",
+          "Full HP Recovery",
+          "99 turn(s) Silence",
+          "Beneficial Effects (including Super Type / Super Class) / Accumulated Values Removal"
+        ]
+      ]
+    },
+    {
+      "difficulty": 10,
+      "enemyType": "QCK",
+      "minLevel": 1,
+      "maxLevel": 20,
+      "evidence": "Global QUEST GUIDE: BATTLE 3-1, When Lv1~Lv20. Bind10, Paralysis6, GREAT3 barrier1; no Territory or ATK-up row. Starting state and NAO-absent interruption agree with the event source. Captured native-10 frames24/44/48, 2026-10-23.",
+      "stage3": [
+        "Non-Normal Attacks deal 1 damage",
+        "Immune to instant defeat Specials",
+        "Percentage damage resistance 100%",
+        "Full Immunity except Increased Damage Taken",
+        "Weakness Class: Free Spirit",
+        "10 turn(s) Left-Column Bind",
+        "6 turn(s) Paralysis",
+        "Change [RCV] Slots to [BLOCK] Slots",
+        "1 turn(s) Tap-Timing Barrier (GREAT 3 time(s))",
+        "Interrupt - when NAO is not active (every time):",
+        "Non-Normal Attacks deal 1 damage",
+        "Full HP Recovery",
+        "99 turn(s) Silence",
+        "Beneficial Effects (including Super Type / Super Class) / Accumulated Values Removal"
+      ]
+    },
+    {
+      "difficulty": 10,
+      "enemyType": "QCK",
+      "minLevel": 21,
+      "maxLevel": 30,
+      "evidence": "Global QUEST GUIDE: BATTLE 3-2, When Lv21~Lv30. Territory3, Bind10, Paralysis10, GREAT3 barrier1; no ATK-up row. Captured native-10 frames56/60/64 and the following BATTLE3-3 Lv31+ boundary, 2026-10-23.",
+      "stage3": [
+        "Non-Normal Attacks deal 1 damage",
+        "Immune to instant defeat Specials",
+        "Percentage damage resistance 100%",
+        "Full Immunity except Increased Damage Taken",
+        "Weakness Class: Free Spirit",
+        "3 turn(s) Territory",
+        "10 turn(s) Left-Column Bind",
+        "10 turn(s) Paralysis",
+        "Change [RCV] Slots to [BLOCK] Slots",
+        "1 turn(s) Tap-Timing Barrier (GREAT 3 time(s))",
+        "Interrupt - when NAO is not active (every time):",
+        "Non-Normal Attacks deal 1 damage",
+        "Full HP Recovery",
+        "99 turn(s) Silence",
+        "Beneficial Effects (including Super Type / Super Class) / Accumulated Values Removal"
+      ]
+    }
+  ]
+}

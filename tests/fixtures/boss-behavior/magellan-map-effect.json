@@ -1,0 +1,175 @@
+{
+  "id": "screen-546fc126b4bad109cddbffe3",
+  "name": "Magellan & Hannyabal: Fortress of Hell",
+  "source": "MuMu · seçili Quest Guide / BEHAVIOR ekranı",
+  "training": false,
+  "difficulty": "11★",
+  "reviewed": "2026-10-10",
+  "notes": "Seçili ekran anlık okundu. Başı ve sonu doğrulanmış listede atlanan aşamalar listelenmedi olarak korunur. İlk saldırı ve açık numaralı tur tetiklerinin tanınan mekanikleri planlanır. HP, yenilince ve karşı saldırı koşulları ayrı gösterilir; orb / bariyer / konum ve okunamayan etkiler kesin çözülmüş sayılmaz.",
+  "stages": [
+    {
+      "id": "screen-battle-1",
+      "name": "Battle 1",
+      "battleNumber": 1,
+      "turn": 0,
+      "requirements": [],
+      "notes": "Rehberde bu aşama için davranış listelenmedi.",
+      "events": [],
+      "sourceSections": [],
+      "behaviorStatus": "notListed"
+    },
+    {
+      "id": "screen-battle-2",
+      "name": "Battle 2",
+      "battleNumber": 2,
+      "turn": 1,
+      "requirements": [],
+      "notes": "Rehberde bu aşama için davranış listelenmedi.",
+      "events": [],
+      "sourceSections": [],
+      "behaviorStatus": "notListed"
+    },
+    {
+      "id": "screen-battle-3",
+      "name": "Battle 3",
+      "battleNumber": 3,
+      "turn": 2,
+      "requirements": [],
+      "notes": "Battle 3 · Tetik okunamadı:\n2 turn(s) Resilience\n2 turn(s) Resilience\n3 turn(s) Resilience",
+      "events": [
+        {
+          "trigger": "unknown",
+          "label": "Tetik okunamadı",
+          "sourceBattle": "Battle 3",
+          "text": "2 turn(s) Resilience\n2 turn(s) Resilience\n3 turn(s) Resilience",
+          "requirements": [
+            {
+              "mechanic": "resilience",
+              "turns": 3
+            }
+          ]
+        }
+      ],
+      "sourceSections": [
+        "Battle 3"
+      ],
+      "behaviorStatus": "listed"
+    },
+    {
+      "id": "screen-battle-4",
+      "name": "Battle 4",
+      "battleNumber": 4,
+      "turn": 3,
+      "requirements": [
+        {
+          "mechanic": "resilience",
+          "turns": 98
+        }
+      ],
+      "notes": "Battle 4 · İlk saldırı:\n98 turn(s) Resilience\nImmunity\n\nBattle 4 · Yenilince:\nFull HP Recovery\nV) 3 turn(s) Resilience\n3 turn(s) Resilience\nto [BLOCK] Slots",
+      "events": [
+        {
+          "trigger": "preemptive",
+          "label": "İlk saldırı",
+          "sourceBattle": "Battle 4",
+          "text": "98 turn(s) Resilience\nImmunity",
+          "requirements": [
+            {
+              "mechanic": "resilience",
+              "turns": 98
+            }
+          ]
+        },
+        {
+          "trigger": "defeated",
+          "label": "Yenilince",
+          "sourceBattle": "Battle 4",
+          "text": "Full HP Recovery\nV) 3 turn(s) Resilience\n3 turn(s) Resilience\nto [BLOCK] Slots",
+          "requirements": [
+            {
+              "mechanic": "resilience",
+              "turns": 3
+            }
+          ]
+        }
+      ],
+      "sourceSections": [
+        "Battle 4"
+      ],
+      "behaviorTextComplete": false,
+      "behaviorStatus": "listed"
+    },
+    {
+      "id": "screen-battle-5",
+      "name": "Battle 5",
+      "battleNumber": 5,
+      "turn": 4,
+      "requirements": [],
+      "notes": "Battle 5 · Tetik okunamadı:\nMagellan & Hannyabal\n99 turn(s) Slot Barrier ([QCK] Slots 1 time(s))\n\nBattle 5 · İlk saldırı:\nPossible Random Action\n1000 poison damage per character\n\nBattle 5 · INTERRUPTION Slot Effect Boost:\nUnlimited number of times\nRemove Beneficial Effects",
+      "events": [
+        {
+          "trigger": "unknown",
+          "label": "Tetik okunamadı",
+          "sourceBattle": "Battle 5",
+          "text": "Magellan & Hannyabal\n99 turn(s) Slot Barrier ([QCK] Slots 1 time(s))",
+          "requirements": []
+        },
+        {
+          "trigger": "preemptive",
+          "label": "İlk saldırı",
+          "sourceBattle": "Battle 5",
+          "text": "Possible Random Action\n1000 poison damage per character",
+          "requirements": []
+        },
+        {
+          "trigger": "interrupt",
+          "label": "INTERRUPTION Slot Effect Boost",
+          "sourceBattle": "Battle 5",
+          "text": "Unlimited number of times\nRemove Beneficial Effects",
+          "requirements": []
+        }
+      ],
+      "sourceSections": [
+        "Battle 5"
+      ],
+      "behaviorTextComplete": false,
+      "behaviorStatus": "listed"
+    }
+  ],
+  "observation": {
+    "observedAt": "2026-10-10T15:46:11.373Z",
+    "complete": true,
+    "startVerified": true,
+    "pages": 10,
+    "marqueeChecked": true,
+    "textComplete": false,
+    "marquee": {
+      "tracked": 2,
+      "completed": 0,
+      "partial": 2
+    },
+    "quest": "Magellan & Hannyabal: Fortress of Hell",
+    "difficulty": 11,
+    "level": null,
+    "fingerprint": "546fc126b4bad109cddbffe32180f1f187f9f250ba028f29e317e2d79d4fb6ea",
+    "warnings": [
+      "Kayan satırın tamamı doğrulanamadı · to [BLOCK] Slots",
+      "Kayan satırın tamamı doğrulanamadı · 99 turn(s) Slot Barrier ([QCK] Slots 1 time(s))",
+      "Battle 3: tetik veya davranış metni eksik.",
+      "Battle 5: tetik veya davranış metni eksik.",
+      "Battle 5: süre / koşul doğrulanamadı · 1000 poison damage per character",
+      "Sayısal boss seviyesi ekranda yok / okunamadı; başka seviyeler için tahmin yapılmaz."
+    ]
+  },
+  "restrictions": {
+    "status": "partial",
+    "source": "MuMu · seçili görevin REQUIREMENT açıklaması",
+    "text": "Map Effect: Inferno Hell",
+    "quest": "Clash!! Magellan & Hannyabal: Fortress",
+    "difficulty": 11,
+    "warnings": [
+      "REQUIREMENT metni okundu; harita etkisi henüz kadro hesabında desteklenmiyor: Map Effect: Inferno Hell."
+    ],
+    "unsupported": "Map Effect"
+  }
+}

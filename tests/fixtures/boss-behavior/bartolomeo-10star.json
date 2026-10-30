@@ -1,0 +1,135 @@
+{
+  "id": "screen-5ff6928d77a33dfdc3223dd8",
+  "name": "Clash!! Bartolomeo: Merciless",
+  "source": "MuMu · seçili Quest Guide / BEHAVIOR ekranı",
+  "training": false,
+  "difficulty": "10★",
+  "reviewed": "2026-10-08",
+  "notes": "Seçili ekran anlık okundu. Başı ve sonu doğrulanmış listede atlanan aşamalar listelenmedi olarak korunur. İlk saldırı ve açık numaralı tur tetiklerinin tanınan mekanikleri planlanır. HP, yenilince ve karşı saldırı koşulları ayrı gösterilir; orb / bariyer / konum ve okunamayan etkiler kesin çözülmüş sayılmaz.",
+  "stages": [
+    {
+      "id": "screen-battle-1",
+      "name": "Battle 1",
+      "battleNumber": 1,
+      "turn": 0,
+      "requirements": [],
+      "notes": "Battle 1 · İlk saldırı:\n10 turn(s) ATK x 1.5",
+      "events": [
+        {
+          "trigger": "preemptive",
+          "label": "İlk saldırı",
+          "sourceBattle": "Battle 1",
+          "text": "10 turn(s) ATK x 1.5",
+          "requirements": []
+        }
+      ],
+      "sourceSections": [
+        "Battle 1"
+      ],
+      "behaviorStatus": "listed"
+    },
+    {
+      "id": "screen-battle-2",
+      "name": "Battle 2",
+      "battleNumber": 2,
+      "turn": 1,
+      "requirements": [],
+      "notes": "Rehberde bu aşama için davranış listelenmedi.",
+      "events": [],
+      "sourceSections": [],
+      "behaviorStatus": "notListed"
+    },
+    {
+      "id": "screen-battle-3",
+      "name": "Battle 3",
+      "battleNumber": 3,
+      "turn": 2,
+      "requirements": [],
+      "notes": "Battle 3-1 · Tetik okunamadı:\nstreet Punk.. Blade\n99 turn(s) Hit Barrier (15 hits)\nstreet Punk.. Blade\n99 turn(s) Hit Barrier (15 hits)\n\nBattle 3-1 · İlk saldırı:\nturn(s) Crewmate character swap Captain\n\nBattle 3-2 · Tetik okunamadı:\nstreet Punk.. Blade\n99 turn(s) Hit Barrier (15 hits)\nstreet Punk.. Blade\n99 turn(s) Hit Barrier (15 hits)\n\nBattle 3-2 · İlk saldırı:\n6 turn(s) Crewmate character swap Captair",
+      "events": [
+        {
+          "trigger": "unknown",
+          "label": "Tetik okunamadı",
+          "sourceBattle": "Battle 3-1",
+          "text": "street Punk.. Blade\n99 turn(s) Hit Barrier (15 hits)\nstreet Punk.. Blade\n99 turn(s) Hit Barrier (15 hits)",
+          "requirements": []
+        },
+        {
+          "trigger": "preemptive",
+          "label": "İlk saldırı",
+          "sourceBattle": "Battle 3-1",
+          "text": "turn(s) Crewmate character swap Captain",
+          "requirements": []
+        },
+        {
+          "trigger": "unknown",
+          "label": "Tetik okunamadı",
+          "sourceBattle": "Battle 3-2",
+          "text": "street Punk.. Blade\n99 turn(s) Hit Barrier (15 hits)\nstreet Punk.. Blade\n99 turn(s) Hit Barrier (15 hits)",
+          "requirements": []
+        },
+        {
+          "trigger": "preemptive",
+          "label": "İlk saldırı",
+          "sourceBattle": "Battle 3-2",
+          "text": "6 turn(s) Crewmate character swap Captair",
+          "requirements": []
+        }
+      ],
+      "sourceSections": [
+        "Battle 3-1",
+        "Battle 3-2"
+      ],
+      "behaviorStatus": "listed"
+    },
+    {
+      "id": "screen-battle-4",
+      "name": "Battle 4",
+      "battleNumber": 4,
+      "turn": 3,
+      "requirements": [],
+      "notes": "Rehberde bu aşama için davranış listelenmedi.",
+      "events": [],
+      "sourceSections": [],
+      "behaviorStatus": "notListed"
+    },
+    {
+      "id": "screen-battle-5",
+      "name": "Battle 5",
+      "battleNumber": 5,
+      "turn": 4,
+      "requirements": [],
+      "notes": "Battle 5 · İlk saldırı:\n0 2 turn(s) Immunity\n2 turn(s) Damage Barrier (900000 damage,\n19 turn(s) Special Use Limit 2 time(s)",
+      "events": [
+        {
+          "trigger": "preemptive",
+          "label": "İlk saldırı",
+          "sourceBattle": "Battle 5",
+          "text": "0 2 turn(s) Immunity\n2 turn(s) Damage Barrier (900000 damage,\n19 turn(s) Special Use Limit 2 time(s)",
+          "requirements": [],
+          "specialLimit": 2
+        }
+      ],
+      "sourceSections": [
+        "Battle 5"
+      ],
+      "specialLimit": 2,
+      "behaviorStatus": "listed"
+    }
+  ],
+  "observation": {
+    "observedAt": "2026-10-08T13:34:32.526Z",
+    "complete": true,
+    "startVerified": true,
+    "pages": 8,
+    "quest": "Clash!! Bartolomeo: Merciless",
+    "difficulty": 10,
+    "level": null,
+    "fingerprint": "5ff6928d77a33dfdc3223dd8c695c1fcc5300e44e833696c9f3ef1ef1e21c72f",
+    "warnings": [
+      "Battle 3: tetik veya davranış metni eksik.",
+      "Battle 3: Battle 3-1 / Battle 3-2 alt bölümleri ayrı gösterilir. İlk saldırı gereksinimleri ortak kapsamla değerlendirilir; alt numara tek başına saldırı turu sayılmaz.",
+      "Sayısal boss seviyesi ekranda yok / okunamadı; başka seviyeler için tahmin yapılmaz."
+    ]
+  }
+}

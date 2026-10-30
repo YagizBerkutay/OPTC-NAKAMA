@@ -1,0 +1,229 @@
+{
+  "id": "screen-faf4a25f17de53d926023c60",
+  "name": "Clash!! CP-9: Six King Pistol",
+  "source": "MuMu · seçili Quest Guide / BEHAVIOR ekranı",
+  "training": false,
+  "difficulty": "10★",
+  "reviewed": "2026-10-12",
+  "notes": "Seçili ekran anlık okundu. Başı ve sonu doğrulanmış listede atlanan aşamalar listelenmedi olarak korunur. İlk saldırı ve açık numaralı tur tetiklerinin tanınan mekanikleri planlanır. HP, yenilince ve karşı saldırı koşulları ayrı gösterilir; orb / bariyer / konum ve okunamayan etkiler kesin çözülmüş sayılmaz.",
+  "stages": [
+    {
+      "id": "screen-battle-1",
+      "name": "Battle 1",
+      "battleNumber": 1,
+      "turn": 0,
+      "requirements": [
+        {
+          "mechanic": "bind",
+          "turns": 98
+        }
+      ],
+      "notes": "Battle 1 · İlk saldırı:\n98 turn(s) RCV Bind\n98 turn(s) Chain Multiplier Growth Rate x C\nRetreat",
+      "events": [
+        {
+          "trigger": "preemptive",
+          "label": "İlk saldırı",
+          "sourceBattle": "Battle 1",
+          "text": "98 turn(s) RCV Bind\n98 turn(s) Chain Multiplier Growth Rate x C\nRetreat",
+          "requirements": [
+            {
+              "mechanic": "bind",
+              "turns": 98
+            }
+          ]
+        }
+      ],
+      "sourceSections": [
+        "Battle 1"
+      ],
+      "behaviorTextComplete": false,
+      "behaviorStatus": "listed"
+    },
+    {
+      "id": "screen-battle-2",
+      "name": "Battle 2",
+      "battleNumber": 2,
+      "turn": 1,
+      "requirements": [],
+      "notes": "Battle 2 · STARTING STATE Cannoneer Apprentice:\n3 turn(s) Tap-Timino Barrier (GOOD 1 timel\n\nBattle 2 · STARTING STATE Bazooka Ensign:\n3 turn(s) Tap-Timino Barrier (PERFECT 2 time(s))))))))))))))))\n\nBattle 2 · STARTING STATE Apprentice:\n3 turn(s) Tap-Timino Barrier (GREAT 1 timi",
+      "events": [
+        {
+          "trigger": "starting",
+          "label": "STARTING STATE Cannoneer Apprentice",
+          "sourceBattle": "Battle 2",
+          "text": "3 turn(s) Tap-Timino Barrier (GOOD 1 timel",
+          "requirements": []
+        },
+        {
+          "trigger": "starting",
+          "label": "STARTING STATE Bazooka Ensign",
+          "sourceBattle": "Battle 2",
+          "text": "3 turn(s) Tap-Timino Barrier (PERFECT 2 time(s))))))))))))))))",
+          "requirements": []
+        },
+        {
+          "trigger": "starting",
+          "label": "STARTING STATE Apprentice",
+          "sourceBattle": "Battle 2",
+          "text": "3 turn(s) Tap-Timino Barrier (GREAT 1 timi",
+          "requirements": []
+        }
+      ],
+      "sourceSections": [
+        "Battle 2"
+      ],
+      "behaviorTextComplete": false,
+      "behaviorStatus": "listed"
+    },
+    {
+      "id": "screen-battle-3",
+      "name": "Battle 3",
+      "battleNumber": 3,
+      "turn": 2,
+      "requirements": [
+        {
+          "mechanic": "defenseUp",
+          "turns": 5
+        }
+      ],
+      "notes": "Battle 3 · İlk saldırı:\n5 turn(s) DEF x 5000\nto [BLOCK] Slots\n99 turn(s) 10% damage of current HP at end of turn\n98 turn(s) Heal 200000 HP at end of turn",
+      "events": [
+        {
+          "trigger": "preemptive",
+          "label": "İlk saldırı",
+          "sourceBattle": "Battle 3",
+          "text": "5 turn(s) DEF x 5000\nto [BLOCK] Slots\n99 turn(s) 10% damage of current HP at end of turn\n98 turn(s) Heal 200000 HP at end of turn",
+          "requirements": [
+            {
+              "mechanic": "defenseUp",
+              "turns": 5
+            }
+          ]
+        }
+      ],
+      "sourceSections": [
+        "Battle 3"
+      ],
+      "behaviorTextComplete": false,
+      "behaviorStatus": "listed"
+    },
+    {
+      "id": "screen-battle-4",
+      "name": "Battle 4",
+      "battleNumber": 4,
+      "turn": 3,
+      "requirements": [
+        {
+          "mechanic": "resilience",
+          "turns": 1
+        }
+      ],
+      "notes": "Battle 4 · İlk saldırı:\nBeneficial Effects/Accumulated Values Renu\n1 turn(s) Resilience\n98 turn(s) Delay Immunity\n\nBattle 4 · Yenilince:\nSelf Heal HP to\nRetreat",
+      "events": [
+        {
+          "trigger": "preemptive",
+          "label": "İlk saldırı",
+          "sourceBattle": "Battle 4",
+          "text": "Beneficial Effects/Accumulated Values Renu\n1 turn(s) Resilience\n98 turn(s) Delay Immunity",
+          "requirements": [
+            {
+              "mechanic": "resilience",
+              "turns": 1
+            }
+          ]
+        },
+        {
+          "trigger": "defeated",
+          "label": "Yenilince",
+          "sourceBattle": "Battle 4",
+          "text": "Self Heal HP to\nRetreat",
+          "requirements": []
+        }
+      ],
+      "sourceSections": [
+        "Battle 4"
+      ],
+      "behaviorTextComplete": false,
+      "behaviorStatus": "listed"
+    },
+    {
+      "id": "screen-battle-5",
+      "name": "Battle 5",
+      "battleNumber": 5,
+      "turn": 4,
+      "requirements": [
+        {
+          "mechanic": "despair",
+          "turns": 5
+        },
+        {
+          "mechanic": "bind",
+          "turns": 5
+        }
+      ],
+      "notes": "Battle 5 · İlk saldırı:\n5 turn(s) Top-Row Despair\n5 turn(s) Top-Row Bind\n98 turn(s) Immunity",
+      "events": [
+        {
+          "trigger": "preemptive",
+          "label": "İlk saldırı",
+          "sourceBattle": "Battle 5",
+          "text": "5 turn(s) Top-Row Despair\n5 turn(s) Top-Row Bind\n98 turn(s) Immunity",
+          "requirements": [
+            {
+              "mechanic": "despair",
+              "turns": 5
+            },
+            {
+              "mechanic": "bind",
+              "turns": 5
+            }
+          ]
+        }
+      ],
+      "sourceSections": [
+        "Battle 5"
+      ],
+      "behaviorStatus": "listed"
+    }
+  ],
+  "observation": {
+    "observedAt": "2026-10-12T17:06:40.997Z",
+    "complete": true,
+    "startVerified": true,
+    "pages": 7,
+    "marqueeChecked": true,
+    "textComplete": false,
+    "marquee": {
+      "tracked": 7,
+      "completed": 1,
+      "partial": 6
+    },
+    "quest": "Clash!! CP-9: Six King Pistol",
+    "difficulty": 10,
+    "level": null,
+    "fingerprint": "faf4a25f17de53d926023c6044dc6a6787bb95ffaba292d54024219b069ce29d",
+    "warnings": [
+      "Kayan satırın tamamı doğrulanamadı · 98 turn(s) Chain Multiplier Growth Rate x C",
+      "Kayan satırın tamamı doğrulanamadı · 3 turn(s) Tap-Timino Barrier (GOOD 1 timel",
+      "Kayan satırın tamamı doğrulanamadı · 3 turn(s) Tap-Timino Barrier (PERFECT 2 time(s))))))))))))))))",
+      "Kayan satırın tamamı doğrulanamadı · 3 turn(s) Tap-Timino Barrier (GREAT 1 timi",
+      "Kayan satırın tamamı doğrulanamadı · to [BLOCK] Slots",
+      "Kayan satırın tamamı doğrulanamadı · Beneficial Effects/Accumulated Values Renu",
+      "Sayısal boss seviyesi ekranda yok / okunamadı; başka seviyeler için tahmin yapılmaz."
+    ]
+  },
+  "restrictions": {
+    "status": "verified",
+    "source": "MuMu · seçili görevin REQUIREMENT açıklaması",
+    "text": "QCK/PSY characters only/ You will be Neo Ambushed at a certain rate every time you clear the quest!",
+    "quest": "Clash!! CP-9: Six King Pistol",
+    "difficulty": 10,
+    "warnings": [
+      "Neo Ambush: Görevi tamamladıktan sonra rastgele ek bir Neo savaşı çıkabilir. Bu öneri okunan rehber aşamalarını kapsar; ek savaşın davranışları okunmadan Neo karşılaşmasının kazanılması doğrulanmaz."
+    ],
+    "allowedTypes": [
+      "QCK",
+      "PSY"
+    ]
+  }
+}

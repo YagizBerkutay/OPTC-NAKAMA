@@ -1,0 +1,532 @@
+{
+  "lines": [
+    {
+      "text": "6:08",
+      "words": [
+        {
+          "y": 9.5,
+          "height": 16.5,
+          "width": 40.5,
+          "text": "6:08",
+          "x": 13
+        }
+      ]
+    },
+    {
+      "text": "Clash!! CP-",
+      "words": [
+        {
+          "y": 178.5,
+          "height": 26.5,
+          "width": 117,
+          "text": "Clash!!",
+          "x": 106.5
+        },
+        {
+          "y": 178.5,
+          "height": 26.5,
+          "width": 58,
+          "text": "CP-",
+          "x": 240
+        }
+      ]
+    },
+    {
+      "text": "O Lucci: Special Assignment",
+      "words": [
+        {
+          "y": 179,
+          "height": 25.5,
+          "width": 23,
+          "text": "O",
+          "x": 300.5
+        },
+        {
+          "y": 178.5,
+          "height": 26,
+          "width": 104,
+          "text": "Lucci:",
+          "x": 338.5
+        },
+        {
+          "y": 178.5,
+          "height": 32,
+          "width": 125.5,
+          "text": "Special",
+          "x": 458.5
+        },
+        {
+          "y": 178.5,
+          "height": 32,
+          "width": 195,
+          "text": "Assignment",
+          "x": 600.5
+        }
+      ]
+    },
+    {
+      "text": "Difficulty 1 1",
+      "words": [
+        {
+          "y": 269,
+          "height": 34,
+          "width": 149,
+          "text": "Difficulty",
+          "x": 298.5
+        },
+        {
+          "y": 268,
+          "height": 31,
+          "width": 11.5,
+          "text": "1",
+          "x": 533
+        },
+        {
+          "y": 268,
+          "height": 31,
+          "width": 11.5,
+          "text": "1",
+          "x": 569.5
+        }
+      ]
+    },
+    {
+      "text": "QUEST INFO",
+      "words": [
+        {
+          "y": 348,
+          "height": 24.5,
+          "width": 102,
+          "text": "QUEST",
+          "x": 188.5
+        },
+        {
+          "y": 348.5,
+          "height": 24,
+          "width": 69.5,
+          "text": "INFO",
+          "x": 303.5
+        }
+      ]
+    },
+    {
+      "text": "QUEST GUIDE",
+      "words": [
+        {
+          "y": 348,
+          "height": 25,
+          "width": 102.5,
+          "text": "QUEST",
+          "x": 515
+        },
+        {
+          "y": 348,
+          "height": 25,
+          "width": 94,
+          "text": "GUIDE",
+          "x": 629
+        }
+      ]
+    },
+    {
+      "text": "(s) nap-I imino Barrier (PERI-ECE3 time(s))",
+      "words": [
+        {
+          "y": 420,
+          "height": 20.5,
+          "width": 31.5,
+          "text": "(s)",
+          "x": 177
+        },
+        {
+          "y": 418,
+          "height": 22.5,
+          "width": 80,
+          "text": "nap-I",
+          "x": 214
+        },
+        {
+          "y": 420,
+          "height": 20.5,
+          "width": 68.5,
+          "text": "imino",
+          "x": 301.5
+        },
+        {
+          "y": 420,
+          "height": 18.5,
+          "width": 99.5,
+          "text": "Barrier",
+          "x": 381.5
+        },
+        {
+          "y": 418,
+          "height": 22.5,
+          "width": 163,
+          "text": "(PERI-ECE3",
+          "x": 491.5
+        },
+        {
+          "y": 420,
+          "height": 20.5,
+          "width": 99.5,
+          "text": "time(s))",
+          "x": 668
+        }
+      ]
+    },
+    {
+      "text": "PREEMPTIVE",
+      "words": [
+        {
+          "y": 495,
+          "height": 21.5,
+          "width": 158.5,
+          "text": "PREEMPTIVE",
+          "x": 117.5
+        }
+      ]
+    },
+    {
+      "text": "98 turn(s) Recovery Amount x 0.5",
+      "words": [
+        {
+          "y": 564,
+          "height": 20.5,
+          "width": 35.5,
+          "text": "98",
+          "x": 178
+        },
+        {
+          "y": 560.5,
+          "height": 27,
+          "width": 88.5,
+          "text": "turn(s)",
+          "x": 227
+        },
+        {
+          "y": 564,
+          "height": 24.5,
+          "width": 130,
+          "text": "Recovery",
+          "x": 326.5
+        },
+        {
+          "y": 564,
+          "height": 20.5,
+          "width": 100.5,
+          "text": "Amount",
+          "x": 467.5
+        },
+        {
+          "y": 569.5,
+          "height": 15,
+          "width": 14.5,
+          "text": "x",
+          "x": 579
+        },
+        {
+          "y": 564,
+          "height": 20.5,
+          "width": 46.5,
+          "text": "0.5",
+          "x": 604
+        }
+      ]
+    },
+    {
+      "text": "Retreat",
+      "words": [
+        {
+          "y": 620,
+          "height": 21,
+          "width": 100.5,
+          "text": "Retreat",
+          "x": 177.5
+        }
+      ]
+    },
+    {
+      "text": "BATTLE 3",
+      "words": [
+        {
+          "y": 739,
+          "height": 26.5,
+          "width": 143.5,
+          "text": "BATTLE",
+          "x": 359.5
+        },
+        {
+          "y": 739.5,
+          "height": 26,
+          "width": 19,
+          "text": "3",
+          "x": 519.5
+        }
+      ]
+    },
+    {
+      "text": "PREEMPTIVE",
+      "words": [
+        {
+          "y": 803.5,
+          "height": 21.5,
+          "width": 158.5,
+          "text": "PREEMPTIVE",
+          "x": 117.5
+        }
+      ]
+    },
+    {
+      "text": "5) Bottom-Row Random 1 character(s) Bind",
+      "words": [
+        {
+          "y": 870.5,
+          "height": 26,
+          "width": 17,
+          "text": "5)",
+          "x": 177
+        },
+        {
+          "y": 874,
+          "height": 20.5,
+          "width": 159,
+          "text": "Bottom-Row",
+          "x": 205.5
+        },
+        {
+          "y": 874,
+          "height": 20.5,
+          "width": 101.5,
+          "text": "Random",
+          "x": 384
+        },
+        {
+          "y": 874,
+          "height": 20.5,
+          "width": 10,
+          "text": "1",
+          "x": 501
+        },
+        {
+          "y": 870,
+          "height": 26.5,
+          "width": 163,
+          "text": "character(s)",
+          "x": 527
+        },
+        {
+          "y": 873.5,
+          "height": 21,
+          "width": 58,
+          "text": "Bind",
+          "x": 701
+        }
+      ]
+    },
+    {
+      "text": "Bottom-Row for Random 1 character Blow",
+      "words": [
+        {
+          "y": 930,
+          "height": 20.5,
+          "width": 159,
+          "text": "Bottom-Row",
+          "x": 183
+        },
+        {
+          "y": 930,
+          "height": 20.5,
+          "width": 41.5,
+          "text": "for",
+          "x": 362
+        },
+        {
+          "y": 930,
+          "height": 20.5,
+          "width": 102,
+          "text": "Random",
+          "x": 413.5
+        },
+        {
+          "y": 930,
+          "height": 20.5,
+          "width": 10,
+          "text": "1",
+          "x": 530.5
+        },
+        {
+          "y": 930,
+          "height": 20.5,
+          "width": 131,
+          "text": "character",
+          "x": 556
+        },
+        {
+          "y": 930,
+          "height": 20.5,
+          "width": 63.5,
+          "text": "Blow",
+          "x": 697
+        }
+      ]
+    },
+    {
+      "text": "BATTLE 4- 1",
+      "words": [
+        {
+          "y": 1047.5,
+          "height": 26,
+          "width": 143.5,
+          "text": "BATTLE",
+          "x": 340.5
+        },
+        {
+          "y": 1048,
+          "height": 25.5,
+          "width": 37,
+          "text": "4-",
+          "x": 497.5
+        },
+        {
+          "y": 1047.5,
+          "height": 26,
+          "width": 12.5,
+          "text": "1",
+          "x": 542
+        }
+      ],
+      "battleDigitVerified": true
+    },
+    {
+      "text": "HQ Vice Admiral",
+      "words": [
+        {
+          "y": 1114.5,
+          "height": 20.5,
+          "width": 38.5,
+          "text": "HQ",
+          "x": 373
+        },
+        {
+          "y": 1114.5,
+          "height": 20.5,
+          "width": 59,
+          "text": "Vice",
+          "x": 422.5
+        },
+        {
+          "y": 1114.5,
+          "height": 20.5,
+          "width": 104.5,
+          "text": "Admiral",
+          "x": 493
+        }
+      ]
+    },
+    {
+      "text": "99 turn(s) Delay Immunity",
+      "words": [
+        {
+          "y": 1181,
+          "height": 20,
+          "width": 36.5,
+          "text": "99",
+          "x": 178
+        },
+        {
+          "y": 1177,
+          "height": 27,
+          "width": 88.5,
+          "text": "turn(s)",
+          "x": 227
+        },
+        {
+          "y": 1180.5,
+          "height": 25,
+          "width": 76,
+          "text": "Delay",
+          "x": 326.5
+        },
+        {
+          "y": 1180.5,
+          "height": 25,
+          "width": 120.5,
+          "text": "Immunity",
+          "x": 415
+        }
+      ]
+    },
+    {
+      "text": "ADVENTUREvckeemEMi'",
+      "words": [
+        {
+          "y": 1432.5,
+          "height": 33,
+          "width": 292,
+          "text": "ADVENTUREvckeemEMi'",
+          "x": 27
+        }
+      ]
+    },
+    {
+      "text": "0K",
+      "words": [
+        {
+          "y": 1333,
+          "height": 20.5,
+          "width": 38.5,
+          "text": "0K",
+          "x": 431
+        }
+      ]
+    },
+    {
+      "text": "TOME'",
+      "words": [
+        {
+          "y": 1433,
+          "height": 27,
+          "width": 95,
+          "text": "TOME'",
+          "x": 404.5
+        }
+      ]
+    },
+    {
+      "text": "TAVERN",
+      "words": [
+        {
+          "y": 1437.5,
+          "height": 21,
+          "width": 103.5,
+          "text": "TAVERN",
+          "x": 576
+        }
+      ]
+    },
+    {
+      "text": "s RUMBLE—",
+      "words": [
+        {
+          "y": 1452.5,
+          "height": 7.5,
+          "width": 8,
+          "text": "s",
+          "x": 732
+        },
+        {
+          "y": 1449.5,
+          "height": 19.5,
+          "width": 125.5,
+          "text": "RUMBLE—",
+          "x": 753.5
+        }
+      ]
+    }
+  ],
+  "width": 900,
+  "height": 1600,
+  "text": "6:08\nClash!! CP-\nO Lucci: Special Assignment\nDifficulty 1 1\nQUEST INFO\nQUEST GUIDE\n(s) nap-I imino Barrier (PERI-ECE3 time(s))\nPREEMPTIVE\n98 turn(s) Recovery Amount x 0.5\nRetreat\nBATTLE 3\nPREEMPTIVE\n5) Bottom-Row Random 1 character(s) Bind\nBottom-Row for Random 1 character Blow\nBATTLE 4- 1\nHQ Vice Admiral\n99 turn(s) Delay Immunity\nADVENTUREvckeemEMi'\n0K\nTOME'\nTAVERN\ns RUMBLE—",
+  "corrections": 0
+}

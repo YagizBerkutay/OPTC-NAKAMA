@@ -1,0 +1,201 @@
+[
+  {
+    "kind": "line",
+    "text": "(PREEMPTIVE)",
+    "position": {
+      "top": 420,
+      "height": 31,
+      "left": 111,
+      "edge": true,
+      "rightClipped": false
+    }
+  },
+  {
+    "kind": "line",
+    "text": "Percentage damage 50% of current HP",
+    "marquee": {
+      "complete": true,
+      "samples": 3,
+      "method": "pixels"
+    },
+    "position": {
+      "top": 491,
+      "height": 24.5,
+      "left": 177.5,
+      "edge": false,
+      "rightClipped": false
+    }
+  },
+  {
+    "kind": "line",
+    "text": "3 turn(s) Resilience",
+    "marquee": {
+      "complete": true,
+      "samples": 3,
+      "method": "pixels"
+    },
+    "position": {
+      "top": 543.5,
+      "height": 27,
+      "left": 179,
+      "edge": false,
+      "rightClipped": false
+    }
+  },
+  {
+    "kind": "line",
+    "text": "For 1 turn(s), apply Territory: Enemy on the field",
+    "marquee": {
+      "complete": true,
+      "samples": 11,
+      "method": "pixels"
+    },
+    "position": {
+      "top": 601,
+      "height": 26.5,
+      "left": 177.5,
+      "edge": false,
+      "rightClipped": false
+    }
+  },
+  {
+    "kind": "line",
+    "text": "[EMPTY] [STR] [DEX] [QCK] [PSY] [INT] [G] [RCV] [TND] [BOMB]Slots to [BLOCK] Slots",
+    "pixelDiscovered": true,
+    "marquee": {
+      "complete": true,
+      "samples": 13,
+      "method": "pixels"
+    },
+    "position": {
+      "top": 657,
+      "height": 26,
+      "left": 176,
+      "rightClipped": false
+    }
+  },
+  {
+    "kind": "battle",
+    "number": 3,
+    "variant": "1",
+    "text": "BATTLE 3-1",
+    "position": {
+      "top": 778.5,
+      "height": 26,
+      "left": 340.5,
+      "edge": false,
+      "rightClipped": false
+    }
+  },
+  {
+    "kind": "line",
+    "text": "When LVI &Lv20",
+    "position": {
+      "top": 859.5,
+      "height": 26,
+      "left": 113,
+      "edge": false,
+      "rightClipped": false
+    }
+  },
+  {
+    "kind": "event",
+    "trigger": "starting",
+    "label": "STARTING STATE Koala: Rowdy Halloween Party",
+    "text": "STARTING STATE Koala: Rowdy Halloween Party",
+    "marquee": {
+      "complete": true,
+      "samples": 3,
+      "method": "pixels"
+    },
+    "position": {
+      "top": 902,
+      "height": 20.25,
+      "left": 292.5,
+      "edge": false,
+      "rightClipped": false
+    }
+  },
+  {
+    "kind": "line",
+    "text": "Non-NormaI Attacks deal 1 damage",
+    "marquee": {
+      "complete": true,
+      "samples": 3,
+      "method": "pixels"
+    },
+    "position": {
+      "top": 970.5,
+      "height": 24.5,
+      "left": 177.5,
+      "edge": false,
+      "rightClipped": false
+    }
+  },
+  {
+    "kind": "line",
+    "text": "Immune to instant defeat Specials",
+    "marquee": {
+      "complete": true,
+      "samples": 3,
+      "method": "pixels"
+    },
+    "position": {
+      "top": 1027,
+      "height": 24.5,
+      "left": 178.5,
+      "edge": false,
+      "rightClipped": false
+    }
+  },
+  {
+    "kind": "line",
+    "text": "Percentage damage resistance 100%",
+    "marquee": {
+      "complete": true,
+      "samples": 3,
+      "method": "pixels"
+    },
+    "position": {
+      "top": 1083,
+      "height": 24.5,
+      "left": 177.5,
+      "edge": false,
+      "rightClipped": false
+    }
+  },
+  {
+    "kind": "line",
+    "text": "Weakness Class: Cerebral",
+    "marquee": {
+      "complete": true,
+      "samples": 3,
+      "method": "pixels"
+    },
+    "position": {
+      "top": 1139,
+      "height": 21,
+      "left": 177,
+      "edge": false,
+      "rightClipped": false
+    }
+  },
+  {
+    "kind": "event",
+    "trigger": "preemptive",
+    "label": "İlk saldırı · When crew's HP is below 70%",
+    "text": "PREEMPTIVE When crew's HP is below 70%",
+    "marquee": {
+      "complete": true,
+      "samples": 3,
+      "method": "pixels"
+    },
+    "position": {
+      "top": 1218.25,
+      "height": 21.5,
+      "left": 292.5,
+      "edge": false,
+      "rightClipped": false
+    }
+  }
+]

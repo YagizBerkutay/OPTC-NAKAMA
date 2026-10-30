@@ -1,0 +1,168 @@
+[
+  {
+    "kind": "line",
+    "text": "DEX PSY type VS Effect gauge reduction: 10",
+    "marquee": {
+      "complete": true,
+      "samples": 23,
+      "method": "pixels"
+    },
+    "position": {
+      "top": 437,
+      "height": 23.5,
+      "left": 177.5,
+      "edge": false,
+      "rightClipped": false
+    }
+  },
+  {
+    "kind": "line",
+    "text": "Retreat",
+    "marquee": {
+      "complete": true,
+      "samples": 3,
+      "method": "pixels"
+    },
+    "position": {
+      "top": 492,
+      "height": 20.5,
+      "left": 177.5,
+      "edge": false,
+      "rightClipped": false
+    }
+  },
+  {
+    "kind": "battle",
+    "number": 2,
+    "variant": "",
+    "text": "BATTLE 2",
+    "position": {
+      "top": 611,
+      "height": 26,
+      "left": 359.5,
+      "edge": false,
+      "rightClipped": false
+    }
+  },
+  {
+    "kind": "event",
+    "trigger": "starting",
+    "label": "STARTING STATE Soul King: Halloween Musician",
+    "text": "STARTING STATE Soul King: Halloween Musician",
+    "marquee": {
+      "complete": true,
+      "samples": 3,
+      "method": "pixels"
+    },
+    "position": {
+      "top": 672.75,
+      "height": 22.75,
+      "left": 293,
+      "edge": false,
+      "rightClipped": false
+    }
+  },
+  {
+    "kind": "line",
+    "text": "Immunity",
+    "marquee": {
+      "complete": true,
+      "samples": 3,
+      "method": "pixels"
+    },
+    "position": {
+      "top": 744,
+      "height": 24.5,
+      "left": 178.5,
+      "edge": false,
+      "rightClipped": false
+    }
+  },
+  {
+    "kind": "line",
+    "text": "Non-NormaI Attacks deal 1 damage",
+    "marquee": {
+      "complete": true,
+      "samples": 3,
+      "method": "pixels"
+    },
+    "position": {
+      "top": 800,
+      "height": 24.5,
+      "left": 177.5,
+      "edge": false,
+      "rightClipped": false
+    }
+  },
+  {
+    "kind": "event",
+    "trigger": "preemptive",
+    "label": "İlk saldırı",
+    "text": "PREEMPTIVE",
+    "position": {
+      "top": 877,
+      "height": 25.25,
+      "edge": false,
+      "rightClipped": false
+    }
+  },
+  {
+    "kind": "line",
+    "text": "Percentage damage 50% of current HP",
+    "marquee": {
+      "complete": true,
+      "samples": 3,
+      "method": "pixels"
+    },
+    "position": {
+      "top": 948,
+      "height": 24.5,
+      "left": 177.5,
+      "edge": false,
+      "rightClipped": false
+    }
+  },
+  {
+    "kind": "line",
+    "text": "V) 3 turn(s) Resilience",
+    "position": {
+      "top": 993.5,
+      "height": 45,
+      "left": 119,
+      "edge": false,
+      "rightClipped": false
+    }
+  },
+  {
+    "kind": "line",
+    "text": "For 1 turn(s), apply Territory: Enemy on the field",
+    "marquee": {
+      "complete": true,
+      "samples": 22,
+      "method": "pixels"
+    },
+    "position": {
+      "top": 1058,
+      "height": 27,
+      "left": 177,
+      "edge": false,
+      "rightClipped": false
+    }
+  },
+  {
+    "kind": "line",
+    "text": "[EMPTY] [STR] [DEX] I[QCK] [PSY] [INT] [G] [RCV] [TND] [BOMB]Slots to [BLOCK] Slots",
+    "marquee": {
+      "complete": true,
+      "samples": 17,
+      "method": "pixels"
+    },
+    "position": {
+      "top": 1114,
+      "height": 27.5,
+      "left": 572,
+      "edge": false,
+      "rightClipped": false
+    }
+  }
+]

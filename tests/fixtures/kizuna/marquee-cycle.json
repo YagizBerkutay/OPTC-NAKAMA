@@ -1,0 +1,352 @@
+[
+  [
+    {
+      "kind": "line",
+      "text": "IX PSY type Reduce Special Charoe by 10",
+      "position": {
+        "top": 20.5,
+        "height": 23,
+        "left": 79,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Switch Effect requirement reduction: 10",
+      "position": {
+        "top": 76.5,
+        "height": 23,
+        "left": 109.5,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "( PSY type VS Effect gauge reduction: 10",
+      "position": {
+        "top": 133,
+        "height": 23.5,
+        "left": 79,
+        "edge": false,
+        "rightClipped": false
+      }
+    }
+  ],
+  [
+    {
+      "kind": "line",
+      "text": "IX PSY type Reduce Special Charoe by 10",
+      "position": {
+        "top": 20.33333333333337,
+        "height": 23,
+        "left": 79,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Switch Effect requirement reduction: 10",
+      "position": {
+        "top": 76.66666666666663,
+        "height": 22.666666666666668,
+        "left": 109,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "( PSY type VS Effect gauge reduction: 10",
+      "position": {
+        "top": 133,
+        "height": 23.333333333333332,
+        "left": 79,
+        "edge": false,
+        "rightClipped": false
+      }
+    }
+  ],
+  [
+    {
+      "kind": "line",
+      "text": "DEX I",
+      "position": {
+        "top": 20.66666666666663,
+        "height": 20.333333333333332,
+        "left": 600.6666666666666,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "line",
+      "text": "DEX I",
+      "position": {
+        "top": 77,
+        "height": 20,
+        "left": 600.6666666666666,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "line",
+      "text": "DEX I",
+      "position": {
+        "top": 133,
+        "height": 20.333333333333332,
+        "left": 600.6666666666666,
+        "edge": false,
+        "rightClipped": true
+      }
+    }
+  ],
+  [
+    {
+      "kind": "line",
+      "text": "DEX PSY type Reduce Special Charoe by 1",
+      "position": {
+        "top": 20.33333333333337,
+        "height": 23,
+        "left": 79.66666666666666,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "line",
+      "text": "DEX PSY type Super Switch Effect require",
+      "position": {
+        "top": 76.66666666666663,
+        "height": 22.666666666666668,
+        "left": 79.66666666666666,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "line",
+      "text": "DEX PSY type VS Effect gauge reduction:",
+      "position": {
+        "top": 133,
+        "height": 23.333333333333332,
+        "left": 79.66666666666666,
+        "edge": false,
+        "rightClipped": false
+      }
+    }
+  ],
+  [
+    {
+      "kind": "line",
+      "text": "DEX PSY type Reduce Special Charoe by 1",
+      "position": {
+        "top": 20.5,
+        "height": 23,
+        "left": 79.5,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "line",
+      "text": "DEX PSY type Super Switch Effect require",
+      "position": {
+        "top": 76.5,
+        "height": 23,
+        "left": 79.5,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "line",
+      "text": "DEX PSY type VS Effect gauge reduction:",
+      "position": {
+        "top": 133,
+        "height": 23.5,
+        "left": 79.5,
+        "edge": false,
+        "rightClipped": false
+      }
+    }
+  ],
+  [
+    {
+      "kind": "line",
+      "text": "DEX PSY type Reduce Special Charoe by 1",
+      "position": {
+        "top": 20.33333333333337,
+        "height": 23,
+        "left": 79.66666666666666,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "line",
+      "text": "DEX PSY type Super Switch Effect require",
+      "position": {
+        "top": 76.66666666666663,
+        "height": 22.666666666666668,
+        "left": 79.66666666666666,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "line",
+      "text": "DEX PSY type VS Effect gauge reduction:",
+      "position": {
+        "top": 133,
+        "height": 23.333333333333332,
+        "left": 79.66666666666666,
+        "edge": false,
+        "rightClipped": false
+      }
+    }
+  ],
+  [
+    {
+      "kind": "line",
+      "text": "IX PSY type Reduce Special Charoe by 10",
+      "position": {
+        "top": 20.33333333333337,
+        "height": 23,
+        "left": 79,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "type Super Switch Effect requirement red",
+      "position": {
+        "top": 76.66666666666663,
+        "height": 22.666666666666668,
+        "left": 107,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "line",
+      "text": "( PSY type VS Effect gauge reduction: 10",
+      "position": {
+        "top": 133,
+        "height": 23.333333333333332,
+        "left": 79,
+        "edge": false,
+        "rightClipped": false
+      }
+    }
+  ],
+  [
+    {
+      "kind": "line",
+      "text": "IX PSY type Reduce Special Charoe by 10",
+      "position": {
+        "top": 20.33333333333337,
+        "height": 23,
+        "left": 79,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Der Switch Effect requirement reduction:",
+      "position": {
+        "top": 76.66666666666663,
+        "height": 22.666666666666668,
+        "left": 79,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "( PSY type VS Effect gauge reduction: 10",
+      "position": {
+        "top": 133,
+        "height": 23.333333333333332,
+        "left": 79,
+        "edge": false,
+        "rightClipped": false
+      }
+    }
+  ],
+  [
+    {
+      "kind": "line",
+      "text": "IX PSY type Reduce Special Charoe by 10",
+      "position": {
+        "top": 20.5,
+        "height": 23,
+        "left": 79,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Switch Effect requirement reduction: 10",
+      "position": {
+        "top": 76.5,
+        "height": 23,
+        "left": 109.5,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "( PSY type VS Effect gauge reduction: 10",
+      "position": {
+        "top": 133,
+        "height": 23.5,
+        "left": 79,
+        "edge": false,
+        "rightClipped": false
+      }
+    }
+  ],
+  [
+    {
+      "kind": "line",
+      "text": "IX PSY type Reduce Special Charoe by 10",
+      "position": {
+        "top": 20.33333333333337,
+        "height": 23,
+        "left": 79,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Switch Effect requirement reduction: 10",
+      "position": {
+        "top": 76.66666666666663,
+        "height": 22.666666666666668,
+        "left": 109,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "( PSY type VS Effect gauge reduction: 10",
+      "position": {
+        "top": 133,
+        "height": 23.333333333333332,
+        "left": 79,
+        "edge": false,
+        "rightClipped": false
+      }
+    }
+  ]
+]

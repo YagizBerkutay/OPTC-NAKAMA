@@ -1,0 +1,565 @@
+{
+  "lines": [
+    {
+      "text": "6:19",
+      "words": [
+        {
+          "y": 9.5,
+          "height": 16.5,
+          "width": 40.5,
+          "text": "6:19",
+          "x": 13
+        }
+      ]
+    },
+    {
+      "text": "Clash!! CP-O Lucci: Special Assignment",
+      "words": [
+        {
+          "y": 178.5,
+          "height": 26.5,
+          "width": 117,
+          "text": "Clash!!",
+          "x": 106.5
+        },
+        {
+          "y": 178.5,
+          "height": 26.5,
+          "width": 83.5,
+          "text": "CP-O",
+          "x": 240
+        },
+        {
+          "y": 178.5,
+          "height": 26,
+          "width": 104,
+          "text": "Lucci:",
+          "x": 338.5
+        },
+        {
+          "y": 178.5,
+          "height": 32,
+          "width": 125.5,
+          "text": "Special",
+          "x": 458.5
+        },
+        {
+          "y": 178.5,
+          "height": 32,
+          "width": 195,
+          "text": "Assignment",
+          "x": 600.5
+        }
+      ]
+    },
+    {
+      "text": "Difficulty 1 1",
+      "words": [
+        {
+          "y": 269,
+          "height": 34,
+          "width": 149,
+          "text": "Difficulty",
+          "x": 298.5
+        },
+        {
+          "y": 268,
+          "height": 31,
+          "width": 11.5,
+          "text": "1",
+          "x": 533
+        },
+        {
+          "y": 268,
+          "height": 31,
+          "width": 11.5,
+          "text": "1",
+          "x": 569.5
+        }
+      ]
+    },
+    {
+      "text": "QUEST INFO",
+      "words": [
+        {
+          "y": 348,
+          "height": 24.5,
+          "width": 102,
+          "text": "QUEST",
+          "x": 188.5
+        },
+        {
+          "y": 348.5,
+          "height": 24,
+          "width": 69.5,
+          "text": "INFO",
+          "x": 303.5
+        }
+      ]
+    },
+    {
+      "text": "Retreat",
+      "words": [
+        {
+          "y": 420,
+          "height": 19,
+          "width": 100,
+          "text": "Retreat",
+          "x": 177.5
+        }
+      ]
+    },
+    {
+      "text": "QUEST GUIDE",
+      "words": [
+        {
+          "y": 348,
+          "height": 25,
+          "width": 102.5,
+          "text": "QUEST",
+          "x": 515
+        },
+        {
+          "y": 348,
+          "height": 25,
+          "width": 94,
+          "text": "GUIDE",
+          "x": 629
+        }
+      ]
+    },
+    {
+      "text": "BATTLE 3",
+      "words": [
+        {
+          "y": 537,
+          "height": 26.5,
+          "width": 143,
+          "text": "BATTLE",
+          "x": 360
+        },
+        {
+          "y": 537,
+          "height": 26.5,
+          "width": 19,
+          "text": "3",
+          "x": 519.5
+        }
+      ]
+    },
+    {
+      "text": "PREEMPTIVE",
+      "words": [
+        {
+          "y": 601.5,
+          "height": 21.5,
+          "width": 158.5,
+          "text": "PREEMPTIVE",
+          "x": 117.5
+        }
+      ]
+    },
+    {
+      "text": "6 turn(s) Bottom-Row Random 1 character(",
+      "words": [
+        {
+          "y": 672,
+          "height": 20.5,
+          "width": 16.5,
+          "text": "6",
+          "x": 178
+        },
+        {
+          "y": 668,
+          "height": 26.5,
+          "width": 88.5,
+          "text": "turn(s)",
+          "x": 207
+        },
+        {
+          "y": 672,
+          "height": 20.5,
+          "width": 159.5,
+          "text": "Bottom-Row",
+          "x": 306.5
+        },
+        {
+          "y": 672,
+          "height": 20.5,
+          "width": 101.5,
+          "text": "Random",
+          "x": 485.5
+        },
+        {
+          "y": 672,
+          "height": 20.5,
+          "width": 10,
+          "text": "1",
+          "x": 602.5
+        },
+        {
+          "y": 668,
+          "height": 26.5,
+          "width": 139.5,
+          "text": "character(",
+          "x": 628
+        }
+      ]
+    },
+    {
+      "text": "3 turn(s) Bottom-Row for Random 1 charac",
+      "words": [
+        {
+          "y": 728,
+          "height": 20.5,
+          "width": 15,
+          "text": "3",
+          "x": 179
+        },
+        {
+          "y": 724.5,
+          "height": 27,
+          "width": 88.5,
+          "text": "turn(s)",
+          "x": 207
+        },
+        {
+          "y": 728,
+          "height": 20.5,
+          "width": 159.5,
+          "text": "Bottom-Row",
+          "x": 306.5
+        },
+        {
+          "y": 728,
+          "height": 20.5,
+          "width": 41.5,
+          "text": "for",
+          "x": 486
+        },
+        {
+          "y": 728,
+          "height": 20.5,
+          "width": 102,
+          "text": "Random",
+          "x": 537.5
+        },
+        {
+          "y": 728,
+          "height": 20.5,
+          "width": 9.5,
+          "text": "1",
+          "x": 655
+        },
+        {
+          "y": 728,
+          "height": 20.5,
+          "width": 88.5,
+          "text": "charac",
+          "x": 680
+        }
+      ]
+    },
+    {
+      "text": "-0",
+      "words": [
+        {
+          "y": 822.5,
+          "height": 14,
+          "width": 17.5,
+          "text": "-0",
+          "x": 101
+        }
+      ]
+    },
+    {
+      "text": "BATTLE 4- 1",
+      "words": [
+        {
+          "y": 845.5,
+          "height": 26,
+          "width": 143.5,
+          "text": "BATTLE",
+          "x": 340.5
+        },
+        {
+          "y": 845.5,
+          "height": 26,
+          "width": 37,
+          "text": "4-",
+          "x": 497.5
+        },
+        {
+          "y": 845.5,
+          "height": 26,
+          "width": 13,
+          "text": "1",
+          "x": 541.5
+        }
+      ],
+      "battleDigitVerified": true
+    },
+    {
+      "text": "Navy HQ Vice Admiral Momonga",
+      "words": [
+        {
+          "y": 912.5,
+          "height": 25,
+          "width": 69.5,
+          "text": "Navy",
+          "x": 292.5
+        },
+        {
+          "y": 912.5,
+          "height": 20.5,
+          "width": 38.5,
+          "text": "HQ",
+          "x": 373
+        },
+        {
+          "y": 912.5,
+          "height": 20.5,
+          "width": 59,
+          "text": "Vice",
+          "x": 422.5
+        },
+        {
+          "y": 912.5,
+          "height": 20.5,
+          "width": 104.5,
+          "text": "Admiral",
+          "x": 493
+        },
+        {
+          "y": 912.5,
+          "height": 25,
+          "width": 121.5,
+          "text": "Momonga",
+          "x": 609.5
+        }
+      ]
+    },
+    {
+      "text": "@ 99 turn(s) Delay Immunity",
+      "words": [
+        {
+          "y": 971,
+          "height": 36,
+          "width": 36.5,
+          "text": "@",
+          "x": 125
+        },
+        {
+          "y": 979,
+          "height": 20.5,
+          "width": 36.5,
+          "text": "99",
+          "x": 178
+        },
+        {
+          "y": 975,
+          "height": 27,
+          "width": 88.5,
+          "text": "turn(s)",
+          "x": 227
+        },
+        {
+          "y": 978.5,
+          "height": 25,
+          "width": 76.5,
+          "text": "Delay",
+          "x": 326.5
+        },
+        {
+          "y": 978.5,
+          "height": 25,
+          "width": 120.5,
+          "text": "Immunity",
+          "x": 415
+        }
+      ]
+    },
+    {
+      "text": "PREEMPTIVE",
+      "words": [
+        {
+          "y": 1058,
+          "height": 21,
+          "width": 158.5,
+          "text": "PREEMPTIVE",
+          "x": 117.5
+        }
+      ]
+    },
+    {
+      "text": "Percentage damage 30% of current HP",
+      "words": [
+        {
+          "y": 1126.5,
+          "height": 25,
+          "width": 150.5,
+          "text": "Percentage",
+          "x": 177.5
+        },
+        {
+          "y": 1127,
+          "height": 24.5,
+          "width": 97,
+          "text": "damage",
+          "x": 339.5
+        },
+        {
+          "y": 1126.5,
+          "height": 20.5,
+          "width": 60,
+          "text": "30%",
+          "x": 449.5
+        },
+        {
+          "y": 1126.5,
+          "height": 21,
+          "width": 26.5,
+          "text": "of",
+          "x": 521
+        },
+        {
+          "y": 1126.5,
+          "height": 21,
+          "width": 100.5,
+          "text": "current",
+          "x": 559
+        },
+        {
+          "y": 1126.5,
+          "height": 20.5,
+          "width": 35.5,
+          "text": "HP",
+          "x": 670
+        }
+      ]
+    },
+    {
+      "text": "5 turn(s) Remove SFX",
+      "words": [
+        {
+          "y": 1183,
+          "height": 20.5,
+          "width": 16,
+          "text": "5",
+          "x": 178.5
+        },
+        {
+          "y": 1179,
+          "height": 27,
+          "width": 88.5,
+          "text": "turn(s)",
+          "x": 207
+        },
+        {
+          "y": 1183,
+          "height": 20.5,
+          "width": 103,
+          "text": "Remove",
+          "x": 306.5
+        },
+        {
+          "y": 1183,
+          "height": 20.5,
+          "width": 55,
+          "text": "SFX",
+          "x": 421
+        }
+      ]
+    },
+    {
+      "text": "to [BLOCK] Slots",
+      "words": [
+        {
+          "y": 1240.5,
+          "height": 20.5,
+          "width": 26.5,
+          "text": "to",
+          "x": 530
+        },
+        {
+          "y": 1236.5,
+          "height": 27,
+          "width": 110.5,
+          "text": "[BLOCK]",
+          "x": 568
+        },
+        {
+          "y": 1240.5,
+          "height": 20.5,
+          "width": 69.5,
+          "text": "Slots",
+          "x": 690.5
+        }
+      ]
+    },
+    {
+      "text": "ADVENTURE;",
+      "words": [
+        {
+          "y": 1440,
+          "height": 20.5,
+          "width": 142,
+          "text": "ADVENTURE;",
+          "x": 27
+        }
+      ]
+    },
+    {
+      "text": "0K",
+      "words": [
+        {
+          "y": 1333,
+          "height": 20.5,
+          "width": 38.5,
+          "text": "0K",
+          "x": 431
+        }
+      ]
+    },
+    {
+      "text": "TOME'",
+      "words": [
+        {
+          "y": 1433,
+          "height": 27,
+          "width": 95,
+          "text": "TOME'",
+          "x": 404.5
+        }
+      ]
+    },
+    {
+      "text": "TAVERN",
+      "words": [
+        {
+          "y": 1437.5,
+          "height": 21,
+          "width": 103.5,
+          "text": "TAVERN",
+          "x": 576
+        }
+      ]
+    },
+    {
+      "text": ".RUMBLEw",
+      "words": [
+        {
+          "y": 1449.5,
+          "height": 19.5,
+          "width": 132.5,
+          "text": ".RUMBLEw",
+          "x": 746.5
+        }
+      ]
+    }
+  ],
+  "width": 900,
+  "height": 1600,
+  "text": "6:19\nClash!! CP-O Lucci: Special Assignment\nDifficulty 1 1\nQUEST INFO\nRetreat\nQUEST GUIDE\nBATTLE 3\nPREEMPTIVE\n6 turn(s) Bottom-Row Random 1 character(\n3 turn(s) Bottom-Row for Random 1 charac\n-0\nBATTLE 4- 1\nNavy HQ Vice Admiral Momonga\n@ 99 turn(s) Delay Immunity\nPREEMPTIVE\nPercentage damage 30% of current HP\n5 turn(s) Remove SFX\nto [BLOCK] Slots\nADVENTURE;\n0K\nTOME'\nTAVERN\n.RUMBLEw",
+  "corrections": 0
+}

@@ -1,0 +1,373 @@
+{
+  "lines": [
+    {
+      "text": "6:04",
+      "words": [
+        {
+          "y": 9.5,
+          "height": 16.5,
+          "width": 41.5,
+          "text": "6:04",
+          "x": 13
+        }
+      ]
+    },
+    {
+      "text": "Clash!! CP-O Lucci: Special Assignment",
+      "words": [
+        {
+          "y": 178.5,
+          "height": 26.5,
+          "width": 117,
+          "text": "Clash!!",
+          "x": 106.5
+        },
+        {
+          "y": 178.5,
+          "height": 26.5,
+          "width": 83.5,
+          "text": "CP-O",
+          "x": 240
+        },
+        {
+          "y": 178.5,
+          "height": 26,
+          "width": 104,
+          "text": "Lucci:",
+          "x": 338.5
+        },
+        {
+          "y": 178.5,
+          "height": 32,
+          "width": 125.5,
+          "text": "Special",
+          "x": 458.5
+        },
+        {
+          "y": 178.5,
+          "height": 32,
+          "width": 195,
+          "text": "Assignment",
+          "x": 600.5
+        }
+      ]
+    },
+    {
+      "text": "Difficulty 1 1",
+      "words": [
+        {
+          "y": 269,
+          "height": 34,
+          "width": 149,
+          "text": "Difficulty",
+          "x": 298.5
+        },
+        {
+          "y": 268,
+          "height": 31,
+          "width": 11.5,
+          "text": "1",
+          "x": 533
+        },
+        {
+          "y": 268,
+          "height": 31,
+          "width": 11.5,
+          "text": "1",
+          "x": 569.5
+        }
+      ]
+    },
+    {
+      "text": "QUEST INFO",
+      "words": [
+        {
+          "y": 348,
+          "height": 25,
+          "width": 109.5,
+          "text": "QUEST",
+          "x": 188.5
+        },
+        {
+          "y": 348,
+          "height": 25,
+          "width": 70,
+          "text": "INFO",
+          "x": 303
+        }
+      ]
+    },
+    {
+      "text": "QUEST GUIDE",
+      "words": [
+        {
+          "y": 348,
+          "height": 24.5,
+          "width": 101.5,
+          "text": "QUEST",
+          "x": 515.5
+        },
+        {
+          "y": 348,
+          "height": 24.5,
+          "width": 93,
+          "text": "GUIDE",
+          "x": 629.5
+        }
+      ]
+    },
+    {
+      "text": "O STA cost until first clear!",
+      "words": [
+        {
+          "y": 439.5,
+          "height": 26,
+          "width": 23,
+          "text": "O",
+          "x": 200.5
+        },
+        {
+          "y": 439,
+          "height": 26.5,
+          "width": 75,
+          "text": "STA",
+          "x": 238.5
+        },
+        {
+          "y": 439.5,
+          "height": 26,
+          "width": 73.5,
+          "text": "cost",
+          "x": 327.5
+        },
+        {
+          "y": 439,
+          "height": 26.5,
+          "width": 76.5,
+          "text": "until",
+          "x": 414.5
+        },
+        {
+          "y": 439,
+          "height": 26.5,
+          "width": 77.5,
+          "text": "first",
+          "x": 508
+        },
+        {
+          "y": 439.5,
+          "height": 26,
+          "width": 99,
+          "text": "clear!",
+          "x": 601
+        }
+      ]
+    },
+    {
+      "text": "BOSS CHARACTERS",
+      "words": [
+        {
+          "y": 500,
+          "height": 29.5,
+          "width": 96,
+          "text": "BOSS",
+          "x": 273.5
+        },
+        {
+          "y": 500,
+          "height": 29.5,
+          "width": 245,
+          "text": "CHARACTERS",
+          "x": 382.5
+        }
+      ]
+    },
+    {
+      "text": "CHARACTER TAG (BOSS)",
+      "words": [
+        {
+          "y": 768.5,
+          "height": 29.5,
+          "width": 222.5,
+          "text": "CHARACTER",
+          "x": 227.5
+        },
+        {
+          "y": 768.5,
+          "height": 29.5,
+          "width": 76,
+          "text": "TAG",
+          "x": 461.5
+        },
+        {
+          "y": 768.5,
+          "height": 33,
+          "width": 120,
+          "text": "(BOSS)",
+          "x": 551.5
+        }
+      ]
+    },
+    {
+      "text": "No Character Tag",
+      "words": [
+        {
+          "y": 835,
+          "height": 26,
+          "width": 45.5,
+          "text": "No",
+          "x": 293
+        },
+        {
+          "y": 835,
+          "height": 26,
+          "width": 176.5,
+          "text": "Character",
+          "x": 353.5
+        },
+        {
+          "y": 835,
+          "height": 31.5,
+          "width": 62.5,
+          "text": "Tag",
+          "x": 545
+        }
+      ]
+    },
+    {
+      "text": "RECOMMENDED RECRUITABLES",
+      "words": [
+        {
+          "y": 908,
+          "height": 29.5,
+          "width": 273.5,
+          "text": "RECOMMENDED",
+          "x": 174
+        },
+        {
+          "y": 908,
+          "height": 29.5,
+          "width": 271,
+          "text": "RECRUITABLES",
+          "x": 461
+        }
+      ]
+    },
+    {
+      "text": "GUARANTEED!",
+      "words": [
+        {
+          "y": 1112,
+          "height": 16,
+          "width": 128,
+          "text": "GUARANTEED!",
+          "x": 125.5
+        }
+      ]
+    },
+    {
+      "text": "OBTAINABLE BOOSTERS AND EVOLVERS",
+      "words": [
+        {
+          "y": 1180.5,
+          "height": 25,
+          "width": 195.5,
+          "text": "OBTAINABLE",
+          "x": 144.5
+        },
+        {
+          "y": 1180.5,
+          "height": 25,
+          "width": 158,
+          "text": "BOOSTERS",
+          "x": 350
+        },
+        {
+          "y": 1181.5,
+          "height": 23.5,
+          "width": 65,
+          "text": "AND",
+          "x": 519
+        },
+        {
+          "y": 1180.5,
+          "height": 25,
+          "width": 158,
+          "text": "EVOLVERS",
+          "x": 595
+        }
+      ]
+    },
+    {
+      "text": "ÄDVENTUREV",
+      "words": [
+        {
+          "y": 1432.5,
+          "height": 28,
+          "width": 142,
+          "text": "ÄDVENTUREV",
+          "x": 27
+        }
+      ]
+    },
+    {
+      "text": "0K",
+      "words": [
+        {
+          "y": 1333,
+          "height": 20.5,
+          "width": 38.5,
+          "text": "0K",
+          "x": 431
+        }
+      ]
+    },
+    {
+      "text": "TOME'",
+      "words": [
+        {
+          "y": 1433,
+          "height": 27,
+          "width": 95,
+          "text": "TOME'",
+          "x": 404.5
+        }
+      ]
+    },
+    {
+      "text": "TAVERN",
+      "words": [
+        {
+          "y": 1437.5,
+          "height": 21,
+          "width": 103.5,
+          "text": "TAVERN",
+          "x": 576
+        }
+      ]
+    },
+    {
+      "text": "s RUMBLE—",
+      "words": [
+        {
+          "y": 1452.5,
+          "height": 7.5,
+          "width": 8,
+          "text": "s",
+          "x": 732
+        },
+        {
+          "y": 1449.5,
+          "height": 19.5,
+          "width": 125.5,
+          "text": "RUMBLE—",
+          "x": 753.5
+        }
+      ]
+    }
+  ],
+  "width": 900,
+  "height": 1600,
+  "text": "6:04\nClash!! CP-O Lucci: Special Assignment\nDifficulty 1 1\nQUEST INFO\nQUEST GUIDE\nO STA cost until first clear!\nBOSS CHARACTERS\nCHARACTER TAG (BOSS)\nNo Character Tag\nRECOMMENDED RECRUITABLES\nGUARANTEED!\nOBTAINABLE BOOSTERS AND EVOLVERS\nÄDVENTUREV\n0K\nTOME'\nTAVERN\ns RUMBLE—",
+  "corrections": 0
+}

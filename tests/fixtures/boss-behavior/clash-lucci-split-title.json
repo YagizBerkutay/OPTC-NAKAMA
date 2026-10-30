@@ -1,0 +1,489 @@
+{
+  "lines": [
+    {
+      "text": "6:03",
+      "words": [
+        {
+          "y": 9.5,
+          "height": 16.5,
+          "width": 40.5,
+          "text": "6:03",
+          "x": 13
+        }
+      ]
+    },
+    {
+      "text": "Clash!! CP-",
+      "words": [
+        {
+          "y": 178.5,
+          "height": 26.5,
+          "width": 117,
+          "text": "Clash!!",
+          "x": 106.5
+        },
+        {
+          "y": 178.5,
+          "height": 26.5,
+          "width": 58,
+          "text": "CP-",
+          "x": 240
+        }
+      ]
+    },
+    {
+      "text": "O Lucci: Special Assignment",
+      "words": [
+        {
+          "y": 179,
+          "height": 25.5,
+          "width": 23,
+          "text": "O",
+          "x": 300.5
+        },
+        {
+          "y": 178.5,
+          "height": 26,
+          "width": 104,
+          "text": "Lucci:",
+          "x": 338.5
+        },
+        {
+          "y": 178.5,
+          "height": 32,
+          "width": 125.5,
+          "text": "Special",
+          "x": 458.5
+        },
+        {
+          "y": 178.5,
+          "height": 32,
+          "width": 195,
+          "text": "Assignment",
+          "x": 600.5
+        }
+      ]
+    },
+    {
+      "text": "Difficulty 1 1",
+      "words": [
+        {
+          "y": 269,
+          "height": 34,
+          "width": 149,
+          "text": "Difficulty",
+          "x": 298.5
+        },
+        {
+          "y": 268,
+          "height": 31,
+          "width": 11.5,
+          "text": "1",
+          "x": 533
+        },
+        {
+          "y": 268,
+          "height": 31,
+          "width": 11.5,
+          "text": "1",
+          "x": 569.5
+        }
+      ]
+    },
+    {
+      "text": "QUEST INFO",
+      "words": [
+        {
+          "y": 348,
+          "height": 24.5,
+          "width": 102,
+          "text": "QUEST",
+          "x": 188.5
+        },
+        {
+          "y": 348.5,
+          "height": 24,
+          "width": 69.5,
+          "text": "INFO",
+          "x": 303.5
+        }
+      ]
+    },
+    {
+      "text": "QUEST GUIDE",
+      "words": [
+        {
+          "y": 348,
+          "height": 25,
+          "width": 102.5,
+          "text": "QUEST",
+          "x": 515
+        },
+        {
+          "y": 348,
+          "height": 25,
+          "width": 94,
+          "text": "GUIDE",
+          "x": 629
+        }
+      ]
+    },
+    {
+      "text": "BATTLE 1",
+      "words": [
+        {
+          "y": 476,
+          "height": 26.5,
+          "width": 143,
+          "text": "BATTLE",
+          "x": 360
+        },
+        {
+          "y": 476,
+          "height": 26.5,
+          "width": 12,
+          "text": "1",
+          "x": 523
+        }
+      ]
+    },
+    {
+      "text": "Rifle Major",
+      "words": [
+        {
+          "y": 543,
+          "height": 20.5,
+          "width": 63.5,
+          "text": "Rifle",
+          "x": 292.5
+        },
+        {
+          "y": 543,
+          "height": 24.5,
+          "width": 79,
+          "text": "Major",
+          "x": 367.5
+        }
+      ]
+    },
+    {
+      "text": "PREEMPTIVE",
+      "words": [
+        {
+          "y": 688.5,
+          "height": 21,
+          "width": 158.5,
+          "text": "PREEMPTIVE",
+          "x": 117.5
+        }
+      ]
+    },
+    {
+      "text": "2 turn(s) Tao",
+      "words": [
+        {
+          "y": 610.5,
+          "height": 20.5,
+          "width": 15.5,
+          "text": "2",
+          "x": 588
+        },
+        {
+          "y": 607,
+          "height": 26.5,
+          "width": 88.5,
+          "text": "turn(s)",
+          "x": 616.5
+        },
+        {
+          "y": 610.5,
+          "height": 23,
+          "width": 52.5,
+          "text": "Tao",
+          "x": 716
+        }
+      ]
+    },
+    {
+      "text": "98 turn(s) Recovery Amount x 0.5",
+      "words": [
+        {
+          "y": 757,
+          "height": 20.5,
+          "width": 35.5,
+          "text": "98",
+          "x": 178
+        },
+        {
+          "y": 753.5,
+          "height": 27,
+          "width": 88.5,
+          "text": "turn(s)",
+          "x": 227
+        },
+        {
+          "y": 757,
+          "height": 24.5,
+          "width": 130,
+          "text": "Recovery",
+          "x": 326.5
+        },
+        {
+          "y": 757,
+          "height": 20.5,
+          "width": 100.5,
+          "text": "Amount",
+          "x": 467.5
+        },
+        {
+          "y": 763,
+          "height": 14.5,
+          "width": 14.5,
+          "text": "x",
+          "x": 579
+        },
+        {
+          "y": 757,
+          "height": 20.5,
+          "width": 46.5,
+          "text": "0.5",
+          "x": 604
+        }
+      ]
+    },
+    {
+      "text": "Retreat",
+      "words": [
+        {
+          "y": 813,
+          "height": 21,
+          "width": 100.5,
+          "text": "Retreat",
+          "x": 177.5
+        }
+      ]
+    },
+    {
+      "text": "BATTLE 3",
+      "words": [
+        {
+          "y": 932,
+          "height": 26.5,
+          "width": 143,
+          "text": "BATTLE",
+          "x": 360
+        },
+        {
+          "y": 932.5,
+          "height": 26,
+          "width": 19,
+          "text": "3",
+          "x": 519.5
+        }
+      ]
+    },
+    {
+      "text": "PREEMPTIVE",
+      "words": [
+        {
+          "y": 996.5,
+          "height": 21.5,
+          "width": 158.5,
+          "text": "PREEMPTIVE",
+          "x": 117.5
+        }
+      ]
+    },
+    {
+      "text": "6 turn(s) Bottom-Row Random 1 character(",
+      "words": [
+        {
+          "y": 1067,
+          "height": 20.5,
+          "width": 16,
+          "text": "6",
+          "x": 178.5
+        },
+        {
+          "y": 1063,
+          "height": 26.5,
+          "width": 88.5,
+          "text": "turn(s)",
+          "x": 207
+        },
+        {
+          "y": 1067,
+          "height": 20.5,
+          "width": 159.5,
+          "text": "Bottom-Row",
+          "x": 306.5
+        },
+        {
+          "y": 1067,
+          "height": 20.5,
+          "width": 101.5,
+          "text": "Random",
+          "x": 485.5
+        },
+        {
+          "y": 1067,
+          "height": 20.5,
+          "width": 10,
+          "text": "1",
+          "x": 602.5
+        },
+        {
+          "y": 1063.5,
+          "height": 26,
+          "width": 139.5,
+          "text": "character(",
+          "x": 628
+        }
+      ]
+    },
+    {
+      "text": "3 turn(s) Bottom-Row for Random 1 charac",
+      "words": [
+        {
+          "y": 1123,
+          "height": 20.5,
+          "width": 15,
+          "text": "3",
+          "x": 179
+        },
+        {
+          "y": 1119.5,
+          "height": 27,
+          "width": 88.5,
+          "text": "turn(s)",
+          "x": 207
+        },
+        {
+          "y": 1123,
+          "height": 20.5,
+          "width": 159.5,
+          "text": "Bottom-Row",
+          "x": 306.5
+        },
+        {
+          "y": 1123,
+          "height": 20.5,
+          "width": 41.5,
+          "text": "for",
+          "x": 486
+        },
+        {
+          "y": 1123,
+          "height": 20.5,
+          "width": 102,
+          "text": "Random",
+          "x": 537.5
+        },
+        {
+          "y": 1123,
+          "height": 20.5,
+          "width": 10,
+          "text": "1",
+          "x": 654.5
+        },
+        {
+          "y": 1123,
+          "height": 20.5,
+          "width": 88.5,
+          "text": "charac",
+          "x": 680
+        }
+      ]
+    },
+    {
+      "text": "RATTI F a-I",
+      "words": [
+        {
+          "y": 1240.5,
+          "height": 23,
+          "width": 107,
+          "text": "RATTI",
+          "x": 340.5
+        },
+        {
+          "y": 1240.5,
+          "height": 23,
+          "width": 21,
+          "text": "F",
+          "x": 463
+        },
+        {
+          "y": 1240.5,
+          "height": 23,
+          "width": 54,
+          "text": "a-I",
+          "x": 497.5
+        }
+      ]
+    },
+    {
+      "text": "ÄDVENTUREV",
+      "words": [
+        {
+          "y": 1432.5,
+          "height": 28,
+          "width": 142,
+          "text": "ÄDVENTUREV",
+          "x": 27
+        }
+      ]
+    },
+    {
+      "text": "0K",
+      "words": [
+        {
+          "y": 1333,
+          "height": 20.5,
+          "width": 38.5,
+          "text": "0K",
+          "x": 431
+        }
+      ]
+    },
+    {
+      "text": "TOME'",
+      "words": [
+        {
+          "y": 1433,
+          "height": 27,
+          "width": 95,
+          "text": "TOME'",
+          "x": 404.5
+        }
+      ]
+    },
+    {
+      "text": "TAVERN",
+      "words": [
+        {
+          "y": 1437.5,
+          "height": 21,
+          "width": 103.5,
+          "text": "TAVERN",
+          "x": 576
+        }
+      ]
+    },
+    {
+      "text": ".RUMBLEw",
+      "words": [
+        {
+          "y": 1449.5,
+          "height": 19.5,
+          "width": 132.5,
+          "text": ".RUMBLEw",
+          "x": 746.5
+        }
+      ]
+    }
+  ],
+  "width": 900,
+  "height": 1600,
+  "text": "6:03\nClash!! CP-\nO Lucci: Special Assignment\nDifficulty 1 1\nQUEST INFO\nQUEST GUIDE\nBATTLE 1\nRifle Major\nPREEMPTIVE\n2 turn(s) Tao\n98 turn(s) Recovery Amount x 0.5\nRetreat\nBATTLE 3\nPREEMPTIVE\n6 turn(s) Bottom-Row Random 1 character(\n3 turn(s) Bottom-Row for Random 1 charac\nRATTI F a-I\nÄDVENTUREV\n0K\nTOME'\nTAVERN\n.RUMBLEw",
+  "corrections": 0
+}

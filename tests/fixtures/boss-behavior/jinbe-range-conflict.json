@@ -1,0 +1,673 @@
+{
+  "runId": "e6ced90b-6379-476b-95e4-d6bf9195a1e7",
+  "time": "2026-10-12T20:51:48.985Z",
+  "page": 6,
+  "retry": 2,
+  "body": {
+    "left": 98,
+    "top": 418,
+    "width": 705,
+    "height": 846
+  },
+  "evidence": {
+    "range": {
+      "verified": true,
+      "min": 362.6666666666667,
+      "max": 391
+    }
+  },
+  "existing": [
+    {
+      "kind": "heading",
+      "text": "BEHAVIOR",
+      "position": {
+        "top": 1185,
+        "height": 29.5,
+        "left": 357,
+        "page": 1,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 2,
+      "variant": "",
+      "text": "BATTLE 2",
+      "position": {
+        "top": 511,
+        "height": 26.5,
+        "left": 359.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "starting",
+      "label": "STARTING STATE Skilled",
+      "text": "STARTING STATE Skilled",
+      "position": {
+        "top": 572.75,
+        "height": 22.75,
+        "left": 447,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "a turn(s) Slot Barrier ( [STR] Slots 1 time(s",
+      "marquee": {
+        "complete": false,
+        "samples": 2
+      },
+      "position": {
+        "top": 642,
+        "height": 26.5,
+        "left": 177,
+        "page": 2,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "starting",
+      "label": "STARTING STATE Slasher Unit",
+      "text": "STARTING STATE Slasher Unit",
+      "position": {
+        "top": 723.5,
+        "height": 20,
+        "left": 390.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "a turn(s) Slot Barrier ([PSY] Slots 1 time(s",
+      "marquee": {
+        "complete": false,
+        "samples": 2
+      },
+      "position": {
+        "top": 789.5,
+        "height": 27,
+        "left": 177,
+        "page": 2,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "starting",
+      "label": "STARTING STATE Skilled",
+      "text": "STARTING STATE Skilled",
+      "position": {
+        "top": 871.25,
+        "height": 20.25,
+        "left": 447,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "turn(s) Slot Barrier ( [STR] Slots 1 time(s",
+      "marquee": {
+        "complete": false,
+        "samples": 2
+      },
+      "position": {
+        "top": 937.5,
+        "height": 27,
+        "left": 207,
+        "page": 2,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 3,
+      "variant": "",
+      "text": "BATTLE 3",
+      "position": {
+        "top": 297.5,
+        "height": 26,
+        "left": 360,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "starting",
+      "label": "STARTING STATE & Penguin",
+      "text": "STARTING STATE & Penguin",
+      "position": {
+        "top": 361.75,
+        "height": 20.25,
+        "left": 391,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "3 turn(s) Tap-Timino Barrier (GREAT 1 tin",
+      "marquee": {
+        "complete": false,
+        "samples": 5
+      },
+      "position": {
+        "top": 428.5,
+        "height": 27,
+        "left": 177,
+        "page": 3,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı",
+      "text": "PREEMPTIVE",
+      "position": {
+        "top": 507.25,
+        "height": 26.25,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "98 turn(s) Immunity",
+      "position": {
+        "top": 575,
+        "height": 27,
+        "left": 178,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Reinforcements",
+      "position": {
+        "top": 635,
+        "height": 20.5,
+        "left": 177.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "-0",
+      "position": {
+        "top": 730.5,
+        "height": 14.5,
+        "left": 101,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 4,
+      "variant": "",
+      "text": "BATTLE 4",
+      "position": {
+        "top": 754,
+        "height": 26,
+        "left": 359.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı",
+      "text": "PREEMPTIVE",
+      "position": {
+        "top": 818,
+        "height": 21.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "98 turn(s) DEF Down Immunity",
+      "position": {
+        "top": 883.5,
+        "height": 27,
+        "left": 178,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Slots to [Unfavorable] Slots",
+      "position": {
+        "top": 939,
+        "height": 27.5,
+        "left": 177.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "3 turn(s) ATK x 1.3",
+      "position": {
+        "top": 996,
+        "height": 27,
+        "left": 179,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "3 turn(s) DEF x 450",
+      "position": {
+        "top": 1052,
+        "height": 27,
+        "left": 179,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "5 turn(s) Non-Normal Attacks deal 1 damao",
+      "marquee": {
+        "complete": false,
+        "samples": 2
+      },
+      "position": {
+        "top": 1109.5,
+        "height": 27,
+        "left": 178,
+        "page": 3,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 5,
+      "variant": "",
+      "text": "BATTLE 5",
+      "position": {
+        "top": 1231,
+        "height": 26,
+        "left": 359.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    }
+  ],
+  "before": [
+    {
+      "kind": "line",
+      "text": "3 turn(s) Tap-Timino Barrier (GREAT 1 timi",
+      "marquee": {
+        "complete": false,
+        "samples": 2
+      },
+      "position": {
+        "top": 428.5,
+        "height": 27,
+        "left": 179,
+        "page": 3,
+        "edge": true,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı",
+      "text": "PREEMPTIVE",
+      "position": {
+        "top": 507.25,
+        "height": 26.25,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "98 turn(s) Immunity",
+      "position": {
+        "top": 575,
+        "height": 27,
+        "left": 178,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Reinforcements",
+      "position": {
+        "top": 635,
+        "height": 20.5,
+        "left": 177.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "-0",
+      "position": {
+        "top": 730.5,
+        "height": 14.5,
+        "left": 101,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 4,
+      "variant": "",
+      "text": "BATTLE 4",
+      "position": {
+        "top": 754,
+        "height": 26,
+        "left": 359.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı",
+      "text": "PREEMPTIVE",
+      "position": {
+        "top": 818,
+        "height": 21.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "98 turn(s) DEF Down Immunity",
+      "position": {
+        "top": 883.5,
+        "height": 27,
+        "left": 178,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Slots to [Unfavorable] Slots",
+      "position": {
+        "top": 939,
+        "height": 27.5,
+        "left": 177.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "3 turn(s) ATK x 1.3",
+      "position": {
+        "top": 996,
+        "height": 27,
+        "left": 179,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "3 turn(s) DEF x 450",
+      "position": {
+        "top": 1052,
+        "height": 27,
+        "left": 179,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "5 turn(s) Non-Normal Attacks deal 1 damao",
+      "marquee": {
+        "complete": false,
+        "samples": 2
+      },
+      "position": {
+        "top": 1109.5,
+        "height": 27,
+        "left": 178,
+        "page": 3,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 5,
+      "variant": "",
+      "text": "BATTLE 5",
+      "position": {
+        "top": 1231,
+        "height": 26,
+        "left": 359.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    }
+  ],
+  "after": [
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı",
+      "text": "PREEMPTIVE",
+      "position": {
+        "top": 436.5,
+        "height": 25.25,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "98 turn(s) DEF Down Immunity",
+      "position": {
+        "top": 504,
+        "height": 27,
+        "left": 178,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Slots to [Unfavorable] Slots",
+      "position": {
+        "top": 559.5,
+        "height": 28,
+        "left": 177.5,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "3 turn(s) ATK x 1.3",
+      "position": {
+        "top": 616.5,
+        "height": 27,
+        "left": 179,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "3 turn(s) DEF x 050",
+      "position": {
+        "top": 672.5,
+        "height": 27,
+        "left": 179,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "5 turn(s) Non-Nor1",
+      "marquee": {
+        "complete": true,
+        "samples": 3
+      },
+      "position": {
+        "top": 730,
+        "height": 26.5,
+        "left": 629,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 5,
+      "variant": "",
+      "text": "BATTLE 5",
+      "position": {
+        "top": 851,
+        "height": 26.5,
+        "left": 359.5,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı",
+      "text": "PREEMPTIVE",
+      "position": {
+        "top": 913.25,
+        "height": 25.5,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "INT type change",
+      "position": {
+        "top": 984.5,
+        "height": 25,
+        "left": 179,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "98 turn(s) Poison Immunity",
+      "position": {
+        "top": 1037,
+        "height": 27,
+        "left": 178,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "98 turn(s) Venom Immunity",
+      "position": {
+        "top": 1093.5,
+        "height": 26.5,
+        "left": 178,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "98 turn(s) Progressive Poison Immunity",
+      "position": {
+        "top": 1149.5,
+        "height": 27,
+        "left": 178,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "98 turn(s) Delay Immunity",
+      "position": {
+        "top": 1205.5,
+        "height": 27,
+        "left": 178,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    }
+  ]
+}

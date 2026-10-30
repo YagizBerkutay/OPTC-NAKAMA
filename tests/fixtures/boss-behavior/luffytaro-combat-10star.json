@@ -1,0 +1,200 @@
+{
+  "id": "screen-140a505d1aea718c7e5f731e",
+  "name": "Clash!! Luffytaro: Subdued",
+  "source": "MuMu · seçili Quest Guide / BEHAVIOR ekranı",
+  "training": false,
+  "difficulty": "10★",
+  "reviewed": "2026-10-08",
+  "notes": "Seçili ekran anlık okundu. Başı ve sonu doğrulanmış listede atlanan aşamalar listelenmedi olarak korunur. İlk saldırı ve açık numaralı tur tetiklerinin tanınan mekanikleri planlanır. HP, yenilince ve karşı saldırı koşulları ayrı gösterilir; orb / bariyer / konum ve okunamayan etkiler kesin çözülmüş sayılmaz.",
+  "stages": [
+    {
+      "id": "screen-battle-1",
+      "name": "Battle 1",
+      "battleNumber": 1,
+      "turn": 0,
+      "requirements": [
+        {
+          "mechanic": "poison",
+          "turns": 98
+        }
+      ],
+      "notes": "Battle 1 · İlk saldırı:\n98 turn(s) Progressive Poison damage",
+      "events": [
+        {
+          "trigger": "preemptive",
+          "label": "İlk saldırı",
+          "sourceBattle": "Battle 1",
+          "text": "98 turn(s) Progressive Poison damage",
+          "requirements": [
+            {
+              "mechanic": "poison",
+              "turns": 98
+            }
+          ]
+        }
+      ],
+      "sourceSections": [
+        "Battle 1"
+      ],
+      "behaviorStatus": "listed"
+    },
+    {
+      "id": "screen-battle-2",
+      "name": "Battle 2",
+      "battleNumber": 2,
+      "turn": 1,
+      "requirements": [],
+      "notes": "Rehberde bu aşama için davranış listelenmedi.",
+      "events": [],
+      "sourceSections": [],
+      "behaviorStatus": "notListed"
+    },
+    {
+      "id": "screen-battle-3",
+      "name": "Battle 3",
+      "battleNumber": 3,
+      "turn": 2,
+      "requirements": [],
+      "notes": "Battle 3 · İlk saldırı:\nRCV] [TND][BOMB]SIots to [Unfavorable] Slo",
+      "events": [
+        {
+          "trigger": "preemptive",
+          "label": "İlk saldırı",
+          "sourceBattle": "Battle 3",
+          "text": "RCV] [TND][BOMB]SIots to [Unfavorable] Slo",
+          "requirements": []
+        }
+      ],
+      "sourceSections": [
+        "Battle 3"
+      ],
+      "behaviorStatus": "listed"
+    },
+    {
+      "id": "screen-battle-4",
+      "name": "Battle 4",
+      "battleNumber": 4,
+      "turn": 3,
+      "requirements": [
+        {
+          "mechanic": "burn",
+          "turns": 5
+        },
+        {
+          "mechanic": "despair",
+          "turns": 8
+        },
+        {
+          "mechanic": "bind",
+          "turns": 6
+        }
+      ],
+      "notes": "Battle 4 · İlk saldırı:\n5 turn(s) 5000 damage Burn\n8 turn(s) Top-Row Despair\n6 turn(s) Middle-Row Bind\nRetreat\n98 turn(s) Immunity\n\nBattle 4 · Yenilince:\n30000 damage",
+      "events": [
+        {
+          "trigger": "preemptive",
+          "label": "İlk saldırı",
+          "sourceBattle": "Battle 4",
+          "text": "5 turn(s) 5000 damage Burn\n8 turn(s) Top-Row Despair\n6 turn(s) Middle-Row Bind\nRetreat\n98 turn(s) Immunity",
+          "requirements": [
+            {
+              "mechanic": "burn",
+              "turns": 5
+            },
+            {
+              "mechanic": "despair",
+              "turns": 8
+            },
+            {
+              "mechanic": "bind",
+              "turns": 6
+            }
+          ]
+        },
+        {
+          "trigger": "defeated",
+          "label": "Yenilince",
+          "sourceBattle": "Battle 4",
+          "text": "30000 damage",
+          "requirements": []
+        }
+      ],
+      "sourceSections": [
+        "Battle 4"
+      ],
+      "behaviorStatus": "listed"
+    },
+    {
+      "id": "screen-battle-5",
+      "name": "Battle 5",
+      "battleNumber": 5,
+      "turn": 4,
+      "requirements": [
+        {
+          "mechanic": "damageReduction",
+          "turns": 5
+        },
+        {
+          "mechanic": "threshold",
+          "turns": 5
+        }
+      ],
+      "notes": "Battle 5 · Tetik okunamadı:\nLand of wano Official\n(s) Tap-Timino Barrier (PERFECT 3 time(s))\nLand of wano Official\n(s) Tap-Timino Barrier (PERFECT 3 time(s))\n\nBattle 5 · İlk saldırı:\nINT type change\nficial Effects/AccumuIated Values Removal\n98 turn(s) Non-NormaI A\n98 turn(s) Immunity\n5 turn(s) Reduce damage taken 80%\n5 turn(s) Damage over 1000 99% Reduction\nto [BLOCK] Slots\n\nBattle 5 · INTERRUPTION Slot Change:\nUnlimited number of times\nRemove Beneficial Effects\n10 turn(s) Top-Row Despair",
+      "events": [
+        {
+          "trigger": "unknown",
+          "label": "Tetik okunamadı",
+          "sourceBattle": "Battle 5",
+          "text": "Land of wano Official\n(s) Tap-Timino Barrier (PERFECT 3 time(s))\nLand of wano Official\n(s) Tap-Timino Barrier (PERFECT 3 time(s))",
+          "requirements": []
+        },
+        {
+          "trigger": "preemptive",
+          "label": "İlk saldırı",
+          "sourceBattle": "Battle 5",
+          "text": "INT type change\nficial Effects/AccumuIated Values Removal\n98 turn(s) Non-NormaI A\n98 turn(s) Immunity\n5 turn(s) Reduce damage taken 80%\n5 turn(s) Damage over 1000 99% Reduction\nto [BLOCK] Slots",
+          "requirements": [
+            {
+              "mechanic": "damageReduction",
+              "turns": 5
+            },
+            {
+              "mechanic": "threshold",
+              "turns": 5
+            }
+          ]
+        },
+        {
+          "trigger": "interrupt",
+          "label": "INTERRUPTION Slot Change",
+          "sourceBattle": "Battle 5",
+          "text": "Unlimited number of times\nRemove Beneficial Effects\n10 turn(s) Top-Row Despair",
+          "requirements": [
+            {
+              "mechanic": "despair",
+              "turns": 10
+            }
+          ]
+        }
+      ],
+      "sourceSections": [
+        "Battle 5"
+      ],
+      "behaviorStatus": "listed"
+    }
+  ],
+  "observation": {
+    "observedAt": "2026-10-08T22:13:55.383Z",
+    "complete": true,
+    "startVerified": true,
+    "pages": 13,
+    "quest": "Clash!! Luffytaro: Subdued",
+    "difficulty": 10,
+    "level": null,
+    "fingerprint": "140a505d1aea718c7e5f731e292bf327e7a7ac06c3cae100150089674f01de13",
+    "warnings": [
+      "Battle 5: tetik veya davranış metni eksik.",
+      "Sayısal boss seviyesi ekranda yok / okunamadı; başka seviyeler için tahmin yapılmaz."
+    ]
+  }
+}

@@ -1,0 +1,2 @@
+const {parentPort,workerData}=require('node:worker_threads'),{createCoopGuideReader}=require('./coop-guide.cjs');
+const reader=createCoopGuideReader(workerData);reader.read(workerData.exe,workerData.device,text=>parentPort.postMessage({type:'progress',text})).then(result=>parentPort.postMessage({type:'result',result}),error=>parentPort.postMessage({type:'error',message:error.message,stack:error.stack}));

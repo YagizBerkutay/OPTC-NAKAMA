@@ -1,0 +1,26 @@
+{
+  "width": 900,
+  "height": 1600,
+  "text": "When &Lv20",
+  "lines": [
+    {
+      "text": "When &Lv20",
+      "words": [
+        {
+          "y": 883.5,
+          "height": 26,
+          "width": 87.5,
+          "text": "When",
+          "x": 113
+        },
+        {
+          "y": 883.5,
+          "height": 26,
+          "width": 130,
+          "text": "&Lv20",
+          "x": 285
+        }
+      ]
+    }
+  ]
+}
