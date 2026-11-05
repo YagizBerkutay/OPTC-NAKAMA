@@ -3,6 +3,7 @@ import { Download, Shield, Sparkles, X } from 'lucide-react';
 import type { AppState, Catalog, Character } from './model';
 import { SCENARIOS, TYPES, CLASSES, type PlannerData } from './planning';
 import { NEUTRAL_SEASON, OCTOBER_GP_SEASON, gpConditionText, type GPGroup, type GPSeason } from './grand-party';
+import { validateGPRules, type GPRules } from './grand-party-rules';
 import { getData, Portrait, TeamCard, SourceLink } from './PlannerPage';
 import { skillDescription } from './rumble-planner';
 import { download } from './storage';
@@ -13,25 +14,43 @@ import {TabBar,SCENARIO_TABS,friendlyError} from './ui';
 export default function GrandPartyPage({state,catalog,onEdit}:{state:AppState;catalog:Catalog;onEdit:(character:Character)=>void}) {
   const [data,setData]=useState<PlannerData>(),[error,setError]=useState(''),[busy,setBusy]=useState(false),[progress,setProgress]=useState('');
   const [groups,setGroups]=useState<GPGroup[]>([]),[leaderId,setLeaderId]=useState(''),[limit,setLimit]=useState(300),[activeScenario,setActiveScenario]=useState('power'),[outcome,setOutcome]=useState('');
-  const [season,setSeason]=useState<GPSeason>(()=>structuredClone(new Date().toISOString().startsWith('2026-10')?OCTOBER_GP_SEASON:NEUTRAL_SEASON)),[seasonOpen,setSeasonOpen]=useState(false),[scope,setScope]=useState('STR'),[attribute,setAttribute]=useState('ATK'),[level,setLevel]=useState(3),[duration,setDuration]=useState(100),[leaderScope,setLeaderScope]=useState(season.leaderTargets.join(', '));
+  const [season,setSeason]=useState<GPSeason>(()=>structuredClone(NEUTRAL_SEASON)),[seasonOpen,setSeasonOpen]=useState(false),[scope,setScope]=useState('STR'),[attribute,setAttribute]=useState('ATK'),[level,setLevel]=useState(3),[duration,setDuration]=useState(100),[leaderScope,setLeaderScope]=useState('');
+  const [autoRead,setAutoRead]=useState(true),[rules,setRules]=useState<GPRules>();
   const [selected,setSelected]=useState<Record<string,number>>({});
-  const worker=useRef<Worker|null>(null),run=useRef(0);
+  const worker=useRef<Worker|null>(null),run=useRef(0),reading=useRef(false),planningSeason=useRef(season),deviceKey=state.settings.adbPath+'|'+state.settings.device,previousDevice=useRef(deviceKey);
+  const stop=()=>{run.current++;worker.current?.terminate();worker.current=null;if(reading.current)void window.nakama?.cancelGrandPartyRules();reading.current=false;setBusy(false);};
   const characters=useMemo(()=>new Map(catalog.characters.map(c=>[c.id,c])),[catalog]);
   useEffect(()=>{let live=true;void getData().then(d=>{if(live)setData(d);}).catch(e=>{if(live)setError(friendlyError(e));});return()=>{live=false;};},[]);
-  useEffect(()=>{run.current++;worker.current?.terminate();worker.current=null;setBusy(false);setGroups([]);setOutcome('');},[state.box,leaderId,limit,season]);
-  useEffect(()=>()=>{worker.current?.terminate();},[]);
+  useEffect(()=>{stop();setGroups([]);setOutcome('');},[state.box,leaderId,limit]);
+  useEffect(()=>{if(season!==planningSeason.current){stop();setGroups([]);setOutcome('');setRules(undefined);}},[season]);
+  useEffect(()=>{if(previousDevice.current===deviceKey)return;previousDevice.current=deviceKey;stop();setGroups([]);setRules(undefined);setSeason(structuredClone(NEUTRAL_SEASON));setLeaderScope('');},[deviceKey]);
+  useEffect(()=>window.nakama?.onGrandPartyProgress(text=>{if(reading.current)setProgress(text);}),[]);
+  useEffect(()=>()=>{run.current++;worker.current?.terminate();if(reading.current)void window.nakama?.cancelGrandPartyRules();},[]);
   const leaders=state.box.filter(o=>data?.units[o.id]?.rumble?.gpability?.length||data?.units[o.id]?.rumbleForms?.some(f=>data.units[f.id]?.rumble?.gpability?.length)||data?.units[o.id]?.evolutions.some(e=>data.units[e.to]?.rumble?.gpability?.length));
-  const start=()=> {
-    if(!data)return;
-    worker.current?.terminate();const id=++run.current,w=new Worker(new URL('./grand-party.worker.ts',import.meta.url),{type:'module'});
-    worker.current=w;setBusy(true);setError('');setOutcome('');setGroups([]);setSelected({});setProgress('Kutun hazırlanıyor…');
+  const start=async()=> {
+    if(!data||busy)return;
+    worker.current?.terminate();const id=++run.current;setBusy(true);setError('');setOutcome('');setGroups([]);setSelected({});
+    let chosenSeason=season;
+    try{
+      if(autoRead){
+        reading.current=true;setProgress('MuMu bağlantısı ve güncel Grand Party kuralları doğrulanıyor…');
+        if(!window.nakama)throw Error('Grand Party ekran okuması masaüstü uygulamasında çalışır.');
+        if(!state.settings.device)throw Error('MuMu bağlantısından cihazını seç.');
+        await window.nakama.connect(state.settings.adbPath,state.settings.device);if(id!==run.current)return;
+        const observed=validateGPRules(await window.nakama.grandPartyRules({exe:state.settings.adbPath,device:state.settings.device}));if(id!==run.current)return;
+        chosenSeason=observed.season;planningSeason.current=chosenSeason;setSeason(chosenSeason);setLeaderScope(chosenSeason.leaderTargets.join(', '));setRules(observed);
+      }
+      reading.current=false;if(id!==run.current)return;setProgress('Kutun hazırlanıyor…');
+    const w=new Worker(new URL('./grand-party.worker.ts',import.meta.url),{type:'module'});worker.current=w;
     const finish=()=>{w.terminate();if(worker.current===w)worker.current=null;setBusy(false);};
     w.onmessage=event=>{if(id!==run.current)return;const message=event.data;if(message.progress)setProgress(message.progress);if(message.partial)setGroups(message.partial);if(message.groups){setGroups(message.groups);setOutcome('Grand Party hesabı tamamlandı. Üç geliştirme seçeneği hazır.');finish();}if(message.error){setError(message.error);finish();}};
     w.onerror=event=>{if(id===run.current){setError(event.message||'Grand Party hesabı tamamlanamadı.');finish();}};
-    w.postMessage({box:state.box,characters:catalog.characters,data,leaderId:leaderId||undefined,costLimit:limit,season});
+    w.postMessage({box:state.box,characters:catalog.characters,data,leaderId:leaderId||undefined,costLimit:limit,season:chosenSeason});
+    }catch(e){if(id===run.current){reading.current=false;setBusy(false);setError(friendlyError(e));}}
   };
   return <div className="planner-page grand-party-page">
     <section className="panel"><div className="plan-intro"><Shield/><strong>Üç kadro. Bir GP lideri.</strong><p>Mevcut hâl, Lv.100 evrimsiz ve Lv.100 evrimli seçeneklerde karakterleri üç takıma birlikte dağıtır; GP leader skill, ortak Burst hakkı ve 5 aktif + en fazla 3 yedeği karşılaştırır. İki güçlü kadroyu ve işe yarayan üçüncü kadroyu birlikte hedefler.</p></div>
+      <fieldset disabled={busy} className="gp-settings"><label className="check"><input type="checkbox" aria-label="Grand Party kurallarını MuMu’dan otomatik oku" checked={autoRead} onChange={e=>setAutoRead(e.target.checked)}/>Grand Party kurallarını MuMu’dan otomatik oku</label><p className="muted">MuMu’da Grand Party ana ekranını aç. Kadrolar kurulmadan önce güncel Rule Details okunur; okuma doğrulanmazsa hesap başlatılmaz.</p>
       <div className="form-grid"><label>GP lideri<select aria-label="GP lideri" value={leaderId} onChange={e=>setLeaderId(e.target.value)}><option value="">Kutumdan otomatik seç</option>{leaders.map(o=><option key={o.id} value={o.id}>#{o.id} {characters.get(o.id)?.name}</option>)}</select></label><label>Kadro başına maliyet sınırı<input aria-label="Grand Party maliyet sınırı" type="number" min={1} max={300} value={limit} onChange={e=>setLimit(Math.max(1,Math.min(300,Number(e.target.value)||1)))}/></label></div>
       <div className="notice">Etkinlik bonusu: {season.effects.length||season.leaderTargets.length?season.name:'Güncel kurallar doğrulanmadı; normal yeteneklerle hesaplanacak.'}</div>
       <p className="muted">{season.note}</p><button className="secondary" aria-expanded={seasonOpen} aria-controls="gp-season-settings" onClick={()=>setSeasonOpen(v=>!v)}>{seasonOpen?'Etkinlik ayarlarını kapat':'Etkinlik bonuslarını ekle'}</button>
@@ -43,8 +62,10 @@ export default function GrandPartyPage({state,catalog,onEdit}:{state:AppState;ca
         <label className="check"><input type="checkbox" checked={season.effectsRequireLeader||false} onChange={e=>setSeason(s=>({...s,effectsRequireLeader:e.target.checked}))}/>Kadro buffları için de lider etiketi koşulu aransın</label><label>Lider etiket eşleşmesi<select value={season.leaderMatch||'any'} onChange={e=>setSeason(s=>({...s,leaderMatch:e.target.value as 'any'|'all'}))}><option value="any">Etiketlerden en az biri</option><option value="all">Etiketlerin tümü</option></select></label><div className="form-grid"><label>Bonus alacak liderin tipi / sınıfı / etiketi<input aria-label="Bonus lider hedefleri" value={leaderScope} placeholder="Fighter, Straw Hat Pirates" onChange={e=>{setLeaderScope(e.target.value);setSeason(s=>({...s,leaderTargets:e.target.value.split(',').map(v=>v.trim()).filter(Boolean).slice(0,20)}));}}/></label><label>Ek Burst kullanım hakkı<input aria-label="Ek GP Burst hakkı" type="number" min={-2} max={5} value={season.extraUses} onChange={e=>setSeason(s=>({...s,extraUses:Math.max(-2,Math.min(5,Number(e.target.value)))}))}/></label><label>GP barı dolma hız çarpanı<input type="number" min={.1} max={3} step={.1} value={season.chargeMultiplier} onChange={e=>setSeason(s=>({...s,chargeMultiplier:Math.max(.1,Math.min(3,Number(e.target.value)||1))}))}/></label></div>
         <div className="actions"><button className="secondary" onClick={()=>{setSeason(structuredClone(NEUTRAL_SEASON));setLeaderScope('');}}>Etkinlik bonuslarını sıfırla</button><button className="secondary" onClick={()=>{setSeason(structuredClone(OCTOBER_GP_SEASON));setLeaderScope(OCTOBER_GP_SEASON.leaderTargets.join(', '));}}>6 Ekim boostunu yükle</button></div>
       </div>}
-      <div className="actions gp-actions"><button className="primary" aria-busy={busy} aria-describedby="gp-requirements" disabled={!data||busy||state.box.length<3} onClick={start}><Sparkles size={17}/>Grand Party kadrolarını kur</button>{busy&&<button className="secondary" onClick={()=>{run.current++;worker.current?.terminate();worker.current=null;setBusy(false);setOutcome('Grand Party hesabı durduruldu; tamamlanan seçenekler korunur.');}}>Durdur</button>}</div>
-      <p id="gp-requirements" className="disabled-hint">{!data?'Yetenek verileri yükleniyor.':state.box.length<3?'Üç kadro oluşturmak için kutuna en az 3 karakter ekle.':''}</p>{outcome&&<div className="completion-status" role="status">{outcome}</div>}
+      </fieldset>
+      {rules&&<details data-gp-rules><summary>MuMu’dan doğrulanan Grand Party kuralları</summary><p>{rules.source} · {new Date(rules.observedAt).toLocaleString('tr-TR')}</p><p>Lider koşulu: {season.leaderTargets.join(' / ')} · en az biri. Ek GP Burst: +{season.extraUses}.</p><ul>{season.effects.map((effect,i)=><li key={i}>{skillDescription(effect)}</li>)}</ul><p className="source-text">{rules.text}</p></details>}
+      <div className="actions gp-actions"><button className="primary" aria-busy={busy} aria-describedby="gp-requirements" disabled={!data||busy||state.box.length<3||autoRead&&!state.settings.device} onClick={start}><Sparkles size={17}/>Grand Party kadrolarını kur</button>{busy&&<button className="secondary" onClick={()=>{stop();setOutcome('Grand Party hesabı durduruldu; tamamlanan seçenekler korunur.');}}>Durdur</button>}</div>
+      <p id="gp-requirements" className="disabled-hint">{!data?'Yetenek verileri yükleniyor.':state.box.length<3?'Üç kadro oluşturmak için kutuna en az 3 karakter ekle.':autoRead&&!state.settings.device?'MuMu bağlantısından cihazını seç.':''}</p>{outcome&&<div className="completion-status" role="status">{outcome}</div>}
       {busy&&<p className="plan-progress" role="status">{progress}</p>}{error&&<div className="error" role="alert">{error}</div>}
     </section>
     {groups.length>0&&<TabBar prefix="gp" className="scenario-tabs" label="Grand Party geliştirme senaryosu" items={SCENARIO_TABS} value={activeScenario} onChange={setActiveScenario}/> }
@@ -60,7 +81,7 @@ export default function GrandPartyPage({state,catalog,onEdit}:{state:AppState;ca
             <details><summary>Lider yeteneği, Burst ve seçim gerekçesi</summary><h4>GP leader skill</h4><p className="source-text">{(plan.leader.ability.effects||[]).map(skillDescription).join('\n')}</p><h4>GP Burst</h4><p className="source-text">{(plan.leader.burst.effects||[]).map(skillDescription).join('\n')}</p><p>Koşul: {gpConditionText(plan.leader.condition)}</p><ul>{plan.warnings.map((v,i)=><li key={i}>{v}</li>)}</ul></details>
           </article>
           {plan.teams.map((team,i)=><div className="gp-crew-section" key={i}><h3>Kadro {i+1}{i===plan.teams.map(t=>t.score).indexOf(Math.max(...plan.teams.map(t=>t.score)))?' · En yüksek uyum':''}</h3><TeamCard team={team} scenario={group.scenario} characters={characters} data={data} kind="rumble" onEdit={onEdit}/></div>)}
-          <div className="actions plan-export"><button className="secondary" onClick={()=>download(`nakama-grand-party-${group.scenario}.json`,JSON.stringify({scenario:group.scenario,season,plan,evolutionMaterials:plan.teams.map(team=>teamMaterials(team,characters,data))},null,2))}><Download size={16}/>Bu Grand Party planını kaydet</button></div>
+          <div className="actions plan-export"><button className="secondary" onClick={()=>download(`nakama-grand-party-${group.scenario}.json`,JSON.stringify({scenario:group.scenario,season,rules,plan,evolutionMaterials:plan.teams.map(team=>teamMaterials(team,characters,data))},null,2))}><Download size={16}/>Bu Grand Party planını kaydet</button></div>
         </>}
       </section>;
     })}

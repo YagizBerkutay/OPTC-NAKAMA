@@ -70,6 +70,16 @@ test('numbered turn labels retain timing; suffix and effect duration never infer
  const id=modalIdentity(fixture(0)),r=encounterFromTokens(id,[battle(1),battle(2,'2'),pre,line('3 turns Bind'),{kind:'event',...eventLabel('TURN 2'),text:'TURN 2'},line('5 turns Paralysis')],meta);
  assert.deepEqual(r.stages[1].requirements,[{mechanic:'bind',turns:3}]);assert.equal(r.stages[1].events[1].battleTurn,2);assert.deepEqual(r.stages[1].events[1].requirements,[{mechanic:'paralysis',turns:5}]);
 });
+test('malformed decimal duration is unreadable instead of extracting its trailing digit',()=>{
+ assert.deepEqual(durationEffects('3 turns Bind').effects,[{mechanic:'bind',turns:3}]);
+ assert.deepEqual(durationEffects('- 3 turns Bind').effects,[{mechanic:'bind',turns:3}]);
+ assert.deepEqual(durationEffects('-3 turns Bind').effects,[{mechanic:'bind',turns:3}]);
+ for(const text of ['1.5 turns Bind','abc3 turns Bind','1e3 turns Bind','3/4 turns Bind']){
+  const malformed=durationEffects(text);
+  assert.deepEqual(malformed.effects,[],text);
+  assert.deepEqual(malformed.unreadable,[text],text);
+ }
+});
 test('a trailing unreadable zero is not silently treated as one-star difficulty',()=>{
  const o=fixture(0),row=o.lines.find((l:any)=>l.text==='Difficulty');row.words.push({text:'1',x:533,y:269,width:12,height:30},{text:'()',x:564,y:269,width:24,height:30});assert.equal(modalIdentity(o).difficulty,null);
  row.words[2].text='0';assert.equal(modalIdentity(o).difficulty,10);

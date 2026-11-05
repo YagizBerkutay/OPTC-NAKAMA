@@ -19,6 +19,22 @@ test('a stalled individual line request terminates its worker and the next reque
  const pending=assert.rejects(client.read(input),/yanıt vermedi/);await started;t.mock.timers.tick(31);await pending;assert.equal(old.closed,1);assert.equal((await client.read(input)).text,'6 turns');await client.close();
 });
 
+test('a cancelled active line read rejects promptly but keeps the worker serialized for other reads',async()=>{
+ let entered!:()=>void,release!:()=>void,calls=0;const started=new Promise<void>(r=>entered=r),blocked=new Promise<void>(r=>release=r),w=fake(async()=>{if(++calls===1){entered();await blocked;}return {data};}),client=createLineOCR({timeout:200,factory:async()=>w}),input=await image(),controller=new AbortController();
+ const first=assert.rejects(client.read(input,{signal:controller.signal} as any),/cancel/i);await started;controller.abort();await first;
+ const second=client.read(input);await new Promise(r=>setTimeout(r,5));assert.equal(calls,1);assert.equal(w.closed,0);release();assert.equal((await second).text,'6 turns');assert.equal(calls,2);await client.close();
+});
+
+test('a new line read waits for a retiring Tesseract worker, with a bounded retirement wait',async t=>{
+ let entered!:()=>void,finishTerminate!:()=>void,calls=0;const started=new Promise<void>(r=>entered=r),terminated=new Promise<void>(r=>finishTerminate=r),old=fake(()=>{entered();return new Promise(()=>{});});old.terminate=async()=>{await terminated;};const next=fake(),client=createLineOCR({timeout:20,terminateTimeout:100,factory:async()=>++calls===1?old:next}),input=await image();t.mock.timers.enable({apis:['setTimeout']});
+ const first=assert.rejects(client.read(input),/yanıt vermedi/);await started;t.mock.timers.tick(21);await first;const second=client.read(input);await new Promise(r=>setImmediate(r));assert.equal(calls,1);finishTerminate();assert.equal((await second).text,'6 turns');assert.equal(calls,2);await client.close();
+});
+
+test('a Tesseract terminate deadline rejects reuse, then later completion permits a clean worker',async()=>{
+ let entered!:()=>void,finishTerminate!:()=>void,calls=0;const started=new Promise<void>(r=>entered=r),old=fake(()=>{entered();return new Promise(()=>{});});old.terminate=()=>new Promise(resolve=>{finishTerminate=resolve;});const next=fake(),client=createLineOCR({timeout:20,terminateTimeout:50,factory:async()=>++calls===1?old:next}),input=await image();
+ const first=assert.rejects(client.read(input),/yanıt vermedi/);await started;await first;await assert.rejects(client.read(input),/kapatma zaman aşımına uğradı/);assert.equal(calls,1);finishTerminate();assert.equal((await client.read(input)).text,'6 turns');assert.equal(calls,2);await client.close();
+});
+
 test('unexpected OCR worker exit rejects the read instead of leaving the guide hung',async()=>{
  let entered!:()=>void;const started=new Promise<void>(r=>entered=r),w=fake(async()=>{entered();return new Promise(()=>{});}),client=createLineOCR({factory:async()=>w}),input=await image(),pending=assert.rejects(client.read(input),/beklenmedik/);await started;w.worker.emit('exit',1);await pending;assert.equal(w.closed,1);await client.close();
 });
@@ -29,6 +45,10 @@ test('an idle line OCR worker is released and initialized again on demand',async
 
 test('a worker finishing initialization after cancellation is terminated and never reused',async()=>{
  let enter!:()=>void,ready!:(v:any)=>void;const entered=new Promise<void>(r=>enter=r),boot=new Promise(r=>ready=r),stale=fake(),current=fake();let calls=0;const client=createLineOCR({factory:()=>{if(++calls===1){enter();return boot;}return Promise.resolve(current);}}),input=await image(),pending=assert.rejects(client.read(input),/kapatıldı/);await entered;await client.close();await pending;ready(stale);await new Promise(r=>setTimeout(r,0));assert.equal(stale.closed,1);assert.equal((await client.read(input)).text,'6 turns');await client.close();
+});
+
+test('a retry cannot start beside a worker factory that is still resolving after close',async()=>{
+ let enter!:()=>void,ready!:(v:any)=>void,calls=0;const entered=new Promise<void>(r=>enter=r),boot=new Promise(r=>ready=r),stale=fake(),next=fake(),client=createLineOCR({factory:()=>{if(++calls===1){enter();return boot;}return Promise.resolve(next);}}),input=await image();const first=assert.rejects(client.read(input),/kapatıldı/);await entered;await client.close();await first;const retry=client.read(input);await new Promise(r=>setTimeout(r,5));assert.equal(calls,1);ready(stale);assert.equal((await retry).text,'6 turns');assert.equal(stale.closed,1);assert.equal(calls,2);await client.close();
 });
 
 test('the bundled English model reads real short effects, a large multiplier and the missing percentage',async()=>{

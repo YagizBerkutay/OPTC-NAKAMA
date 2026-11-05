@@ -8,17 +8,17 @@ function levelRange(text){
 }
 function createLevelReader(readOCR,readLineOCR){
  const cache=new Map();
- return async(image,ocr,body)=>{
+ return async(image,ocr,body,{signal}={})=>{
   for(const r of rows(ocr).filter(r=>/^When\b/i.test(r.text)&&r.y>body.top+8&&r.y+r.height<body.top+body.height-8)){
    if(levelRange(r.text))continue;
    const rect={left:body.left+8,top:Math.round(r.y-4),width:body.width-20,height:Math.round(r.height+8)},raw=await sharp(image).extract(rect).removeAlpha().raw().toBuffer({resolveWithObject:true}),key=crypto.createHash('sha256').update(raw.data).digest('hex');let value=cache.get(key);
    if(value===undefined){
     const mask=Buffer.alloc(raw.data.length);for(let i=0;i<mask.length;i+=3){const a=raw.data[i],b=raw.data[i+1],c=raw.data[i+2],v=a>120&&b>100&&c<150&&a>c*1.4?0:255;mask[i]=mask[i+1]=mask[i+2]=v;}
     const masked=await sharp(mask,{raw:{width:raw.info.width,height:raw.info.height,channels:3}}).resize({height:110}).extend({top:30,bottom:30,left:30,right:30,background:'white'}).png().toBuffer();
-    const texts=[(await readOCR(masked)).text];if(!texts.some(levelRange))texts.push((await readOCR(await sharp(image).extract(rect).resize({height:110}).png().toBuffer())).text);
-    if(!texts.some(levelRange)){const resized=[];for(const scale of [.8,1.5])resized.push((await readOCR(masked,{scale})).text);const ranges=resized.map(levelRange);if(ranges.every(Boolean)&&JSON.stringify(ranges[0])===JSON.stringify(ranges[1]))texts.push(...resized);}
+    const texts=[(await readOCR(masked,{signal})).text];if(!texts.some(levelRange))texts.push((await readOCR(await sharp(image).extract(rect).resize({height:110}).png().toBuffer(),{signal})).text);
+    if(!texts.some(levelRange)){const resized=[];for(const scale of [.8,1.5])resized.push((await readOCR(masked,{scale,signal})).text);const ranges=resized.map(levelRange);if(ranges.every(Boolean)&&JSON.stringify(ranges[0])===JSON.stringify(ranges[1]))texts.push(...resized);}
     if(!texts.some(levelRange)&&readLineOCR){
-     const color=await sharp(image).extract(rect).extend({top:12,bottom:12,left:12,right:12,background:'black'}).png().toBuffer(),alternate=[(await readLineOCR(masked,{scale:1})).text,(await readLineOCR(color,{scale:3})).text],ranges=alternate.map(levelRange);
+     const color=await sharp(image).extract(rect).extend({top:12,bottom:12,left:12,right:12,background:'black'}).png().toBuffer(),alternate=[(await readLineOCR(masked,{scale:1,signal})).text,(await readLineOCR(color,{scale:3,signal})).text],ranges=alternate.map(levelRange);
      if(ranges.every(Boolean)&&JSON.stringify(ranges[0])===JSON.stringify(ranges[1]))texts.push(...alternate);
     }
     const candidates=texts.map(t=>({t,range:levelRange(t)})).filter(v=>v.range);

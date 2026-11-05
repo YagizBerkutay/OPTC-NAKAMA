@@ -6,7 +6,7 @@ const pause=ms=>new Promise(r=>setTimeout(r,ms));
 function createRuleReader(io){
   let active;
   const wait=io.wait||pause;
-  async function read(exe,device,progress=()=>{}){
+  async function read(exe,device,progress=()=>{},onObserve){
     if(active)throw Error('Bir kural okuması zaten sürüyor.');
     const token={cancelled:false};active=token;
     const check=()=>{if(token.cancelled)throw Error('Kural okuma iptal edildi.');};
@@ -16,12 +16,12 @@ function createRuleReader(io){
         const tab=await io.ocr(capture.image,{crop:{left:Math.round(capture.width*.122),top:Math.round(capture.height*.247),width:Math.round(capture.width*.35),height:Math.round(capture.height*.050)},scale:3});check();
         const lines=tab.lines.filter(l=>/^UNDERWAY$/i.test(l.text));ocr={...ocr,lines:[...ocr.lines,...lines],text:ocr.text+'\n'+lines.map(l=>l.text).join('\n')};
       }
-      return {...capture,ocr};};
+      onObserve?.(capture.image,ocr);return {...capture,ocr};};
     const input=async(action,snap,rect)=>{check();await io.input(exe,device,action,snap,rect);check();await wait(1000);};
     const waitRules=async()=>{
       for(let attempt=0;attempt<6;attempt++){
         const s=await observe();if(isRulesScreen(s.ocr))return s;
-        if(!/CONNEC|LOADING/i.test(s.ocr.text)&&!rulesButton(s.ocr))throw Error('MuMu Rules ekranında değil; kural okuma durduruldu.');
+        if(!/CONNEC|LOADING|PREVIOUS\s+RANKING/i.test(s.ocr.text)&&!rulesButton(s.ocr))throw Error('MuMu Rules ekranında değil; kural okuma durduruldu.');
         await wait(1000);check();
       }
       throw Error('Rules ekranı yüklenemedi; bağlantıyı kontrol edip yeniden okut.');
@@ -77,11 +77,24 @@ function createRuleReader(io){
         if(page===0){await input('tap',snap,underway);snap=await waitRules();}
         update(phase+' kuralları okunuyor · sayfa '+(page+1)+' / 10…');
         const text=await io.ocr(snap.image,{scale:2});check();
+        onObserve?.(snap.image,text,{stage:'rule-parse',phase,scale:2});
         const section=phaseSection(text,phase);
         if(section)targetSeen=true;
         else if(targetSeen)throw Error(phase+' başlığı görünür alandan çıktı; Rules ekranını başa alıp yeniden okut.');
         if(section?.complete){
-          const profile=parseRules(section.text,phase);
+          let profile,parseError;
+          try{profile=parseRules(section.text,phase);}catch(error){parseError=error;}
+          // A dropped bracket or Up glyph at one scale is not a failed scan.
+          for(const scale of [3,4]){
+            if(profile)break;
+            update(phase+' · kural metni farklı ölçekte yeniden okunuyor…');
+            const retry=await io.ocr(snap.image,{scale});check();
+            onObserve?.(snap.image,retry,{stage:'rule-parse',phase,scale});
+            const candidate=phaseSection(retry,phase);
+            if(!candidate?.complete)continue;
+            try{profile=parseRules(candidate.text,phase);}catch(error){parseError=error;}
+          }
+          if(!profile)throw parseError;
           update(phase+' · '+profile.effects.filter(e=>e.kind==='stat').length+' seviye bonusu okundu.');
           // Return to the same screen and verify this profile still belongs to its current phase.
           const last=await observe();if(!isRulesScreen(last.ocr))throw Error('Okuma sırasında ekran değişti.');

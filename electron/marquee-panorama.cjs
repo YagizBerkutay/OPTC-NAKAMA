@@ -57,8 +57,8 @@ function mergeSlotWords(lists){
    }else if(!slot||!slot.text.toLowerCase().includes(word.text.toLowerCase())||overlap(slot,word)<word.width*.75)result.push(word);
   }for(const slot of chosen)if(!used.has(slot))result.push(slot);return result.sort((a,b)=>a.x-b.x);})};
 }
-function createPixelMarquee(tokens,body,reuse,{now=Date.now,staticCycleMs}={}){
- const sources=[...tokens],tracks=[],failedImages=new Set();let cycleMs=staticCycleMs,badgeBoxes;
+function createPixelMarquee(tokens,body,reuse,{now=Date.now,staticCycleMs,retainPartial=false}={}){
+ const sources=[...tokens],tracks=[],failedImages=new Set(),failedEffectImages=new Map();let cycleMs=staticCycleMs,badgeBoxes;
  const addTrack=(token,index)=>{
   const p=token.position;if(!p||!['line','event'].includes(token.kind)||token.kind==='line'&&!Number.isFinite(p.contentLeft)&&p.left<body.left+body.width*.10||/^When\s*Lv/i.test(token.text)||p.edge||p.top+p.height+6>=body.top+body.height-8)return;
   const old=reuse?.verified&&reuse.tokens.find(t=>t.marquee?.complete&&t.kind===token.kind&&t.trigger===token.trigger&&t.position&&!t.position.edge&&Math.abs(t.position.top-reuse.shift-p.top)<=4&&!conflictingNumbers(t,token));
@@ -122,46 +122,65 @@ function createPixelMarquee(tokens,body,reuse,{now=Date.now,staticCycleMs}={}){
    if(cycleMs)for(const track of tracks)if(!track.done&&!track.startSeen&&!track.moving&&track.still>=2&&now()-track.stillSince>=cycleMs&&!track.token.position.rightClipped&&track.previous?.right<track.rect.width-30)track.done=true;
   },calibration:()=>cycleMs,pending:()=>tracks.filter(t=>!t.done).length,waitingText:()=>tracks.filter(t=>!t.done).map(t=>t.token.text||'İlk görüntüde okunamayan satır').join(' · ').slice(0,160),
   retry(indices){for(const track of tracks)if(indices.has(track.index)){track.previous=undefined;track.done=false;}},
-  async recognize(readOCR,check,readLineOCR,readBlockOCR){
-   const panels=[];let height=20;for(const track of tracks){const rendered=prepareStrip(track.pixels,track.width,track.rect.height),png=await sharp(rendered.data,{raw:{width:rendered.width,height:rendered.height,channels:3}}).png().toBuffer();panels.push({track,rendered,top:height,png});height+=track.rect.height+24;}
+  async recognize(readOCR,check,readLineOCR,readBlockOCR,signal){
+   const panels=[];let height=20;for(const track of tracks){if(track.resolved)continue;const rendered=prepareStrip(track.pixels,track.width,track.rect.height),png=await sharp(rendered.data,{raw:{width:rendered.width,height:rendered.height,channels:3}}).png().toBuffer();panels.push({track,rendered,top:height,png});height+=track.rect.height+24;}
    if(!panels.length)return {tokens:sources,retry:new Set()};
+   if(!retainPartial&&panels.some(p=>p.track.token.requiresEffectProof&&failedEffectImages.get(p.track.index)===createHash('sha256').update(p.png).digest('hex')))return {tokens:sources,retry:new Set(panels.map(p=>p.track.index)),awaitingFreshPixels:true};
    const width=Math.max(...panels.map(p=>p.rendered.width))+40,sheet=await sharp({create:{width,height,channels:3,background:'black'}}).composite(panels.map(p=>({input:p.png,left:20,top:p.top}))).png().toBuffer();check();
-   const a=await readOCR(sheet,{scale:3});check();const b=await readOCR(sheet,{scale:2});check();const result=[...sources],retry=new Set();
-   const fromWords=(list,p)=>{const covered=new Uint8Array(p.rendered.width);for(const w of list)covered.fill(1,Math.min(covered.length,Math.max(0,Math.floor(w.x-20)-3)),Math.max(0,Math.min(covered.length,Math.ceil(w.x+w.width-20)+3)));let ink=0,read=0;const missing=[];for(let x=0;x<covered.length;x++){ink+=p.rendered.columns[x];if(covered[x])read+=p.rendered.columns[x];else if(p.rendered.columns[x]){const last=missing.at(-1);if(last&&x-last.end<=4){last.end=x;last.ink+=p.rendered.columns[x];}else missing.push({start:x,end:x,ink:p.rendered.columns[x]});}}return {list,text:list.map(w=>w.text).join(' ').trim(),coverage:ink?read/ink:0,missingWord:missing.some(r=>r.end-r.start>=10&&r.ink>=30)};};
-   const words=(ocr,p)=>fromWords(ocr.lines.flatMap(l=>l.words).filter(w=>w.y+w.height/2>=p.top-2&&w.y+w.height/2<=p.top+p.track.rect.height+2&&w.height<=p.track.rect.height+16).sort((a,b)=>a.x-b.x),p);
-   const numbers=s=>s.match(/\d+/g)||[],uncertain=s=>/\breduction\s*:\s*$|\bby\s*$|^(?:[a-z|]+\s+)?turn\(s\)(?=\s|$)/i.test(s)||[...s.matchAll(/\b(?:by|over|above|below|x|reduction\s*:?)\s*([0-9IlOo|]+)(?=\s|%|$)|\b([0-9IlOo|]+)\s*(?=turn(?:\(s\)|s)?\b|%)/gi)].some(m=>/[IlOo|]/.test(m[1]||m[2]));
+   const a=await readOCR(sheet,{scale:3,signal});check();const b=await readOCR(sheet,{scale:2,signal});check();const result=[...sources],retry=new Set();
+   const fromWords=(list,p,reader)=>{const covered=new Uint8Array(p.rendered.width);for(const w of list)covered.fill(1,Math.min(covered.length,Math.max(0,Math.floor(w.x-20)-3)),Math.max(0,Math.min(covered.length,Math.ceil(w.x+w.width-20)+3)));let ink=0,read=0;const missing=[];for(let x=0;x<covered.length;x++){ink+=p.rendered.columns[x];if(covered[x])read+=p.rendered.columns[x];else if(p.rendered.columns[x]){const last=missing.at(-1);if(last&&x-last.end<=4){last.end=x;last.ink+=p.rendered.columns[x];}else missing.push({start:x,end:x,ink:p.rendered.columns[x]});}}return {list,text:list.map(w=>w.text).join(' ').trim(),coverage:ink?read/ink:0,missingWord:missing.some(r=>r.end-r.start>=10&&r.ink>=30),reader};};
+   const words=(ocr,p,reader)=>fromWords(ocr.lines.flatMap(l=>l.words).filter(w=>w.y+w.height/2>=p.top-2&&w.y+w.height/2<=p.top+p.track.rect.height+2&&w.height<=p.track.rect.height+16).sort((a,b)=>a.x-b.x),p,reader);
+   const numbers=s=>s.match(/\d+/g)||[],uncertain=s=>/§\d*%/.test(s)||/\breduction\s*:\s*$|\bby\s*$|^(?:[a-z|]+\s+)?turn\(s\)(?=\s|$)/i.test(s)||[...s.matchAll(/\b(?:by|over|above|below|x|reduction\s*:?)\s*([0-9IlOo|]+)(?=\s|%|$)|\b([0-9IlOo|]+)\s*(?=turn(?:\(s\)|s)?\b|%)/gi)].some(m=>/[IlOo|]/.test(m[1]||m[2]));
    const confident=s=>!s.missingWord&&!s.list?.some(w=>w.confidence!==undefined&&w.confidence<(/\d/.test(w.text)?80:45));
-   const agree=(values,p)=>values.filter((s,i)=>s.text&&!s.ambiguousSlots&&!uncertain(s.text)&&confident(s)&&s.coverage>=.88&&(!numbers(p.track.token.text).length||numbers(s.text).length)&&values.some((other,j)=>i!==j&&other.text&&!uncertain(other.text)&&confident(other)&&JSON.stringify(numbers(s.text))===JSON.stringify(numbers(other.text)))).sort((a,b)=>b.coverage-a.coverage||b.text.length-a.text.length)[0];
+   const effectProof=(s,p)=>{const conditionWords=/\b(?:if|when|chance|chain|multiplier|or less|or more|below|above|at least|at most)\b/i.test(s.text),condition=p.track.token.requiresEffectCondition||conditionWords,m=s.text.match(condition?/^(\d{1,2})\s+turn\(s\)\s+if\b.+(?<![\d.])(\d+(?:\.\d+)?)\s+or\s+(less|more)\b.*\b(?:(?:ATK\s+(\d{1,3})%)|((\d{1,3})%\s+ATK))\s+Down\b/i:/^(\d{1,2})\s+turn\(s\)(?:\s|$).*\b(?:(?:ATK\s+(\d{1,3})%)|((\d{1,3})%\s+ATK))\s+Down\b/i),percent=+(condition?(m?.[4]||m?.[6]):(m?.[2]||m?.[4]));return !!m&&+m[1]>=1&&+m[1]<=99&&(!condition||+m[2]>0)&&percent>=1&&percent<=100&&[...s.text.matchAll(/\b\d+(?:\.\d+)?%?/g)].every(v=>{const w=s.list?.find(w=>w.text===v[0]);return !!w&&w.confidence>=90;});};
+   const agree=(values,p)=>values.filter((s,i)=>s.text&&!s.ambiguousSlots&&!uncertain(s.text)&&confident(s)&&s.coverage>=.88&&(!numbers(p.track.token.text).length||numbers(s.text).length)&&(!p.track.token.requiresEffectProof||effectProof(s,p))&&values.some((other,j)=>i!==j&&other.text&&!uncertain(other.text)&&confident(other)&&JSON.stringify(numbers(s.text))===JSON.stringify(numbers(other.text))&&(!p.track.token.requiresEffectProof||other.reader!==s.reader&&effectProof(other,p)))).sort((a,b)=>b.coverage-a.coverage||b.text.length-a.text.length)[0];
    let third;
-   for(const panel of panels){const values=[words(a,panel),words(b,panel)],slotMode=values.some(v=>slotLabels(v.text).length>=3),choose=()=>{if(!slotMode)return agree(values,panel);const merged=mergeSlotWords(values.map(v=>v.list||[]));return agree(values.map((v,i)=>v.list?{...fromWords(merged.lists[i],panel),ambiguousSlots:merged.ambiguous}:v),panel);};
-    const isolated=async scale=>{const read=await readOCR(panel.png,{scale});check();values.push(words({lines:read.lines.map(l=>({...l,words:l.words.map(w=>({...w,x:w.x+20,y:w.y+panel.top}))}))},panel));};
-    if(slotMode)await isolated(2.5);let text=choose();if(!text){if(!third){third=await readOCR(sheet,{scale:4});check();}values.push(words(third,panel));text=choose();}
-    if(!text&&readLineOCR){
-     const read=await readLineOCR(panel.png,{scale:2});check();values.push(words({lines:read.lines.map(l=>({...l,words:l.words.map(w=>({...w,x:w.x+20,y:w.y+panel.top}))}))},panel));text=choose();
-     if(!text){const view=recognitionView(panel.rendered,140);if(view){const image=await sharp(view.data,{raw:{width:view.width,height:view.height,channels:3}}).png().toBuffer(),read=await readLineOCR(image,{scale:2});check();values.push(words({lines:read.lines.map(l=>({...l,words:l.words.map(w=>({...w,x:w.x+view.x+20,y:w.y+view.y+panel.top}))}))},panel));text=choose();}}
+   for(const panel of panels){const fingerprint=createHash('sha256').update(panel.png).digest('hex');const values=[words(a,panel,'ocr'),words(b,panel,'ocr')],slotMode=values.some(v=>slotLabels(v.text).length>=3),choose=()=>{if(!slotMode)return agree(values,panel);const merged=mergeSlotWords(values.map(v=>v.list||[]));return agree(values.map((v,i)=>v.list?{...fromWords(merged.lists[i],panel,v.reader),ambiguousSlots:merged.ambiguous}:v),panel);};let lineRead=false,cleaned;
+    const isolated=async scale=>{const read=await readOCR(panel.png,{scale,signal});check();values.push(words({lines:read.lines.map(l=>({...l,words:l.words.map(w=>({...w,x:w.x+20,y:w.y+panel.top}))}))},panel,'ocr'));};
+    if(slotMode)await isolated(2.5);let text=choose();if(!text&&panel.track.token.requiresEffectProof&&readLineOCR){lineRead=true;const read=await readLineOCR(panel.png,{scale:2,signal});check();values.push(words({lines:read.lines.map(l=>({...l,words:l.words.map(w=>({...w,x:w.x+20,y:w.y+panel.top}))}))},panel,'line'));text=choose();}
+    if(!text){if(!third){third=await readOCR(sheet,{scale:4,signal});check();}values.push(words(third,panel,'ocr'));text=choose();}
+    if(!text&&readLineOCR&&!lineRead){
+     const read=await readLineOCR(panel.png,{scale:2,signal});check();values.push(words({lines:read.lines.map(l=>({...l,words:l.words.map(w=>({...w,x:w.x+20,y:w.y+panel.top}))}))},panel,'line'));text=choose();
+     if(!text){const view=recognitionView(panel.rendered,140);if(view){const image=await sharp(view.data,{raw:{width:view.width,height:view.height,channels:3}}).png().toBuffer(),read=await readLineOCR(image,{scale:2,signal});cleaned={image,view};check();values.push(words({lines:read.lines.map(l=>({...l,words:l.words.map(w=>({...w,x:w.x+view.x+20,y:w.y+view.y+panel.top}))}))},panel,'line'));text=choose();}}
     }
     // An open-top duration digit can be transcribed as a letter by page OCR.
     // Require a second confident layout reading of the same complete pixels.
-    if(!text&&readBlockOCR&&values.some(v=>/^\d+\s+turn\(s\)/i.test(v.text)&&confident(v))){const read=await readBlockOCR(panel.png,{scale:2});check();values.push(words({lines:read.lines.map(l=>({...l,words:l.words.map(w=>({...w,x:w.x+20,y:w.y+panel.top}))}))},panel));text=choose();}
+    if(!text&&readBlockOCR&&values.some(v=>/^\d+\s+turn\(s\)/i.test(v.text)&&confident(v))){const read=await readBlockOCR(panel.png,{scale:2,signal});check();values.push(words({lines:read.lines.map(l=>({...l,words:l.words.map(w=>({...w,x:w.x+20,y:w.y+panel.top}))}))},panel,'block'));text=choose();
+     if(!text&&cleaned){const {image,view}=cleaned,read=await readBlockOCR(image,{scale:2,signal});check();values.push(words({lines:read.lines.map(l=>({...l,words:l.words.map(w=>({...w,x:w.x+view.x+20,y:w.y+view.y+panel.top}))}))},panel,'block'));text=choose();}
+    }
     if(!text&&!panel.track.moving&&!panel.track.startSeen){values.push({text:panel.track.token.text,coverage:0});text=choose();}
     if(!text){for(const scale of [3,2,1.5]){await isolated(scale);text=choose();if(text)break;}}
-    const fingerprint=createHash('sha256').update(panel.png).digest('hex');
-    if(!text){if(failedImages.has(fingerprint))throw Error('Kayan satır aynı görüntüde farklı okuma yöntemleriyle doğrulanamadı; eksik metinle devam edilmedi: '+(panel.track.token.text||'İlk görüntüde okunamayan satır'));failedImages.add(fingerprint);retry.add(panel.track.index);continue;}
-    failedImages.delete(fingerprint);
+    if(!text){
+     const t=panel.track,previousFailure=failedEffectImages.get(t.index);
+     if(retainPartial&&previousFailure===fingerprint){
+      result[t.index]=positioned({...t.token,marquee:{complete:false,samples:t.samples}},t.token.position);
+      sources[t.index]=result[t.index];
+      t.resolved=true;
+      continue;
+     }
+     if(retainPartial||t.token.requiresEffectProof){failedEffectImages.set(t.index,fingerprint);retry.add(t.index);continue;}
+     if(failedImages.has(fingerprint))throw Error('Kayan satır aynı görüntüde farklı okuma yöntemleriyle doğrulanamadı; eksik metinle devam edilmedi: '+(t.token.text||'İlk görüntüde okunamayan satır'));
+     failedImages.add(fingerprint);retry.add(t.index);continue;
+    }
+    failedImages.delete(fingerprint);failedEffectImages.delete(panel.track.index);
     const t=panel.track,full=(t.prefix?t.prefix+' ':'')+text.text;result[t.index]=positioned({...t.token,...(t.token.kind==='event'?eventLabel(full):{}),text:full,marquee:{complete:true,samples:t.samples,method:'pixels'}},{...t.token.position,rightClipped:false});
+    if(retainPartial){sources[t.index]=result[t.index];t.resolved=true;}
    }
    return {tokens:result.sort((a,b)=>(a.position?.top||0)-(b.position?.top||0)),retry};
   }
  };
 }
-async function collectPixelMarquee(first,{capture,tokens,body,check,progress,wait,measure,readOCR,readLineOCR,readBlockOCR,reuse,staticCycleMs}){
- const tracker=createPixelMarquee(tokens(first),body,reuse,{staticCycleMs});let snap=first,samples=0;await tracker.observe(first.image);
+async function collectPixelMarquee(first,{capture,tokens,body,check,progress,wait,measure,readOCR,readLineOCR,readBlockOCR,reuse,staticCycleMs,signal,retainPartial}){
+ const tracker=createPixelMarquee(tokens(first),body,reuse,{staticCycleMs,retainPartial});let snap=first,samples=0,unknownFrames=0;await tracker.observe(first.image);
  for(;;){
-  check();if(!tracker.pending()){
-   const result=await tracker.recognize(readOCR,check,readLineOCR,readBlockOCR);if(!result.retry.size)return {snap,tokens:require('./behavior-effect-ocr.cjs').restoreVerifiedEffects(result.tokens,snap.ocr),staticCycleMs:tracker.calibration()};tracker.retry(result.retry);progress('Kayan satırdaki sayılar yeniden görüntüden doğrulanıyor · '+result.retry.size+' satır…');
+   check();if(!tracker.pending()){
+   const result=await tracker.recognize(readOCR,check,readLineOCR,readBlockOCR,signal);if(!result.retry.size)return {snap,tokens:require('./behavior-effect-ocr.cjs').restoreVerifiedEffects(result.tokens,snap.ocr),staticCycleMs:tracker.calibration()};tracker.retry(result.retry);progress(result.awaitingFreshPixels?'ATK Down satırını doğrulamak için yeni görüntü bekleniyor · '+result.retry.size+' satır…':'Kayan satırdaki sayılar yeniden görüntüden doğrulanıyor · '+result.retry.size+' satır…');
   }
   progress('Kayan yazılar görüntüden birleştiriliyor · '+tracker.pending()+' satır · kare '+(++samples)+(tracker.pending()===1?' · '+tracker.waitingText():'')+'…');await wait(80);check();const next=await capture({pixelsOnly:true});check();
-  const position=await measure(snap.image,next.image,body);check();if(!position||position.shift>3)throw Error('Davranış listesi okuma sırasında hareket etti; aynı satırın kayan metni doğrulanamadı.');
+  const position=await measure(snap.image,next.image,body);check();
+  if(retainPartial&&!position?.verified&&++unknownFrames<3){progress('Belirsiz görüntü atlandı, sayfa konumu yeniden ölçülüyor…');continue;}
+  if(!position?.verified||position.shift>3){const measured=position?{verified:!!position.verified,...(Number.isFinite(position.shift)?{shift:position.shift}:{}),...(position.source?{source:position.source}:{})}:null;await snap.recordPixelPair?.(snap,next,measured,position?.verified?'verified-motion':'motion-unverified');throw Error(position?.verified?'Davranış listesi okuma sırasında hareket etti; aynı satırın kayan metni doğrulanamadı.':'Davranış listesinin hareketi doğrulanamadı; eksik kayan metinle devam edilmedi.');}
+  unknownFrames=0;
   await tracker.observe(next.image);snap=next;
  }
 }

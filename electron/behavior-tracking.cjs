@@ -105,8 +105,8 @@ function createMarqueeTracker(tokens,{body}={}){
   result:()=>{const page=Symbol();return [...tracks].sort((a,b)=>a.token.position.top-b.token.position.top).map(v=>{const text=v.prefix?v.prefix+(v.token.text?' '+v.token.text:''):v.token.text;return positioned({...v.token,text,...(v.prefix?eventLabel(text):{}),...(readable(v)&&(v.clipped||v.moving)?{marquee:{complete:!unresolved(v),samples:v.fragments.length}}:{})},{...v.token.position,page});});}};
 }
 // Wait for observed completion or cancellation, regardless of animation length.
-async function collectMarquee(first,{capture,tokens,body,check,progress,wait=sleep,maxDuration=Infinity,maxSamples=Math.ceil(maxDuration/450)+1,now=Date.now,measure=estimateScroll,readOCR,readLineOCR,readBlockOCR,reuse,staticCycleMs}){
- if(readOCR)return require('./marquee-panorama.cjs').collectPixelMarquee(first,{capture,tokens,body,check,progress,wait,measure,readOCR,readLineOCR,readBlockOCR,reuse,staticCycleMs});
+async function collectMarquee(first,{capture,tokens,body,check,progress,wait=sleep,maxDuration=Infinity,maxSamples=Math.ceil(maxDuration/450)+1,now=Date.now,measure=estimateScroll,readOCR,readLineOCR,readBlockOCR,reuse,staticCycleMs,signal,retainPartial}){
+ if(readOCR)return require('./marquee-panorama.cjs').collectPixelMarquee(first,{capture,tokens,body,check,progress,wait,measure,readOCR,readLineOCR,readBlockOCR,reuse,staticCycleMs,signal,retainPartial});
  const tracker=createMarqueeTracker(tokens(first),{body}),started=now();let snap=first;
  // Two samples also detect rows whose initial frame is in the end pause.
  for(let sample=1;sample<maxSamples;sample++){

@@ -6,6 +6,7 @@ import {candidates,createPlannerSession,plan,type PlannerData,type PlanRequest,t
 import {evaluatePve} from '../src/engine';
 import {makeCombatHooks} from '../src/pve-combat';
 import {bossTimeline} from '../src/boss-timeline';
+import type {Encounter} from '../src/boss-library';
 import {parseEffects} from '../src/planning';
 import {inspectSkills,applyAuxiliary} from '../src/skill-analysis';
 import {chargeFor,eventStats,kizunaBoss,kizunaCrewCharge,kizunaMember,kizunaProblem,kizunaReport,legacyKizunaHP,newKizunaBonus,newKizunaSetup,rankKizunaTeams,validateKizunaSetup} from '../src/kizuna';
@@ -128,6 +129,16 @@ test('SOS changes only remaining HP, retaining level-31 guide and original setup
  assert.match(kizunaProblem({...setup,maxHP:'',remainingHP:'100000001'},boss),/aşamaz/);
  assert.match(kizunaProblem({...setup,confirmed:false},boss),/eşleştiğini/);
  assert.match(kizunaProblem({...setup,profileId:'another'},boss),/eşleştiğini/);
+});
+
+test('incomplete boss text blocks planning while legacy observations without textComplete remain compatible',()=>{
+ const {boss,setup}=fixture();
+ const observation={observedAt:'2026-10-21T19:00:00.000Z',quest:'Kizuna fixture',difficulty:10,level:31,complete:true,pages:1,fingerprint:'fixture',warnings:[]};
+ const encounter=(reading:Encounter['observation']):Encounter=>({...boss,stages:boss.stages.map(stage=>({...stage,notes:stage.notes||''})),difficulty:'10★',reviewed:'2026-10-21',notes:'fixture',observation:reading});
+ const observed=encounter({...observation,textComplete:false});
+ const legacy=encounter(observation);
+ assert.match(kizunaProblem(setup,observed),/kayan|tamam|okun/i);
+ assert.equal(kizunaProblem(setup,legacy),'');
 });
 
 test('card bonuses are exact-ID / starting-form / scope specific and do not mutate base or Support stats',()=>{

@@ -69,6 +69,15 @@ test('automatic result fills the exact boss context and bonus roster without per
  const previous=newKizunaSetup(),before=structuredClone(previous),r=result(),built=applyAutomaticKizuna(previous,r,cards).setup;
  assert.equal(built.confirmed,true);assert.equal(built.level,31);assert.equal(built.levelMax,31);assert.equal(built.maxHP,'1000000');assert.equal(built.enemyType,'QCK');assert.equal(built.profileId,'qa');assert.equal(built.bonusCoverage,'complete');assert.equal(built.bonuses[0].atk,5);assert.equal(built.bonuses[0].tickets,1.4);assert.equal(built.bonuses[0].cooldown,15);assert.equal(built.bonuses.length,1);assert.ok(built.otherEffects.includes('Sahiplik bonusu #102'));assert.deepEqual(previous,before);assert.equal(kizunaProblem(built,r.live!.boss),'');
 });
+test('partial marquee text cannot auto-confirm a Kizuna guide; missing legacy flag remains compatible',t=>{
+ t.mock.timers.enable({apis:['Date'],now});
+ const partial=result();partial.live!.boss.observation!.textComplete=false;
+ const built=applyAutomaticKizuna(newKizunaSetup(),partial,cards).setup;
+ assert.equal(built.confirmed,false);
+ assert.match(kizunaProblem(built,partial.live!.boss),/kayan|tamam|okun/i);
+ const legacy=result();delete legacy.live!.boss.observation!.textComplete;
+ assert.equal(applyAutomaticKizuna(newKizunaSetup(),legacy,cards).setup.confirmed,true);
+});
 test('event rollover clears old coefficient proofs; source and game mismatch cannot confirm a guide',()=>{
  const old={...newKizunaSetup(),statOrder:'after-flat' as const,rewardStack:'multiply' as const,rewardSource:'old event evidence'};
  const applied=applyAutomaticKizuna(old,result(),cards).setup;assert.equal(applied.statOrder,'unknown');assert.equal(applied.rewardStack,'unknown');assert.equal(applied.rewardSource,'');
@@ -98,7 +107,7 @@ test('automatic service keeps internet results if MuMu is unavailable and does n
 });
 test('automatic worker switches to live LIST fallback on network failure and preserves cancellation',async()=>{
  const {createService}=require('../electron/kizuna-auto-service.cjs'),workers:any[]=[];
- class FakeWorker extends EventEmitter {data:any;terminated=false;constructor(_file:string,options:any){super();this.data=options.workerData;workers.push(this);}async terminate(){this.terminated=true;}}
+ class FakeWorker extends EventEmitter {data:any;terminated=false;constructor(_file:string,options:any){super();this.data=options.workerData;workers.push(this);}postMessage(message:any){if(message.type==='cancel')queueMicrotask(()=>this.emit('message',{type:'error',message:'Kizuna otomatik okuması iptal edildi.'}));}async terminate(){this.terminated=true;}}
  const api={validateAdb:()=>{},validateDevice:()=>{},connect:async()=>{}},input={exe:'qa',device:'127.0.0.1:1',difficulty:10};
  const service=createService('.local',{WorkerClass:FakeWorker,deviceApi:api,online:{read:async()=>{throw Error('network unavailable');},cancel:()=>true}});
  const pending=service.read(input);await new Promise(r=>setImmediate(r));assert.equal(workers[0].data.options.collectBonuses,true);workers[0].emit('message',{type:'result',result:result().live});const response=await pending;assert.equal(response.event,undefined);assert.ok(response.live);assert.ok(response.warnings.some((w:string)=>w.includes('network unavailable')));
@@ -107,7 +116,7 @@ test('automatic worker switches to live LIST fallback on network failure and pre
 
 test('automatic reading continues beyond ten minutes, accepts progress and results, and can still be cancelled',async t=>{
  const {createService}=require('../electron/kizuna-auto-service.cjs'),workers:any[]=[],messages:string[]=[];
- class FakeWorker extends EventEmitter {terminated=false;constructor(){super();workers.push(this);}async terminate(){this.terminated=true;}}
+ class FakeWorker extends EventEmitter {terminated=false;constructor(){super();workers.push(this);}postMessage(message:any){if(message.type==='cancel')queueMicrotask(()=>this.emit('message',{type:'error',message:'Kizuna otomatik okuması iptal edildi.'}));}async terminate(){this.terminated=true;}}
  const service=createService('.local',{WorkerClass:FakeWorker,deviceApi:{validateAdb:()=>{},validateDevice:()=>{},connect:async()=>{}},online:{read:async()=>event,cancel:()=>true}}),input={exe:'qa',device:'127.0.0.1:1',difficulty:10};
  t.mock.timers.enable({apis:['setTimeout']});t.after(()=>service.cancel());
  let settled=false;const pending=service.read(input,(text:string)=>messages.push(text)).finally(()=>{settled=true;});await new Promise(r=>setImmediate(r));
@@ -180,6 +189,59 @@ test('Kizuna reads target crops when full-frame OCR misses both Vs title and TIP
  assert.deepEqual(mainValues(snap.ocr),{title:'vs. Koala',remainingHP:'13738800',maxHP:'13738800',level:3,battles:3});
 });
 
+test('temporary missing Lv is recaptured on the same main screen before any input',async()=>{
+ const {createReader}=require('../electron/kizuna-live.cjs');
+ const line=(text:string,x:number,y:number)=>({text,words:[{text,x,y,width:80,height:20}]});
+ let captures=0;const actions:string[]=[];
+ const frame=()=>({width:900,height:1600,text:'KIZUNA CLASH Vs. QA TIPS Battle: 3',lines:[line('KIZUNA CLASH',300,500),line('Vs. QA',160,995),line('850000000 850000000',260,1070),line('TIPS Battle: 3',70,1114)]});
+ const reader=createReader({capture:async()=>({image:Buffer.from(String(++captures)),width:900,height:1600}),readOCR:async(image:Buffer,{crop}:any)=>{
+  const n=Number(image.toString());if(!crop)return frame();
+  const text=crop.left===180?'Battle: 3':crop.left>600?n===1?'Unreadable':'31':crop.left===144?'Vs. QA':'TIPS';
+  return {width:900,height:1600,text,lines:[line(text,crop.left,crop.left>600?1044:crop.top)]};
+ },wait:async()=>{},act:async(_e:string,_d:string,action:string)=>{actions.push(action);assert.equal(captures,2,'both target OCR frames precede input');throw Error('stop-after-target-proof');}});
+ await assert.rejects(reader.read('qa','qa',{title:'Vs. QA',targetOnly:true}),/stop-after-target-proof/);
+ assert.equal(captures,2);assert.deepEqual(actions,['hold']);
+});
+
+test('persistent missing Kizuna Lv fails with the field name and never inputs',async()=>{
+ const {createReader}=require('../electron/kizuna-live.cjs');
+ const line=(text:string,x:number,y:number)=>({text,words:[{text,x,y,width:80,height:20}]});
+ let captures=0,inputs=0;
+ const frame=()=>({width:900,height:1600,text:'KIZUNA CLASH Vs. QA TIPS Battle: 3',lines:[line('KIZUNA CLASH',300,500),line('Vs. QA',160,995),line('850000000 850000000',260,1070),line('TIPS Battle: 3',70,1114)]});
+ const reader=createReader({capture:async()=>({image:Buffer.from(String(++captures)),width:900,height:1600}),readOCR:async(_image:Buffer,{crop}:any)=>{
+  if(!crop)return frame();const text=crop.left===180?'Battle: 3':crop.left>600?'Unreadable':crop.left===144?'Vs. QA':'TIPS';return {width:900,height:1600,text,lines:[line(text,crop.left,crop.top)]};
+ },wait:async()=>{},act:async()=>{inputs++;}});
+ await assert.rejects(reader.read('qa','qa',{title:'Vs. QA',targetOnly:true}),/Lv\./);
+ assert.equal(captures,3);assert.equal(inputs,0);
+});
+
+test('target numeric conflict across a missing-field retry is rejected before input',async()=>{
+ const {createReader}=require('../electron/kizuna-live.cjs');
+ const line=(text:string,x:number,y:number)=>({text,words:[{text,x,y,width:80,height:20}]});
+ let captures=0,inputs=0;
+ const frame=(n:number)=>({width:900,height:1600,text:'KIZUNA CLASH Vs. QA TIPS Battle: 3',lines:[line('KIZUNA CLASH',300,500),line('Vs. QA',160,995),line((n===1?'850000000':'850000001')+' '+(n===1?'850000000':'850000001'),260,1070),line('TIPS Battle: 3',70,1114)]});
+ const reader=createReader({capture:async()=>({image:Buffer.from(String(++captures)),width:900,height:1600}),readOCR:async(image:Buffer,{crop}:any)=>{
+  const n=Number(image.toString());if(!crop)return frame(n);const text=crop.left===180?'Battle: 3':crop.left>600?n===1?'Unreadable':'31':crop.left===144?'Vs. QA':'TIPS';return {width:900,height:1600,text,lines:[line(text,crop.left,crop.top)]};
+ },wait:async()=>{},act:async()=>{inputs++;}});
+ await assert.rejects(reader.read('qa','qa',{title:'Vs. QA',targetOnly:true}),/HP.*değişti|hedef.*değişti/i);
+ assert.equal(captures,2);assert.equal(inputs,0);
+});
+
+test('Kizuna cancellation aborts an active main OCR request and leaves the next read usable',{timeout:3000},async()=>{
+ const {createReader}=require('../electron/kizuna-live.cjs');
+ const line=(text:string,x:number,y:number)=>({text,words:[{text,x,y,width:80,height:20}]});
+ let inputs=0,started!:()=>void,hang=true;const waiting=new Promise<void>(resolve=>{started=resolve;});
+ const frame={width:900,height:1600,text:'KIZUNA CLASH Vs. QA TIPS Battle: 3',lines:[line('KIZUNA CLASH',300,500),line('Vs. QA',160,995),line('850000000 850000000',260,1070),line('TIPS Battle: 3',70,1114)]};
+ const reader=createReader({capture:async()=>({image:Buffer.from('qa'),width:900,height:1600}),readOCR:async(_image:Buffer,{crop,signal}:any)=>{
+  if(hang&&!crop){started();if(!signal)throw Error('missing AbortSignal');return await new Promise((_resolve,reject)=>signal.addEventListener('abort',()=>reject(Error('OCR aborted')), {once:true}));}
+  if(!crop)return structuredClone(frame);const text=crop.left===180?'Battle: 3':crop.left>600?'31':crop.left===144?'Vs. QA':'TIPS';return {width:900,height:1600,text,lines:[line(text,crop.left,crop.left>600?1047:crop.top)]};
+ },wait:async()=>{},act:async()=>{inputs++;throw Error('independent-read-reached-input');}});
+ const controller=new AbortController(),check=()=>{if(controller.signal.aborted)throw Error('cancelled');};check.signal=controller.signal;
+ const cancelled=reader.read('qa','qa',{targetOnly:true},check);await waiting;hang=false;controller.abort();
+ await assert.rejects(cancelled,/OCR aborted|cancelled/i);assert.equal(inputs,0);
+ await assert.rejects(reader.read('qa','qa',{targetOnly:true}),/independent-read-reached-input/);assert.equal(inputs,1);
+});
+
 test('candidate landmarks never authorize inputs without independently readable target title and TIPS',async()=>{
  const {createReader}=require('../electron/kizuna-live.cjs');
  for(const missing of ['title','tips']){
@@ -230,6 +292,28 @@ test('difficulty navigation reaches 3 stars from Super through a measured visibl
   phase='main';
  }});
  await assert.rejects(reader.read('qa','qa',{difficulty:3}),/final-visible-target/);assert.deepEqual(taps,[144,297]);assert.deepEqual(measured,[13,7]);
+});
+
+test('an intentional difficulty change accepts that variant’s own HP while preserving boss identity',async t=>{
+ const {createReader}=require('../electron/kizuna-live.cjs'),behavior=require('../electron/boss-behavior.cjs');
+ const line=(text:string,x:number,y:number)=>({text,words:[{text,x,y,width:100,height:24}]});
+ const guide=JSON.parse(fs.readFileSync(new URL('./fixtures/boss-behavior/page-0.json',import.meta.url),'utf8'));
+ guide.lines=guide.lines.filter((l:any)=>!l.words.some((w:any)=>w.y>160&&w.y<210));guide.lines.push(line('Vs. QA',300,180));guide.text=guide.lines.map((l:any)=>l.text).join('\n');
+ let phase='main',selected=10;const measured:number[]=[],image=await require('sharp')({create:{width:900,height:1600,channels:3,background:'#ff0000'}}).png().toBuffer();
+ const main=()=>({width:900,height:1600,lines:[line('KIZUNA CLASH LIST',300,500),line('Vs. QA',160,995),line((selected===10?'15000000':'8000000')+' / '+(selected===10?'15000000':'8000000'),260,1070),line('Lv. 31',650,1050),line('TIPS',70,1114),line('Battle: 3 Required: x20',180,1114)],text:'KIZUNA CLASH LIST Vs. QA TIPS Battle: 3 Required: x20'});
+ const reader=createReader({capture:async()=>({image,width:900,height:1600}),wait:async()=>{},readOCR:async(_image:Buffer,{crop}:any)=>{
+  if(!crop)return structuredClone(phase==='guide'?guide:main());
+  const left=crop.left,text=left===180?'Battle: 3':left===144?'Vs. QA':left===66?'TIPS':left===620?'31':'';
+  return {width:900,height:1600,text,lines:text?[line(text,left===144?170:left,left===620?1050:left===144?1040:1114)]:[]};
+ },act:async(_e:string,_d:string,action:string,_snap:any,rect:any)=>{
+  if(action==='hold'){phase='guide';return;}
+  if(rect?.y>1200){selected=7;phase='main';return;}
+  if(action==='tap'&&rect?.text==='INFO')throw Error('selected-variant-reached-guide');
+  phase='main';
+ }});
+ t.mock.method(behavior,'difficultyNumber',async()=>{measured.push(selected);return selected;});
+ await assert.rejects(reader.read('qa','qa',{difficulty:7}),/selected-variant-reached-guide/);
+ assert.deepEqual(measured,[10,7]);
 });
 
 test('real Kizuna difficulty headers exclude the star icon when full-frame OCR omits the numeral',{skip:process.platform!=='win32'},async()=>{

@@ -4,7 +4,23 @@ const {execFile}=require('node:child_process'),execute=require('node:util').prom
 const pause=ms=>new Promise(r=>setTimeout(r,ms));
 function sameGuide(current,first,sameHeader){const key=text=>String(text||'').toLowerCase().replace(/\s+/g,'');return current.width===first.width&&current.height===first.height&&current.identity?.mode==='pka'&&first.identity?.mode==='pka'&&key(current.identity.title)===key(first.identity.title)&&current.identity.level===first.identity.level&&sameHeader(current.header,first.header);}
 function expandedStart(body,items){const open=items.filter(v=>v.expanded);if(open.length!==1)return null;const band=open[0];return !band.clippedTop&&!band.clippedBottom&&band.top>=body.top&&band.bottom<body.top+body.height-20?band:null;}
+async function verifySettledBand(image,body,expected){const band=expandedStart(body,await bands(image,body)),range=band&&await rangeNumber(image,band,expected);if(!band||!range||range.join('-')!==expected.join('-'))throw Error('PKA’da seçili seviye aralığı kaydırma tamamlanınca doğrulanamadı; okuma kullanılmadı.');return band;}
 const {estimateScroll,collectMarquee,createScrollAlignment}=require('./behavior-tracking.cjs');
+async function settleGuideScroll(first,{capture,body,scrollbar,measure=estimateScroll,alignment=createScrollAlignment(),tokens=()=>[],check,progress,wait=pause}={}){
+ let snap=first,bar=await scrollbar(snap.image,body),stable=0;
+ let lastProgress;const report=text=>{if(text!==lastProgress){progress(text);lastProgress=text;}};
+ const evidence=async(a,b)=>{const direct=await measure(a.image,b.image,body);if(direct?.verified)return direct;return alignment.evidence(a.image,b.image,body,{previous:tokens(a),next:tokens(b)});};
+ for(;;){
+  check();await wait(80);check();
+  const next=await capture({pixelsOnly:true});check();const [nextBar,position]=await Promise.all([scrollbar(next.image,body),evidence(snap,next)]),barStable=bar.known&&nextBar.known&&Math.abs(bar.thumbTop-nextBar.thumbTop)<=1&&Math.abs(bar.thumbBottom-nextBar.thumbBottom)<=1,pixelStable=position?.verified&&position.shift<=1,pixelMoved=position?.verified&&position.shift>1;
+  report(!position?.verified?'PKA · kaydırma konumu ölçülemedi; yeni okunabilir görüntü bekleniyor…':pixelMoved?'PKA · sayfa kaydırması sürüyor…':'PKA · sayfa kaydırmasının durması bekleniyor…');
+  stable=pixelStable&&(!bar.known||!nextBar.known||barStable)?stable+1:0;snap=next;bar=nextBar;if(stable<2)continue;
+  const fresh=await capture();check();const [freshBar,finalPosition]=await Promise.all([scrollbar(fresh.image,body),evidence(snap,fresh)]),finalBarStable=bar.known&&freshBar.known&&Math.abs(bar.thumbTop-freshBar.thumbTop)<=1&&Math.abs(bar.thumbBottom-freshBar.thumbBottom)<=1,finalPixelStable=finalPosition?.verified&&finalPosition.shift<=1,finalPixelMoved=finalPosition?.verified&&finalPosition.shift>1;
+  if(finalPixelMoved||bar.known&&freshBar.known&&!finalBarStable){snap=fresh;bar=freshBar;stable=0;continue;}
+  if(finalPixelStable&&(!bar.known||!freshBar.known||finalBarStable))return fresh;
+  snap=fresh;bar=freshBar;stable=0;
+ }
+}
 // EDIT CREW and the DEFEAT/TOTAL label are animated; the button is verified in its own crop before input.
 const isPKAHome=text=>/PIRATE/i.test(text)&&/\bKING\b/i.test(text)&&/ADV\.?\s*STAMINA|ADVSTAMINA/i.test(text)&&/\bHELP\b/i.test(text)&&/\bLIST\b/i.test(text);
 async function verifyPKAHome(snap,read=ocrBuffer){
@@ -18,10 +34,10 @@ async function verifyPKAHome(snap,read=ocrBuffer){
  for(const scale of [3,2]){const parts=await Promise.all(crops.map(([x,y,w,h])=>read(snap.image,{crop:{left:Math.round(snap.width*x),top:Math.round(snap.height*y),width:Math.round(snap.width*w),height:Math.round(snap.height*h)},scale})));text+='\n'+parts.map(p=>p.text).join('\n');if(isPKAHome(text))return true;}
  return false;
 }
-async function enrichHeader(image,ocr){
+async function enrichHeader(image,ocr,read=ocrBuffer){
  if(!/QUEST\s+GUIDE/i.test(ocr.text)||rows(ocr).some(r=>/Difficulty/i.test(r.text)&&r.y<ocr.height*.25))return ocr;
  if(rows(ocr).some(r=>/^Vs\.\s+\S/i.test(r.text)&&r.y>ocr.height*.09&&r.y<ocr.height*.15))return ocr;
- const title=await ocrBuffer(image,{crop:{left:Math.round(ocr.width*.155),top:Math.round(ocr.height*.119),width:Math.round(ocr.width*.69),height:Math.round(ocr.height*.041)},scale:3});
+ const title=await read(image,{crop:{left:Math.round(ocr.width*.155),top:Math.round(ocr.height*.119),width:Math.round(ocr.width*.69),height:Math.round(ocr.height*.041)},scale:3});
  if(!/^Vs\.\s+\S/i.test(title.text.trim()))return ocr;
  const lines=ocr.lines.filter(l=>!l.words.some(w=>w.y>ocr.height*.119&&w.y<ocr.height*.16));lines.push(...title.lines);
  return {...ocr,lines,text:lines.map(l=>l.text).join('\n')};
@@ -47,21 +63,22 @@ async function bands(image,body){
  }
  return output;
 }
-async function rangeNumber(image,band,expected){
+async function rangeNumber(image,band,expected,signal){
  const m=await sharp(image).metadata();
  for(const threshold of [175,180,185,200]){
-  const crop={left:Math.round(m.width*.40),top:Math.round(band.center-m.height*.013),width:Math.round(m.width*.39),height:Math.round(m.height*.02625)};
+  // A clipped band shifts its measured centre; keep all surviving digit pixels.
+  const crop={left:Math.round(m.width*.40),top:band.clippedTop||band.clippedBottom?band.top:Math.round(band.center-m.height*.013),width:Math.round(m.width*.39),height:band.clippedTop||band.clippedBottom?band.bottom-band.top:Math.round(m.height*.02625)};
   const digit=await sharp(image).extract(crop).removeAlpha().grayscale().threshold(threshold).negate().resize({width:250,height:55,fit:'fill'}).png().toBuffer();
   const input=await sharp({create:{width:720,height:125,channels:3,background:'white'}}).composite([{input:Buffer.from('<svg width="340" height="125"><text x="10" y="85" font-family="Segoe UI" font-size="64">Difficulty</text></svg>'),left:0,top:0},{input:digit,left:340,top:33}]).png().toBuffer();
-  let text=(await ocrBuffer(input)).text.replace(/Difficulty/gi,'').trim();
+  let text=(await ocrBuffer(input,{signal})).text.replace(/Difficulty/gi,'').trim();
   // Windows OCR sometimes drops only the dash and splits its two numbers
   // into separate lines. Accept this solely when its central horizontal dash
   // is present in the thresholded pixels, not from two guessed numbers.
   const raw=await sharp(digit).removeAlpha().raw().toBuffer({resolveWithObject:true});let separator=false;
   for(let y=14;y<42;y++){let run=0;for(let x=90;x<160;x++){const p=(y*raw.info.width+x)*raw.info.channels;if(raw.data[p]<50){if(++run>=20)separator=true;}else run=0;}}
   const parse=value=>{const numeric=value.replace(/[IOil|]/g,c=>/[Oo]/.test(c)?'0':'1'),match=numeric.match(/^(\d{1,4})\s*[-–—]\s*(\d{1,4})$/)||(separator?numeric.match(/^(\d{1,4})\s+(\d{1,4})$/):null);return separator&&match&&+match[1]>=1&&+match[2]>=+match[1]&&+match[2]<=9999?[+match[1],+match[2]]:null;};
-  const independent=parse((await require('./line-ocr.cjs').readLineOCR(digit)).text);let native=parse(text),nativeText=text;
-  if(!native){const padded=await sharp(digit).extend({top:12,bottom:12,left:12,right:12,background:'white'}).png().toBuffer();nativeText=(await ocrBuffer(padded,{scale:3})).text.trim();native=parse(nativeText);}
+  const independent=parse((await require('./line-ocr.cjs').readLineOCR(digit,{signal})).text);let native=parse(text),nativeText=text;
+  if(!native){const padded=await sharp(digit).extend({top:12,bottom:12,left:12,right:12,background:'white'}).png().toBuffer();nativeText=(await ocrBuffer(padded,{scale:3,signal})).text.trim();native=parse(nativeText);}
   if(native&&independent&&native.join('-')===independent.join('-'))return native;
   // An expanded orange header can make WinRT omit its isolated leading 1.
   // Reuse only the full two-reader proof obtained from the same collapsed band before the guarded click.
@@ -80,8 +97,8 @@ function behaviorWindow(body,items,own){
  return {nextBand,body:{...body,top,height:(nextBand?.top??body.top+body.height)-top}};
 }
 function createPKAService({readPage,scrollbar,headerHash,sameHeader,onObserve,readLineOCR,readBlockOCR,targetLevel}){
- const observe=async(exe,device)=>{const image=Buffer.from((await adb.screenshot(exe,device)).split(',')[1],'base64');let ocr=await enrichHeader(image,await ocrBuffer(image,{scale:2}));
-  if(!modalIdentity(ocr)&&/Edit\s+Crew|ABILITY\s*LIST/i.test(ocr.text)){const header=await ocrBuffer(image,{crop:{left:Math.round(ocr.width*.14),top:Math.round(ocr.height*.165),width:Math.round(ocr.width*.85),height:Math.round(ocr.height*.12)},scale:3});ocr={...ocr,lines:[...ocr.lines,...header.lines],text:ocr.text+'\n'+header.text};}
+ const readFor=(reader,signal)=>reader&&((image,options={})=>reader(image,{...options,signal:options.signal||signal})),observe=async(exe,device,signal)=>{const read=readFor(ocrBuffer,signal),image=Buffer.from((await adb.screenshot(exe,device)).split(',')[1],'base64');let ocr=await enrichHeader(image,await read(image,{scale:2}),read);
+  if(!modalIdentity(ocr)&&/Edit\s+Crew|ABILITY\s*LIST/i.test(ocr.text)){const header=await read(image,{crop:{left:Math.round(ocr.width*.14),top:Math.round(ocr.height*.165),width:Math.round(ocr.width*.85),height:Math.round(ocr.height*.12)},scale:3});ocr={...ocr,lines:[...ocr.lines,...header.lines],text:ocr.text+'\n'+header.text};}
   const identity=modalIdentity(ocr);onObserve?.(image,ocr);return {image,ocr,identity,width:ocr.width,height:ocr.height};};
  const input=async(exe,device,action,snap,rect,check)=>{
   check();
@@ -91,8 +108,8 @@ function createPKAService({readPage,scrollbar,headerHash,sameHeader,onObserve,re
    const image=Buffer.from((await adb.screenshot(exe,device)).split(',')[1],'base64'),m=await sharp(image).metadata();check();
    if(m.width!==snap.width||m.height!==snap.height||!sameHeader(await headerHash(image,m.width,m.height),await headerHash(snap.image,snap.width,snap.height)))throw Error('PKA bossu veya rehber ekranı değişti; okuma durduruldu.');
   }else{
-   const current=await observe(exe,device);check();
-   if(!snap.identity&&await verifyPKAHome(snap)&&!await verifyPKAHome(current))throw Error('PKA ana ekranı değişti.');
+   const current=await observe(exe,device,check.signal);check();
+   if(!snap.identity&&await verifyPKAHome(snap,readFor(ocrBuffer,check.signal))&&!await verifyPKAHome(current,readFor(ocrBuffer,check.signal)))throw Error('PKA ana ekranı değişti.');
   }
   const binary=adb.validateAdb(exe),serial=adb.validateDevice(device),options={windowsHide:true,timeout:10000,maxBuffer:2*1024*1024},activity=(await execute(binary,['-s',serial,'shell','dumpsys','activity','activities'],options)).stdout;
   if(!/(?:mResumedActivity|topResumedActivity).*com\.namcobandaigames\.spmoja010[Ee]\//.test(activity))throw Error('Global OPTC ön planda değil.');
@@ -103,16 +120,16 @@ function createPKAService({readPage,scrollbar,headerHash,sameHeader,onObserve,re
   check();await execute(binary,['-s',serial,'shell','input',...args],options);await pause(800);check();
  };
  async function prepare(exe,device,check,progress){
-  let s=await observe(exe,device);check();
+  const read=readFor(ocrBuffer,check.signal),readBlock=readFor(readBlockOCR||require('./line-ocr.cjs').readBlockOCR,check.signal);let s=await observe(exe,device,check.signal);check();
   const edit=s=>/Edit\s+Crew/i.test(s.ocr.text)&&/CREW\s+LOG|ABILITY\s*LIST/i.test(s.ocr.text);
-  const settle=async(predicate)=>{const started=Date.now();for(;;){s=await observe(exe,device);check();if(predicate(s))return;if(Date.now()-started>10000)throw Error('PKA bilgi ekranı geçişi doğrulanamadı.');await pause(350);}};
+  const settle=async(predicate)=>{const started=Date.now();for(;;){s=await observe(exe,device,check.signal);check();if(predicate(s))return;if(Date.now()-started>10000)throw Error('PKA bilgi ekranı geçişi doğrulanamadı.');await pause(350);}};
   const questGuide=async()=>{const guide=rows(s.ocr).flatMap(r=>r.words).find(w=>/^GUIDE$/i.test(w.text)&&w.x>s.width*.38&&w.x<s.width*.63&&w.y>s.height*.18&&w.y<s.height*.24);if(!guide)throw Error('PKA QUEST GUIDE sekmesi okunamadı.');progress('PKA · QUEST GUIDE davranışları açılıyor…');await input(exe,device,'tap',s,guide,check);await settle(s=>s.identity?.mode==='pka'&&!/LOADING|CONNECTING/i.test(s.ocr.text));};
   if(s.identity?.mode==='pka'){
    await questGuide();return true;
   }
-  if(await verifyPKAHome(s)){
-   const rect={left:Math.round(s.width*.805),top:Math.round(s.height*.5125),width:Math.round(s.width*.194),height:Math.round(s.height*.1125)},button=await ocrBuffer(s.image,{crop:rect,scale:3});check();
-   if(!/\bCREW\b/i.test(button.text)){const second=await require('./line-ocr.cjs').readBlockOCR(await sharp(s.image).extract(rect).png().toBuffer());check();if(!/\bCREW\b/i.test(second.text))throw Error('PKA Edit Crew düğmesi okunamadı; Edit Crew → GUIDE ekranını açıp yeniden okut.');}
+  if(await verifyPKAHome(s,read)){
+   const rect={left:Math.round(s.width*.805),top:Math.round(s.height*.5125),width:Math.round(s.width*.194),height:Math.round(s.height*.1125)},button=await read(s.image,{crop:rect,scale:3});check();
+   if(!/\bCREW\b/i.test(button.text)){const second=await readBlock(await sharp(s.image).extract(rect).png().toBuffer());check();if(!/\bCREW\b/i.test(second.text))throw Error('PKA Edit Crew düğmesi okunamadı; Edit Crew → GUIDE ekranını açıp yeniden okut.');}
    progress('PKA · Edit Crew bilgi ekranı açılıyor…');await input(exe,device,'tap',s,{x:s.width*.84,y:s.height*.55,width:s.width*.12,height:s.height*.04},check);await settle(edit);
   }
   if(!edit(s))return false;
@@ -122,26 +139,31 @@ function createPKAService({readPage,scrollbar,headerHash,sameHeader,onObserve,re
   await settle(s=>s.identity?.mode==='pka'&&!/LOADING|CONNECTING/i.test(s.ocr.text));await questGuide();return true;
  }
  async function read(exe,device,first,check,progress){
+  const signal=check.signal,read=readFor(ocrBuffer,signal),line=readFor(readLineOCR,signal),block=readFor(readBlockOCR,signal);
   const identity={...first.identity};let snap=first;
-  const capture=async({pixelsOnly=false}={})=>{check();const image=Buffer.from((await adb.screenshot(exe,device)).split(',')[1],'base64'),ocr=pixelsOnly?snap.ocr:await readPage(image),s={image,ocr,identity:modalIdentity(ocr),width:ocr.width,height:ocr.height};s.header=await headerHash(s.image,s.width,s.height);check();if(!sameGuide(s,first,sameHeader))throw Error('PKA bossu veya rehber ekranı değişti; okuma durduruldu.');if(!pixelsOnly)onObserve?.(s.image,s.ocr);return s;};
-  const scroll=async direction=>{await input(exe,device,direction,snap,null,check);snap=await capture();};
   let selected,range,verifiedBand,seekDirection='up';const seenPositions=new Set();
+  const recordPair=async(before,after,measured,reason)=>{if(!onObserve?.pixelPair)return;const safeBar=async image=>{try{return await scrollbar(image,identity.body);}catch{return null;}};try{const [beforeBar,afterBar]=await Promise.all([safeBar(before.image),safeBar(after.image)]);await onObserve.pixelPair({beforeImage:before.image,afterImage:after.image,measured,scrollbars:{before:beforeBar,after:afterBar},header:{before:before.header??null,after:after.header??null},range:range?{start:range[0],end:range[1]}:null,reason});}catch{}};
+  snap.recordPixelPair=recordPair;
+  const capture=async({pixelsOnly=false}={})=>{check();const image=Buffer.from((await adb.screenshot(exe,device)).split(',')[1],'base64'),ocr=pixelsOnly?snap.ocr:await readPage(image,{signal}),s={image,ocr,identity:modalIdentity(ocr),width:ocr.width,height:ocr.height};s.header=await headerHash(s.image,s.width,s.height);s.recordPixelPair=recordPair;check();if(!sameGuide(s,first,sameHeader)){await recordPair(snap,s,null,'guide-identity-change');throw Error('PKA bossu veya rehber ekranı değişti; okuma durduruldu.');}if(!pixelsOnly)onObserve?.(s.image,s.ocr);return s;};
+  const settled=first=>settleGuideScroll(first,{capture,body:identity.body,scrollbar,measure:estimateScroll,tokens:s=>clipBand(s.ocr,identity),check,progress});
+  const scroll=async direction=>{await input(exe,device,direction,snap,null,check);snap=await settled(await capture());};
   for(;;){
    const items=await bands(snap.image,identity.body),open=items.filter(v=>v.expanded);
    if(open.length>1)throw Error('PKA’da birden fazla seviye aralığı açık; yalnız istediğin aralığı açık bırak.');
    if(targetLevel){
-    let changed=false;for(const item of items.filter(v=>!v.clippedTop&&!v.clippedBottom)){const values=await rangeNumber(snap.image,item,verifiedBand);check();if(item.expanded&&!values&&!verifiedBand){progress('PKA · aralık başlığı sabit kapalı görüntüde doğrulanıyor…');await input(exe,device,'tap',snap,{x:snap.width*.30,y:item.top,width:snap.width*.35,height:item.bottom-item.top},check);snap=await capture();seenPositions.clear();changed=true;break;}if(values&&values[0]<=targetLevel&&targetLevel<=values[1]&&!item.expanded){verifiedBand=values;progress('PKA · Lv.'+values.join('–')+' davranış aralığı açılıyor…');await input(exe,device,'tap',snap,{x:snap.width*.30,y:item.top,width:snap.width*.35,height:item.bottom-item.top},check);snap=await capture();seenPositions.clear();changed=true;break;}}
+    let changed=false;for(const item of items.filter(v=>!v.clippedTop&&!v.clippedBottom)){const values=await rangeNumber(snap.image,item,verifiedBand,signal);check();if(item.expanded&&!values&&!verifiedBand){progress('PKA · aralık başlığı sabit kapalı görüntüde doğrulanıyor…');await input(exe,device,'tap',snap,{x:snap.width*.30,y:item.top,width:snap.width*.35,height:item.bottom-item.top},check);snap=await settled(await capture());seenPositions.clear();changed=true;break;}if(values&&values[0]<=targetLevel&&targetLevel<=values[1]&&!item.expanded){verifiedBand=values;progress('PKA · Lv.'+values.join('–')+' davranış aralığı açılıyor…');await input(exe,device,'tap',snap,{x:snap.width*.30,y:item.top,width:snap.width*.35,height:item.bottom-item.top},check);snap=await settled(await capture());seenPositions.clear();changed=true;break;}}
     if(changed)continue;
    }
    const start=expandedStart(identity.body,items);
    if(start){
-    const values=await rangeNumber(snap.image,start,verifiedBand);check();if(!values)throw Error('PKA seviye aralığı güvenilir okunamadı; başlığın tamamı görünecek şekilde yeniden okut.');if(!targetLevel||values[0]<=targetLevel&&targetLevel<=values[1]){selected=start;range=values;break;}
+    const values=await rangeNumber(snap.image,start,verifiedBand,signal);check();if(!values)throw Error('PKA seviye aralığı güvenilir okunamadı; başlığın tamamı görünecek şekilde yeniden okut.');if(!targetLevel||values[0]<=targetLevel&&targetLevel<=values[1]){selected=start;range=values;break;}
    }
    progress('PKA · açık seviye aralığının başlangıcı doğrulanıyor…');
    // Start from the guide top, then seek its behavior accordions.
    const bar=await scrollbar(snap.image,identity.body);if(bar.top||/BEHAVIO|RECOMMENDED CHARACTER|CLEARED CAPTAIN/i.test(snap.ocr.text))seekDirection='down';const position=seekDirection+'|'+require('node:crypto').createHash('sha256').update(await sharp(snap.image).extract(identity.body).resize(180,210).greyscale().raw().toBuffer()).digest('hex');if(seenPositions.has(position))throw Error('PKA rehberinde istenen seviye aralığına ilerlenemedi.');seenPositions.add(position);await scroll(seekDirection);
   }
   if(!selected||!range)throw Error('PKA BEHAVIOR’da istediğin Lv. aralığını açıp yeniden okut.');
+  snap=await settled(snap);selected=await verifySettledBand(snap.image,identity.body,range);check();
   let tokens=[],complete=false,pages=0,firstPage=true,previousImage,previousTokens,staticCycleMs;const alignment=createScrollAlignment();
   for(;;pages++){
    const items=await bands(snap.image,identity.body);
@@ -150,13 +172,13 @@ function createPKAService({readPage,scrollbar,headerHash,sameHeader,onObserve,re
    const readTokens=s=>clipBand(s.ocr,identity,textBody.top,textBody.top+textBody.height);
    const prior=previousImage?await alignment.evidence(previousImage,snap.image,identity.body,{previous:previousTokens,next:readTokens(snap)}):undefined;
    const visibleBand=own||items.find(v=>v.clippedTop);
-   if(!firstPage&&visibleBand){const seen=await rangeNumber(snap.image,visibleBand,range);check();if(seen?seen.join('-')!==range.join('-'):own||!prior?.verified)throw Error('PKA seviye aralığı veya sayfa konumu doğrulanamadı; okuma kullanılmadı.');}
-   const marquee={capture,tokens:readTokens,body:textBody,check,progress,readOCR:ocrBuffer,readLineOCR,readBlockOCR,staticCycleMs,reuse:prior?.verified?{...prior,tokens:previousTokens}:undefined};
+   if(!firstPage&&visibleBand){const seen=await rangeNumber(snap.image,visibleBand,range,signal);check();if(seen?seen.join('-')!==range.join('-'):own||!prior?.verified){if(previousImage)await recordPair({image:previousImage},snap,prior,'range-continuity');throw Error('PKA seviye aralığı veya sayfa konumu doğrulanamadı; okuma kullanılmadı.');}}
+   const marquee={capture,tokens:readTokens,body:textBody,check,progress,retainPartial:true,readOCR:read,readLineOCR:line,readBlockOCR:block,staticCycleMs,signal,reuse:prior?.verified?{...prior,tokens:previousTokens}:undefined};
    const tracked=await collectMarquee(snap,marquee);snap=tracked.snap;staticCycleMs=tracked.staticCycleMs||staticCycleMs;
    let next=tracked.tokens,merged;
    for(let retry=0;retry<3;retry++){
     const evidence=previousImage?await alignment.evidence(previousImage,snap.image,identity.body,{previous:previousTokens,next}):undefined;
-     try{const result=await require('./behavior-numbers.cjs').mergeNumericRows({existing:tokens,next,previous:previousTokens,beforeImage:previousImage,afterImage:snap.image,evidence,body:identity.body,readOCR:ocrBuffer,check,progress});merged=result.merged;next=result.next;break;}catch(error){if(retry===2)throw error;progress('PKA · sayfa konumu ve kayan satırlar yeniden doğrulanıyor…');snap=await capture();const retracked=await collectMarquee(snap,{...marquee,staticCycleMs});snap=retracked.snap;next=retracked.tokens;}
+     try{const result=await require('./behavior-numbers.cjs').mergeNumericRows({existing:tokens,next,previous:previousTokens,beforeImage:previousImage,afterImage:snap.image,evidence,body:identity.body,readOCR:read,check,progress,signal,retainNumericConflicts:retry===2});merged=result.merged;next=result.next;break;}catch(error){if(retry===2)throw error;progress('PKA · sayfa konumu ve kayan satırlar yeniden doğrulanıyor…');snap=await capture();const retracked=await collectMarquee(snap,{...marquee,staticCycleMs});snap=retracked.snap;next=retracked.tokens;}
    }
    tokens=merged;progress(identity.title+' · Lv.'+range.join('–')+' · sayfa '+(pages+1)+' okunuyor…');firstPage=false;
    if(nextBand||(await scrollbar(snap.image,identity.body)).bottom){complete=true;pages++;break;}
@@ -172,4 +194,4 @@ function createPKAService({readPage,scrollbar,headerHash,sameHeader,onObserve,re
  }
  return {prepare,read};
 }
-module.exports={isPKAHome,verifyPKAHome,enrichHeader,bands,rangeNumber,clipBand,behaviorWindow,expandedStart,sameGuide,createPKAService};
+module.exports={isPKAHome,verifyPKAHome,enrichHeader,bands,rangeNumber,clipBand,behaviorWindow,expandedStart,verifySettledBand,sameGuide,settleGuideScroll,createPKAService};

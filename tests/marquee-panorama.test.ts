@@ -6,6 +6,18 @@ test('real static ATK percentage survives OCR box offsets and heights',{skip:pro
   const result=await tracker.recognize(ocrBuffer,()=>{},readLineOCR);if(result.retry.size||result.tokens[0].text!=='6 turn(s) ATK 90% Down')failures.push({delta,height,text:result.tokens[0].text,retry:[...result.retry]});
  }assert.deepEqual(failures,[]);}finally{closeOCR();}
 });
+test('deferred ATK Down proof requires the full same-row condition, bounded numbers, and independent readers',async()=>{
+ const {cacheOCR}=require('../electron/ocr-cache.cjs'),svg=Buffer.from('<svg width="600" height="100"><rect x="78" y="22" width="100" height="18" fill="white"/><rect x="185" y="22" width="6" height="18" fill="white"/></svg>'),image=await sharp(svg).png().toBuffer(),fresh=await sharp(image).composite([{input:Buffer.from('<svg width="2" height="2"><rect width="2" height="2" fill="white"/></svg>'),left:210,top:24}]).png().toBuffer(),body={left:0,top:0,width:600,height:100},words=(text:string,local=false,confidence=99)=>text.split(' ').map((word,i)=>({text:word,x:(local?0:20)+i*23,y:local?0:20,width:25,height:18,confidence:/\d/.test(word)?confidence:99}));
+ const run=async(ruleText:string,lineText=ruleText,confidence=99,vary=true,conditionRequired=true)=>{let ruleCalls=0,lineCalls=0;const read=cacheOCR(async()=>{ruleCalls++;return {lines:[{words:words(ruleText)}]};}),line=cacheOCR(async()=>{lineCalls++;return {lines:[{words:words(lineText,true,confidence)}]};}),token=positioned({kind:'line',text:'ATK Down',requiresEffectProof:true,requiresEffectCondition:conditionRequired},{top:20,height:24,left:78,rightClipped:false}),tracker=createPixelMarquee([token],body);for(const frame of (vary?[image,fresh,fresh]:[image,image,image]))await tracker.observe(frame);const result=await tracker.recognize(read,()=>{},line);return {result,tracker,image,read,line,ruleCalls,lineCalls,token};};
+ const complete='1 turn(s) if chain multiplier is 3.0 or less, 90% ATK Down',good=await run(complete);assert.equal(good.result.retry.size,0,JSON.stringify({retry:[...good.result.retry],token:good.result.tokens[0],ruleCalls:good.ruleCalls,lineCalls:good.lineCalls}));assert.equal(good.result.tokens[0].marquee.complete,true);assert.match(good.result.tokens[0].text,/if chain multiplier is 3\.0 or less, 90% ATK Down/);assert.equal(good.ruleCalls,2);assert.equal(good.lineCalls,1);
+ const recoveredCondition=await run(complete,complete,99,true,false);assert.equal(recoveredCondition.result.retry.size,0,'A complete same-row condition recovered from full pixels may restore a clipped OCR head');
+ for(const incomplete of ['ATK Down','90% ATK Down','1 turn(s) chain multiplier is 3.0 or less, 90% ATK Down','1 turn(s) if chain multiplier is or less, 90% ATK Down','0 turn(s) if chain multiplier is 3.0 or less, 90% ATK Down','1 turn(s) if chain multiplier is 3.0 or less, 999% ATK Down']){const attempt=await run(incomplete);assert.ok(attempt.result.retry.has(0),incomplete);assert.notEqual(attempt.result.tokens[0].marquee?.complete,true,incomplete);}
+ const orphanCondition=await run('1 turn(s) chain multiplier is 3.0 or less, 90% ATK Down','1 turn(s) chain multiplier is 3.0 or less, 90% ATK Down',99,true,false);assert.ok(orphanCondition.result.retry.has(0),'A conditional tail without its source condition flag cannot certify');
+ const stale=await run('ATK Down','ATK Down',99,false);stale.tracker.retry(stale.result.retry);for(let i=0;i<3;i++)await stale.tracker.observe(stale.image);const reads=stale.ruleCalls+stale.lineCalls,again=await stale.tracker.recognize(stale.read,()=>{},stale.line);assert.ok(again.retry.has(0));assert.equal(stale.ruleCalls+stale.lineCalls,reads,'The same assembled PNG is not OCRed or counted again');
+ const disagreement=await run(complete,'2 turn(s) if chain multiplier is 3.0 or less, 80% ATK Down');assert.ok(disagreement.result.retry.has(0),'Different readers must agree on the same duration, threshold, and percentage');
+ const low=await run(complete,complete,85);assert.ok(low.result.retry.has(0),'Low confidence numeric tokens cannot complete the row');
+ const unconditional=await run('6 turn(s) 90% ATK Down','6 turn(s) 90% ATK Down',99,true,false);assert.equal(unconditional.result.retry.size,0);assert.equal(unconditional.result.tokens[0].marquee.complete,true);
+});
 const require=createRequire(import.meta.url),sharp=require('sharp'),{collectMarquee,createMarqueeTracker}=require('../electron/behavior-tracking.cjs'),{positioned}=require('../electron/boss-behavior-core.cjs'),{createPixelMarquee}=require('../electron/marquee-panorama.cjs');
 const fixture=fs.readFileSync(new URL('./fixtures/kizuna/marquee-cycle.png',import.meta.url)),transcripts=JSON.parse(fs.readFileSync(new URL('./fixtures/kizuna/marquee-cycle.json',import.meta.url),'utf8')),body={left:0,top:0,width:706,height:180};
 const tokens=(n:number)=>transcripts[n].map((t:any)=>{const {position,...value}=t;return positioned(value,position);});
@@ -42,13 +54,13 @@ const line=(text:string,x:number,y:number)=>({text,words:[{text,x,y,width:Math.m
 test('recorded colored text poisons the old string tracker but pixel reading does not run OCR on each frame',async()=>{
  const old=createMarqueeTracker(tokens(0),{body});for(let i=1;i<10;i++)old.observe(tokens(i));assert.ok(old.pending()>0);
  const images=await frames();let captures=0,reads=0;const full=['DEX PSY type Reduce Special Charge by 10','DEX PSY type Super Switch Effect requirement reduction: 10','DEX PSY type VS Effect gauge reduction: 10'];
- const result=await collectMarquee({image:images[0],index:0},{capture:async({pixelsOnly}:any={})=>{assert.equal(pixelsOnly,true);assert.ok(++captures<10,'A recorded full cycle must finish');return {image:images[captures],index:captures};},tokens:(s:any)=>tokens(s.index),body,check:()=>{},wait:async()=>{},progress:()=>{},measure:async()=>({shift:0}),readOCR:async()=>{reads++;assert.ok(captures>=7,'The head pause cannot certify an unseen last word');return {lines:full.map((text,i)=>line(text,20,28+i*60))};}});
+ const result=await collectMarquee({image:images[0],index:0},{capture:async({pixelsOnly}:any={})=>{assert.equal(pixelsOnly,true);assert.ok(++captures<10,'A recorded full cycle must finish');return {image:images[captures],index:captures};},tokens:(s:any)=>tokens(s.index),body,check:()=>{},wait:async()=>{},progress:()=>{},measure:async()=>({shift:0,verified:true}),readOCR:async()=>{reads++;assert.ok(captures>=7,'The head pause cannot certify an unseen last word');return {lines:full.map((text,i)=>line(text,20,28+i*60))};}});
  assert.equal(captures,9);assert.equal(reads,2);assert.deepEqual(result.tokens.map((t:any)=>t.text),full);assert.ok(result.tokens.every((t:any)=>t.marquee.complete));
 });
 
 test('real native OCR reconstructs every colored prefix and trailing counter from the recorded one-word overflow',{skip:process.platform!=='win32'},async()=>{
  const {ocrBuffer,closeOCR}=require('../electron/rule-ocr.cjs'),images=await frames();let captures=0,reads=0;
- try{const result=await collectMarquee({image:images[0],index:0},{capture:async()=>{assert.ok(++captures<10);return {image:images[captures],index:captures};},tokens:(s:any)=>tokens(s.index),body,check:()=>{},wait:async()=>{},progress:()=>{},measure:async()=>({shift:0}),readOCR:async(...args:any[])=>{reads++;return ocrBuffer(...args);}});
+ try{const result=await collectMarquee({image:images[0],index:0},{capture:async()=>{assert.ok(++captures<10);return {image:images[captures],index:captures};},tokens:(s:any)=>tokens(s.index),body,check:()=>{},wait:async()=>{},progress:()=>{},measure:async()=>({shift:0,verified:true}),readOCR:async(...args:any[])=>{reads++;return ocrBuffer(...args);}});
  assert.match(result.tokens[0].text,/^DEX PSY type Reduce Special Char[go]e by 10$/);assert.equal(result.tokens[1].text,'DEX PSY type Super Switch Effect requirement reduction: 10');assert.equal(result.tokens[2].text,'DEX PSY type VS Effect gauge reduction: 10');assert.ok(result.tokens.every((t:any)=>t.marquee.complete));assert.ok(reads<=3);
  }finally{closeOCR();}
 });
@@ -70,7 +82,13 @@ test('different numeric OCR readings require corroboration and missing observed 
 test('pixel collection preserves cancellation and rejects movement before recognizing a different row',async()=>{
  const images=await frames();let captures=0,cancelled=false;const options={capture:async()=>{captures++;return {image:images[0],index:0};},tokens:()=>tokens(0),body,check:()=>{if(cancelled)throw Error('cancelled');},wait:async()=>{cancelled=true;},progress:()=>{},measure:async()=>({shift:0}),readOCR:async()=>assert.fail('No verified complete panorama')};
  await assert.rejects(collectMarquee({image:images[0]},options),/cancelled/);assert.equal(captures,0);
- cancelled=false;await assert.rejects(collectMarquee({image:images[0]},{...options,wait:async()=>{},measure:async()=>({shift:100})}),/liste.*hareket etti/);assert.equal(captures,1);
+ cancelled=false;await assert.rejects(collectMarquee({image:images[0]},{...options,wait:async()=>{},measure:async()=>({shift:100,verified:true})}),/liste.*hareket etti/);assert.equal(captures,1);
+});
+
+test('pixel collection records the exact failing image pair and treats unverified motion as unknown, not stability',async()=>{
+ const images=await frames();let pair:any;const first={image:images[0],recordPixelPair:async(before:any,after:any,measured:any,reason:string)=>{pair={before,after,measured,reason};}};
+ await assert.rejects(collectMarquee(first,{capture:async()=>({image:images[1]}),tokens:()=>tokens(0),body,check(){},wait:async()=>{},progress(){},measure:async()=>null,readOCR:async()=>assert.fail('Unknown alignment must not reach OCR')}),/hareket|doğrulanamadı/i);
+ assert.equal(pair.before,first);assert.ok(pair.after.image);assert.equal(pair.measured,null);assert.equal(pair.reason,'motion-unverified');
 });
 
 test('level-range headings retain their original full text and never enter the effect text crop',async()=>{
@@ -156,6 +174,19 @@ test('a missing original percentage needs two isolated OCR reads and never inher
 test('identical unreadable pixels report a concrete error after alternative OCR methods instead of looping forever',async()=>{
  const images=await frames(),tracker=createPixelMarquee([tokens(0)[0]],{...body,height:60});for(const image of images)await tracker.observe(image);const unreadable=async()=>({lines:[{words:[{text:'10',x:580,y:28,width:30,height:18}]}]});
  const first=await tracker.recognize(unreadable,()=>{});assert.deepEqual([...first.retry],[0]);await assert.rejects(tracker.recognize(unreadable,()=>{}),/aynı görüntüde.*doğrulanamadı/);
+});
+
+test('live boss reading skips an ambiguous frame and keeps an unreadable row as partial',async()=>{
+ const images=await frames(), unreadable=async()=>({lines:[{words:[{text:'10',x:580,y:28,width:30,height:18}]}]});
+ let captured=0, measured=0;
+ const result=await collectMarquee({image:images[0]},{
+  capture:async()=>{assert.ok(++captured<80);return {image:images[(captured-1)%images.length]};},
+  tokens:()=>[tokens(0)[0]],body:{...body,height:60},check(){},progress(){},wait:async()=>{},
+  measure:async()=>++measured===1?null:{shift:0,verified:true},
+  readOCR:unreadable,retainPartial:true
+ });
+ assert.equal(result.tokens[0].marquee.complete,false);
+ assert.equal(result.tokens[0].text,tokens(0)[0].text);
 });
 
 test('letter-shaped OCR digits cannot certify a partial number even when both OCR views agree',async()=>{

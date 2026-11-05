@@ -43,24 +43,24 @@ function selectionButtons(ocr){
 }
 function createQuestRestrictionReader(io){
  async function prepare(exe,device,check,progress){
-  const snap=await io.observe(exe,device);check();
+  const snap=await io.observe(exe,device,check.signal);check();
   if(!snap.identity){if(!selectionButtons(snap.ocr))throw Error('MuMu’da görevin zorluk seçim ekranını veya Quest Guide penceresini aç.');progress('Seçili görevin bilgi penceresi açılıyor…');await io.input(exe,device,'openDetails',snap,check);}
-  const modal=await io.observe(exe,device);check();if(!modal.identity)throw Error('Seçili görevin bilgi penceresi açılmadı.');
+  const modal=await io.observe(exe,device,check.signal);check();if(!modal.identity)throw Error('Seçili görevin bilgi penceresi açılmadı.');
   await io.input(exe,device,'questGuide',modal,check);
  }
  async function read(exe,device,first,identity,check,progress){
   progress('Görevin REQUIREMENT katılım koşulu okunuyor…');check();await io.input(exe,device,'closeGuide',first,check);
-  const selection=await io.observe(exe,device);check();const buttons=selectionButtons(selection.ocr);
+  const selection=await io.observe(exe,device,check.signal);check();const buttons=selectionButtons(selection.ocr);
   if(!buttons)throw Error('Görev seçim ekranı değişti; katılım koşulu uygulanmadı.');
   let result={status:'unverified',source:'MuMu · seçili görev ekranı',text:'',quest:identity.title,difficulty:identity.difficulty,warnings:['REQUIREMENT düğmesi okunamadı / görünmüyor; karakter kısıtlaması yok sayılmadı.']};
-  if(buttons.requirement){progress('Kırmızı REQUIREMENT açıklaması açılıyor…');const images=await io.input(exe,device,'holdRequirement',selection,check,progress);check();const pixels=io.pixelTooltip?await io.pixelTooltip(images,buttons.requirement,identity,{check,progress}):null;
-   if(pixels)result=pixels;else{const texts=[];for(const [index,image]of images.entries()){progress('REQUIREMENT · açıklama görüntüsü '+(index+1)+'/'+images.length+' okunuyor…');texts.push(await io.tooltip(image,buttons.requirement));check();}result=parseRequirementTexts(texts,identity);
+  if(buttons.requirement){progress('Kırmızı REQUIREMENT açıklaması açılıyor…');const images=await io.input(exe,device,'holdRequirement',selection,check,progress);check();const pixels=io.pixelTooltip?await io.pixelTooltip(images,buttons.requirement,identity,{check,progress,signal:check.signal}):null;
+   if(pixels)result=pixels;else{const texts=[];for(const [index,image]of images.entries()){progress('REQUIREMENT · açıklama görüntüsü '+(index+1)+'/'+images.length+' okunuyor…');texts.push(await io.tooltip(image,buttons.requirement,check.signal));check();}result=parseRequirementTexts(texts,identity);
    }
   }
   // Bind the tooltip to the original quest AND difficulty before planning.
   // Only information windows and tabs are opened, never a quest.
-  progress('Katılım koşulu seçili boss ve zorlukla doğrulanıyor…');const current=await io.observe(exe,device);check();if(!selectionButtons(current.ocr))throw Error('Görev seçim ekranı değişti; katılım koşulu kullanılmadı.');
-  await io.input(exe,device,'openDetails',current,check);progress('Seçili görevin Quest Guide ekranına dönülüyor…');const restored=await io.observe(exe,device);check();
+  progress('Katılım koşulu seçili boss ve zorlukla doğrulanıyor…');const current=await io.observe(exe,device,check.signal);check();if(!selectionButtons(current.ocr))throw Error('Görev seçim ekranı değişti; katılım koşulu kullanılmadı.');
+  await io.input(exe,device,'openDetails',current,check);progress('Seçili görevin Quest Guide ekranına dönülüyor…');const restored=await io.observe(exe,device,check.signal);check();
   if(!require('./quest-header.cjs').sameQuestModal(restored,first,io.sameHeader))throw Error('Boss veya zorluk değişti; katılım koşulu kullanılmadı.');
   await io.input(exe,device,'questGuide',restored,check);return result;
  }
@@ -68,29 +68,36 @@ function createQuestRestrictionReader(io){
 }
 function createQuestRestrictionService(sameHeader,headerHash,onObserve){
  const sharp=require('sharp'),adb=require('./adb.cjs'),{ocrBuffer}=require('./rule-ocr.cjs'),{execFile}=require('node:child_process'),{promisify}=require('node:util'),execute=promisify(execFile),pause=ms=>new Promise(r=>setTimeout(r,ms));
- const observe=async(exe,device)=>{
+ const observe=async(exe,device,signal)=>{
   let image,ocr,identity;
   for(let attempt=0;attempt<8;attempt++){
-   image=Buffer.from((await adb.screenshot(exe,device)).split(',')[1],'base64');ocr=await ocrBuffer(image,{scale:2});identity=modalIdentity(ocr);
+   image=Buffer.from((await adb.screenshot(exe,device)).split(',')[1],'base64');
+   ocr=await ocrBuffer(image,{scale:2,signal});
+   if(require('./quest-header.cjs').pendingQuestModal(ocr)){
+    ocr=await require('./behavior-page.cjs').enrichTitle(image,ocr,(source,options)=>ocrBuffer(source,{...options,signal}));
+   }
+   identity=modalIdentity(ocr);
    if(!require('./quest-header.cjs').pendingQuestModal(ocr))break;
+   onObserve?.(image,ocr);
    if(attempt===7)throw Error('Quest Guide başlığı yüklenemedi; katılım koşulu okunmadı.');await pause(650);
   }
   if(!identity){
-   const footer=await ocrBuffer(image,{crop:{left:Math.round(ocr.width*.02),top:Math.round(ocr.height*.60),width:Math.round(ocr.width*.95),height:Math.round(ocr.height*.23)},scale:3});ocr.lines.push(...footer.lines);
+   const footer=await ocrBuffer(image,{crop:{left:Math.round(ocr.width*.02),top:Math.round(ocr.height*.60),width:Math.round(ocr.width*.95),height:Math.round(ocr.height*.23)},scale:3,signal});ocr.lines.push(...footer.lines);
    const battle=ocr.lines.flatMap(l=>l.words).find(w=>/^Battle[:.]?$/i.test(w.text)&&w.y>ocr.height*.55&&w.y<ocr.height*.76);
    if(battle)for(const [left,width]of [[.80,.17],[.565,.19]]){
-    const label=await ocrBuffer(image,{crop:{left:Math.round(ocr.width*left),top:Math.round(battle.y-10),width:Math.round(ocr.width*width),height:Math.round(battle.height+30)},scale:4});
+    const label=await ocrBuffer(image,{crop:{left:Math.round(ocr.width*left),top:Math.round(battle.y-10),width:Math.round(ocr.width*width),height:Math.round(battle.height+30)},scale:4,signal});
     ocr.lines.push(...label.lines.filter(l=>/DETAIL|REQUIREMENT/i.test(l.text)));
    }
-   if(!selectionButtons(ocr)?.requirement){const word=await require('./quest-requirement-button.cjs').readRequirementButton(image,ocr,ocrBuffer);if(word)ocr.lines.push({text:word.text,words:[word]});}
+   if(!selectionButtons(ocr)?.requirement){const word=await require('./quest-requirement-button.cjs').readRequirementButton(image,ocr,(source,options={})=>ocrBuffer(source,{...options,signal}));if(word)ocr.lines.push({text:word.text,words:[word]});}
   }
-  onObserve?.(image,ocr);return {image,ocr,identity,header:identity?await headerHash(image,ocr.width,ocr.height,identity,ocr):null};
+  onObserve?.(image,ocr);
+  return {image,ocr,identity,header:identity?await headerHash(image,ocr.width,ocr.height,identity,ocr):null};
  };
  const io={observe,sameHeader,
   pixelTooltip:(...args)=>require('./requirement-pixels.cjs').readRequirementPixels(...args),
-  tooltip:async(image,button)=>{const m=await sharp(image).metadata(),crop={left:Math.round(m.width*.108),top:Math.max(0,Math.round(button.y-m.height*.058)),width:Math.round(m.width*.687),height:Math.round(m.height*.048)};const ocr=await ocrBuffer(image,{crop,scale:4});onObserve?.(image,ocr);return ocr.text;},
+  tooltip:async(frame,button,signal)=>{if(frame?.image&&frame.rect)return (await ocrBuffer(frame.image,{scale:4,signal})).text;const m=await sharp(frame).metadata(),crop={left:Math.round(m.width*.108),top:Math.max(0,Math.round(button.y-m.height*.058)),width:Math.round(m.width*.687),height:Math.round(m.height*.048)};const ocr=await ocrBuffer(frame,{crop,scale:4,signal});onObserve?.(frame,ocr);return ocr.text;},
   input:async(exe,device,action,snap,check,progress=()=>{})=>{
-   check();const current=await observe(exe,device);check();const binary=adb.validateAdb(exe),serial=adb.validateDevice(device),options={windowsHide:true,timeout:10000,maxBuffer:2*1024*1024},activity=(await execute(binary,['-s',serial,'shell','dumpsys','activity','activities'],options)).stdout;
+   check();const current=await observe(exe,device,check.signal);check();const binary=adb.validateAdb(exe),serial=adb.validateDevice(device),options={windowsHide:true,timeout:10000,maxBuffer:2*1024*1024},activity=(await execute(binary,['-s',serial,'shell','dumpsys','activity','activities'],options)).stdout;
    if(!/(?:mResumedActivity|topResumedActivity).*com\.namcobandaigames\.spmoja010[Ee]\//.test(activity))throw Error('Global OPTC ön planda değil; katılım koşulu okuması durdu.');
    if(snap.identity&&!require('./quest-header.cjs').sameQuestModal(current,snap,sameHeader))throw Error('Seçili görev değişti; koşul okuması durdu.');
    const buttons=selectionButtons(current.ocr);let word;
@@ -105,7 +112,7 @@ function createQuestRestrictionService(sameHeader,headerHash,onObserve){
     const started=Date.now(),duration=30000,hold=execute(binary,['-s',serial,'shell','input','swipe',x,y,x,y,String(duration)],{...options,timeout:duration+5000}),images=[];
     // Never interpret the quest title beneath a tooltip after the hold ends.
     // Slow emulator captures get fewer frames instead of leaking into another UI.
-    try{for(let i=0;;i++){await pause(i?80:950);check();if(Date.now()-started>=duration-3000)break;progress('REQUIREMENT · kayan açıklama görüntüsü '+(i+1)+' alınıyor…');const image=Buffer.from((await adb.screenshot(binary,serial)).split(',')[1],'base64');if(Date.now()-started>=duration-500)break;images.push(image);}}finally{await hold;}return images;
+    try{for(let i=0;;i++){await pause(i?80:950);check();if(Date.now()-started>=duration-3000)break;progress('REQUIREMENT · kayan açıklama görüntüsü '+(i+1)+' alınıyor…');const full=Buffer.from((await adb.screenshot(binary,serial)).split(',')[1],'base64');if(Date.now()-started>=duration-500)break;const m=await sharp(full).metadata(),rect={left:Math.round(m.width*.108),top:Math.max(0,Math.round(button.y-m.height*.058)),width:Math.round(m.width*.687),height:Math.round(m.height*.048)},image=await sharp(full).extract(rect).png().toBuffer();images.push({image,rect,source:{width:m.width,height:m.height}});}}finally{await hold;}return images;
    }
    await execute(binary,['-s',serial,'shell','input','tap',x,y],options);await pause(750);
   }

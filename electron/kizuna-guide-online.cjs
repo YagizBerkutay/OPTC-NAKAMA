@@ -6,7 +6,7 @@ async function readFromTarget(reader,exe,device,options,progress,load=fetchGuide
  const context=await reader.read(exe,device,{...options,collectBonuses:false,targetOnly:true},()=>{},progress);
  let reason='Bu hedef için tarihleri doğrulanmış internet rehberi yok.';
  if(matchesEvent(options.event)){
-  try{progress('Boss mekanikleri internet rehberinden alınıyor…');const result=build(options.event,context,await load());if(result.mechanics.complete)return result;reason=result.mechanics.warnings[0];}
+  try{progress('Boss mekanikleri internet rehberinden alınıyor…');const result=build(options.event,context,await load());if(result.mechanics.complete&&context.target.battles===result.boss.stages.length&&result.boss.stages.at(-1)?.battleNumber===context.target.battles)return result;if(result.mechanics.complete)reason='İnternet rehberindeki Battle sayısı seçili Kizuna hedefiyle eşleşmiyor.';else reason=result.mechanics.warnings[0];}
   catch(error){reason=error.message;}
  }
  progress('İnternet kapsamı eksik · '+context.target.difficulty+'★ Lv.'+context.target.level+' oyun içi rehberi okunuyor…');

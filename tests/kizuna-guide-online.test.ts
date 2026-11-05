@@ -27,6 +27,15 @@ test('complete internet variants keep the short path; internet failures recover 
  const r=await g.readFromTarget(reader,'qa','qa',{difficulty:10,event},()=>{},async()=>html);assert.equal(calls,1);assert.equal(r.mechanics.mode,'online');
  calls=0;const recovered=await g.readFromTarget({read:async(_e:string,_d:string,o:any)=>{calls++;return o.targetOnly?context():gameResult(context());}},'qa','qa',{difficulty:10,event},()=>{},async()=>{throw Error('HTTP 503');});assert.equal(calls,2);assert.equal(recovered.mechanics.mode,'game');
 });
+test('a static internet profile cannot certify mechanics when the target has a different Battle count',async()=>{
+ for(const battles of [2,4]){
+  const target=context();target.target.battles=battles;
+  let calls=0;
+  const native=gameResult(target);
+  await assert.rejects(()=>g.readFromTarget({read:async(_e:string,_d:string,o:any)=>{calls++;return o.targetOnly?target:native;}},'qa','qa',{difficulty:10,event},()=>{},async()=>html),/rehber|tamam|hedef/i);
+  assert.equal(calls,2,'mismatched static coverage must fall back to a fresh in-game read');
+ }
+});
 
 test('game recovery rejects incomplete text and any target change before replacing a saved guide',async()=>{
  for(const mutate of [(r:any)=>{r.boss.observation.textComplete=false;},(r:any)=>{r.boss.observation.complete=false;},(r:any)=>{r.target.level++;},(r:any)=>{r.target.enemyType='QCK';},(r:any)=>{r.target.difficulty=7;},(r:any)=>{r.target.maxHP='15000001';},(r:any)=>{r.boss.stages.pop();}]){

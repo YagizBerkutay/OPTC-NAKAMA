@@ -8,11 +8,12 @@ const crop=(snap,x,y,w,h)=>({left:Math.round(snap.width*x),top:Math.round(snap.h
 const kind=s=>/Character Details/i.test(s.ocr.text)&&s.ocr.lines.flatMap(l=>l.words||[]).some(w=>/^[O0]K$/i.test(w.text)&&w.x>s.width*.35&&w.x<s.width*.65&&w.y>s.height*.75&&w.y<s.height*.83)?'detail':/Special Rules Effect/i.test(s.ocr.text)?'rules':/Assault Rumble Tea/i.test(s.ocr.text)&&/SUB CHARACTER|TOTAL COST/i.test(s.ocr.text)?'setup':/\b[O0]K\b/i.test(s.ocr.text)&&/RUMBLE SPECIAL|RUMBLE ABILIT(?:Y|IES)|RESISTANCE|TARGET PRIORITY|BEHAVIOR PATTERN/i.test(s.ocr.text)?'detail':/Character Details/i.test(s.ocr.text)&&/COMBAT|TARGET PRIORITY|BEHAVIOR PATTERN/i.test(s.ocr.text)?'info':parseAssaultHome(s.ocr.text)?'home':'unknown';
 const {statsFrom,mergePages}=require('./rumble-info.cjs');
 function createAssaultReader(io){
- let active,last;const wait=io.wait||pause;
+ let active,last,restartPending=false;const wait=io.wait||pause;
  const cancel=()=>{if(active)active.cancelled=true;return true;};
- async function read(input,progress=()=>{}){
-  if(active){if(!active.cancelled)throw Error('Assault okuması zaten sürüyor.');await active.finished;}
+ async function read(input,progress=()=>{},onObserve){
+  if(active){if(!active.cancelled||restartPending)throw Error('Assault okuması zaten sürüyor.');restartPending=true;try{await active.finished;}finally{restartPending=false;}}
   if(!input||typeof input.exe!=='string'||typeof input.device!=='string'||input.refresh!==undefined&&typeof input.refresh!=='boolean')throw Error('Assault okuma isteği geçersiz.');
+  if(restartPending)throw Error('Assault okuması zaten sürüyor.');
   let finish;const token={cancelled:false,finished:new Promise(resolve=>finish=resolve)};active=token;const check=()=>{if(token.cancelled)throw Error('Assault okuma iptal edildi.');},update=s=>{check();progress(s);};
   const observe=async()=>{check();const snap=await io.capture(input.exe,input.device);check();snap.ocr=await io.ocr(snap.image);check();
    if(kind(snap)==='unknown'&&!/Character Details|Special Rules Effect|About Assault/i.test(snap.ocr.text)){
@@ -26,6 +27,7 @@ function createAssaultReader(io){
    if(kind(snap)==='unknown'){
     const title=await io.line(await sharp(snap.image).extract(crop(snap,.12,.155,.76,.045)).png().toBuffer());check();snap.ocr.text+='\n'+title.text;
    }
+   onObserve?.(snap.image,snap.ocr);
    return snap;
   };
   const move=async(snap,action)=>{check();await io.input(input.exe,input.device,snap,action,{check});check();await wait(350);};

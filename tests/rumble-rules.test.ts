@@ -66,8 +66,8 @@ test('Dual colours do not receive type Rules bonuses, while their classes remain
  assert.equal(ruleMemberValue(m,f.data,{...rules,effects:[rules.effects[1]]},{ATK:3}),24);
 });
 test('Reader stops before input outside Rumble and supports cancellation without unknown Back input',async()=>{
- let moves=0;const reader=createRuleReader({capture:async()=>({image:Buffer.alloc(1),width:900,height:1600}),ocr:async()=>ocr([{text:'Character Box',y:500}]),input:async()=>{moves++;}});
- await assert.rejects(reader.read('adb','device'),/Aktif Rumble/);assert.equal(moves,0);
+ let moves=0;const observed:any[]=[],reader=createRuleReader({capture:async()=>({image:Buffer.alloc(1),width:900,height:1600}),ocr:async()=>ocr([{text:'Character Box',y:500}]),input:async()=>{moves++;}});
+ await assert.rejects(reader.read('adb','device',()=>{},(image:Buffer,value:any)=>observed.push({image,value})),/Aktif Rumble/);assert.equal(moves,0);assert.ok(observed.length>0);assert.equal(observed[0].image.length,1);assert.match(observed[0].value.text,/Character Box/);
  let release:any;const gate=new Promise(r=>release=r);const cancelReader=createRuleReader({capture:async()=>{await gate;return {image:Buffer.alloc(1),width:900,height:1600};},ocr:async()=>ocr([{text:'Character Box',y:500}]),input:async()=>{moves++;}});
  const pending=cancelReader.read('adb','device');cancelReader.cancel();release();await assert.rejects(pending,/iptal/);assert.equal(moves,0);
 });
@@ -102,6 +102,48 @@ test('An actual new phase still discards the rules; unreadable return gives a di
  const changed=settlingReader('Block B');await assert.rejects(changed.reader.read('adb','device'),/Aktif bölüm değişti/);
  const unreadable=settlingReader('Block C',true);await assert.rejects(unreadable.reader.read('adb','device'),/dönüş doğrulanamadı/);
  assert.deepEqual(changed.moves,['tap','tap','back']);assert.deepEqual(unreadable.moves,['tap','tap','back']);
+});
+
+test('Block C recovers the real missing bracket and Up glyph at another OCR scale before failing',async()=>{
+ const home=ocr([{text:'BLOCK C',y:340},{text:'Ends in: 3d',y:385},{text:'RUMBLE',y:917},{text:'RULES',y:977,x:340}]);
+ const valid='QCK-type RCV Up Lv.4; Driven class ATK Up Lv.4; Striker class HP Up Lv.4; [Paramythia-type] [Giant] damage dealt to all classes 20% Up and damage taken from all classes 20% Down (Special Rule will only affect the Combat Power); During the last 30 s of battle, Special CT Speed Up & Damage Up!';
+ const broken=valid.replace('HP Up','HP U').replace('[Giant]','[Giant');
+ assert.throws(()=>parseRules(broken,'Block C'),/Sayısal/);
+ const page=(text:string)=>ocr([{text:'PREVIOUS RANKING',y:220},{text:'UNDERWAY',y:380},{text:'Block C',y:550},{text,y:650}]);
+ let stage='home',fallbacks=0;const moves:string[]=[],observed:any[]=[];
+ const reader=createRuleReader({wait:async()=>{},capture:async()=>({image:Buffer.from(stage),width:900,height:1600}),ocr:async(image:Buffer,options:any)=>{
+  if(image.toString()==='home')return home;
+  if(options?.scale===3&&!options.crop){fallbacks++;return page(valid);}
+  return page(broken);
+ },input:async(_e:any,_d:any,action:string)=>{moves.push(action);stage=action==='back'?'home':'rules';}});
+ const result=await reader.read('adb','device',()=>{},(_image:Buffer,value:any,metadata:any)=>observed.push({value,metadata}));
+ assert.equal(result.phase,'Block C');assert.deepEqual(result.effects.filter((e:any)=>e.kind==='stat').map((e:any)=>e.level),[4,4,4]);
+ assert.deepEqual(result.effects.find((e:any)=>e.kind==='damage').targets,['Paramythia-type','Giant']);
+ assert.equal(fallbacks,1);assert.deepEqual(moves,['tap','tap','back']);
+ assert.ok(observed.some(v=>v.metadata?.stage==='rule-parse'&&v.metadata.scale===2&&v.value.text.includes('[Giant damage')));
+ assert.ok(observed.some(v=>v.metadata?.stage==='rule-parse'&&v.metadata.scale===3));
+});
+
+test('Rules transition with only PREVIOUS RANKING waits for the Underway content',async()=>{
+ const home=ocr([{text:'BLOCK C',y:340},{text:'Ends in: 3d',y:385},{text:'RUMBLE',y:917},{text:'RULES',y:977,x:340}]);
+ const rules=ocr([{text:'PREVIOUS RANKING',y:220},{text:'UNDERWAY',y:380},{text:'Block C',y:550},{text:ruleC,y:650}]);
+ let stage='home',transitions=0;
+ const reader=createRuleReader({wait:async()=>{},capture:async()=>({image:Buffer.from(stage),width:900,height:1600}),ocr:async()=>stage==='home'?home:transitions++===0?ocr([{text:'PREVIOUS RANKING',y:220}]):rules,input:async(_e:any,_d:any,action:string)=>{stage=action==='back'?'home':'rules';}});
+ assert.equal((await reader.read('adb','device')).phase,'Block C');assert.ok(transitions>1);
+});
+
+test('Unreadable numeric rules stay rejected after alternate scales; a different phase is never substituted',async()=>{
+ const home=ocr([{text:'BLOCK C',y:340},{text:'Ends in: 3d',y:385},{text:'RUMBLE',y:917},{text:'RULES',y:977,x:340}]);
+ for(const wrongPhase of [false,true]){
+  let stage='home';const scales:number[]=[];
+  const reader=createRuleReader({wait:async()=>{},capture:async()=>({image:Buffer.from(stage),width:900,height:1600}),ocr:async(_image:Buffer,options:any)=>{
+   if(stage==='home')return home;
+   if(options?.scale&&!options.crop)scales.push(options.scale);
+   const fallback=options?.scale>=3;
+   return ocr([{text:'PREVIOUS RANKING',y:220},{text:'UNDERWAY',y:380},{text:wrongPhase&&fallback?'Block B':'Block C',y:550},{text:fallback&&wrongPhase?ruleC:ruleC.replace('Lv.4','Lv.a'),y:650}]);
+  },input:async(_e:any,_d:any,action:string)=>{stage=action==='back'?'home':'rules';}});
+  await assert.rejects(reader.read('adb','device'),/belirsiz|güvenilir|Sayısal/);assert.deepEqual(scales,[2,3,4]);
+ }
 });
 test('Exhibition recovers a missing Underway tab on every page and keeps only its own bonuses',async()=>{
  const home=ocr([{text:'EXHIBITION',y:280},{text:'Ends in: 1d',y:330},{text:'RUMBLE',y:1400},{text:'RULES',y:977,x:340}]);

@@ -3,6 +3,7 @@ import { type ScanGrid, type ScanResult } from './recognition';
 import type { Encounter } from './boss-library';
 import type { RumbleRules } from './rumble-rules';
 import type { AssaultContext } from './assault-rumble';
+import type { GPRules } from './grand-party-rules';
 import type { PkaEvent } from './pka';
 import type { PkaRumbleContext } from './pka-rumble';
 import type { CoopObservation, CoopQuestTarget, CoopQuestMenu, CoopQuestRead } from './coop';
@@ -107,6 +108,12 @@ export interface IRumbleBridge {
   onRumbleProgress(callback: (text: string) => void): () => void;
 }
 
+export interface IGrandPartyBridge {
+  grandPartyRules(input: { exe: string; device: string }): Promise<GPRules>;
+  cancelGrandPartyRules(): Promise<boolean>;
+  onGrandPartyProgress(callback: (text: string) => void): () => void;
+}
+
 export interface IAdbBridge {
   pickAdb(): Promise<string | null>;
   discoverAdb(): Promise<string | null>;
@@ -140,6 +147,7 @@ export type NakamaBridge = ICoopBridge &
   IKizunaBridge &
   IBossBridge &
   IRumbleBridge &
+  IGrandPartyBridge &
   IAdbBridge &
   IRecognitionBridge &
   IStateBridge &

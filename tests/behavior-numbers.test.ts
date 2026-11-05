@@ -2,6 +2,30 @@ import {test} from 'node:test';import assert from 'node:assert/strict';import fs
 const require=createRequire(import.meta.url),sharp=require('sharp'),{facts,reconcileNumericRows,mergeNumericRows}=require('../electron/behavior-numbers.cjs'),{mergeTokens,positioned}=require('../electron/boss-behavior-core.cjs'),{ocrBuffer}=require('../electron/rule-ocr.cjs');
 const load=(name:string)=>fs.readFileSync(new URL('./fixtures/boss-behavior/'+name,import.meta.url));
 const fixture=JSON.parse(load('jinbe-number-conflict.json').toString()),beforeImage=load('jinbe-number-before.png'),afterImage=load('jinbe-number-after.png');
+test('Judge scroll anchors with small OCR box offsets agree on the same physical shift',()=>{
+ const record=JSON.parse(load('judge-scroll-jitter.json').toString());
+ const restore=(rows:any[])=>rows.map(t=>positioned(t,t.position));
+ let alignment:any;
+ const result=mergeTokens(restore(record.existing),restore(record.after),record.evidence,(value:any)=>{alignment=value;});
+ assert.equal(alignment.shift,378);
+ assert.deepEqual(result.filter((t:any)=>t.kind==='battle').map((t:any)=>t.text),['BATTLE 1','BATTLE 4-1','BATTLE 4-2','BATTLE 4-3']);
+});
+test('recorded Judge 80% / §0% conflict retains later rows and the previously observed Battle 4-1',async()=>{
+ const record=JSON.parse(load('judge-percent-conflict.json').toString());
+ const restore=(rows:any[])=>rows.map(t=>positioned(t,t.position));
+ const existing=restore(record.existing),next=restore(record.after);
+ assert.throws(()=>mergeTokens(existing,next,null),/sayıları çelişiyor/);
+ const result=await mergeNumericRows({existing,next,retainNumericConflicts:true});
+ const row=result.merged.find((t:any)=>t.text.includes('Chance Down'));
+ assert.match(row.text,/80%/);assert.equal(row.marquee.complete,true);
+ assert.ok(result.merged.some((t:any)=>t.kind==='battle'&&t.text==='BATTLE 4-1'));
+ assert.ok(result.merged.some((t:any)=>t.text.includes('[DEX] Slots')));
+ assert.equal(result.merged.some((t:any)=>t.kind==='invalidBattle'),false);
+ const conflicting=next.map((t:any)=>t.text.includes('§0%')?positioned({...t,text:t.text.replace('§0%','70%')},t.position):t);
+ const disputed=await mergeNumericRows({existing,next:conflicting,retainNumericConflicts:true});
+ assert.equal(disputed.merged.find((t:any)=>t.numericConflict)?.marquee.complete,false);
+ assert.equal(disputed.next.find((t:any)=>t.numericConflict)?.marquee.complete,false);
+});
 const context=()=>{const pages=new Map(),restore=(list:any[])=>list.map(t=>{const id=t.position.page;if(!pages.has(id))pages.set(id,Symbol());return positioned({...t}, {...t.position,page:pages.get(id)});});return {existing:restore(fixture.existing),next:restore(fixture.after),previous:restore(fixture.before),beforeImage,afterImage,evidence:fixture.evidence,body:fixture.body};};
 const rangeContext=()=>{const f=JSON.parse(load('jinbe-range-conflict.json').toString()),pages=new Map(),restore=(list:any[])=>list.map(t=>{const id=t.position.page;if(!pages.has(id))pages.set(id,Symbol());return positioned({...t},{...t.position,page:pages.get(id)});});return {existing:restore(f.existing),next:restore(f.after),previous:restore(f.before),beforeImage:load('jinbe-range-before.png'),afterImage:load('jinbe-range-after.png'),evidence:f.evidence,body:f.body};};
 const healContext=()=>{const f=JSON.parse(load('heal-number-conflict.json').toString()),pages=new Map(),restore=(list:any[])=>list.map(t=>{const id=t.position.page;if(!pages.has(id))pages.set(id,Symbol());return positioned({...t},{...t.position,page:pages.get(id)});});return {existing:restore(f.existing),next:restore(f.after),previous:restore(f.before),beforeImage:load('heal-number-before.png'),afterImage:load('heal-number-after.png'),evidence:f.evidence,body:f.body};};

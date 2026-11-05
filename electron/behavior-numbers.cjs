@@ -115,8 +115,20 @@ async function mergeNumericRows(options){
   const alignment=error.cause?.alignment;if(!alignment?.verified||!Number.isFinite(alignment.shift))throw error;
   // Use the very alignment accepted by the core merger. A calibrated range
   // alone never supplies a shift: the core must first prove a unique match.
-  const next=await reconcileNumericRows({...options,evidence:alignment});if(next===options.next)throw error;
-  return {merged:mergeTokens(correctedPrevious(options,next,alignment),next,alignment),next,evidence:alignment};
+  const next=await reconcileNumericRows({...options,evidence:alignment});
+  if(next===options.next&&!options.retainNumericConflicts)throw error;
+  const merged=mergeTokens(correctedPrevious(options,next,alignment),next,alignment,undefined,options.retainNumericConflicts);
+  const conflicts=merged.filter(t=>t.numericConflict&&t.position?.page===next[0]?.position?.page);
+  if(conflicts.length)options.progress?.('Çelişen sayı inceleme için işaretlendi, sonraki satırlar okunuyor…');
+  if(!options.retainNumericConflicts)return {merged,next,evidence:alignment};
+  const recovered=next.map(t=>{
+   if(t.kind!=='line'||!t.position)return t;
+   const conflict=conflicts.find(row=>row.position===t.position);
+   if(conflict)return conflict;
+   if(/§\d*%/.test(t.text))return merged.find(row=>row.position===t.position&&row.marquee?.complete)||t;
+   return t;
+  });
+  return {merged,next:recovered,evidence:alignment};
  }
 }
 module.exports={facts,reconcileNumericRows,matchingNumberPixels,mergeNumericRows};

@@ -8,10 +8,12 @@ const wait=(ms:number)=>new Promise(r=>setTimeout(r,ms));
 class FakeWorker extends EventEmitter {
  static instances:FakeWorker[]=[];
  terminated=false;
+ autoCancel=true;
  constructor(..._args:unknown[]){super();FakeWorker.instances.push(this);}
+ postMessage(message:unknown){if((message as any)?.type==='cancel'&&this.autoCancel)queueMicrotask(()=>this.emit('message',{type:'error',message:'reader cancelled after draining current operation'}));}
  async terminate(){this.terminated=true;return 0;}
 }
-const setup=(totalMs=300,idleMs=80)=>createBossWorkerService({WorkerClass:FakeWorker,totalMs,idleMs,validate:false});
+const setup=(totalMs=300,idleMs=80,cancelDrainMs=40000)=>createBossWorkerService({WorkerClass:FakeWorker,totalMs,idleMs,cancelDrainMs,validate:false});
 const latest=()=>FakeWorker.instances.at(-1)!;
 
 test('the default Boss Plan worker keeps a progressing scan alive past eight minutes',(t)=>{
@@ -32,13 +34,13 @@ test('progress resets the idle timer but cannot extend the total deadline',async
  try{await assert.rejects(pending,/süre sınırına ulaştı/);assert.ok(progress.length>=2);assert.equal(worker.terminated,true);}finally{clearInterval(beat);service.close();}
 });
 
-test('cancel frees the active job immediately; late messages cannot replace its successor',async()=>{
+test('cancel waits for the reader cancellation response before releasing ownership',async()=>{
  const service=setup(),first=service.read('fake','fake'),old=latest();
  assert.throws(()=>service.read('fake','fake'),/zaten sürüyor/);
- const rejection=assert.rejects(first,/iptal edildi/);assert.equal(service.cancel(),true);
- const second=service.read('fake','fake'),current=latest();
- old.emit('message',{type:'result',result:'stale'});old.emit('exit',1);old.emit('error',Error('late'));
- await rejection;assert.equal(old.terminated,true);assert.equal(current.terminated,false);
+ old.autoCancel=false;let settled=false;const rejection=assert.rejects(first,/iptal edildi/).finally(()=>{settled=true;});assert.equal(service.cancel(),true);
+ assert.throws(()=>service.read('fake','fake'),/zaten sürüyor/);await new Promise(r=>setImmediate(r));assert.equal(settled,false);
+ old.emit('message',{type:'error',message:'reader cancelled after current operation drained'});
+  await rejection;assert.equal(old.terminated,true);const second=service.read('fake','fake'),current=latest();assert.equal(current.terminated,false);
  current.emit('message',{type:'result',result:'current'});assert.equal(await second,'current');
  assert.equal(service.close(),true);
 });
@@ -54,4 +56,21 @@ test('worker errors and exit without a result reject the job and release it',asy
  }
  const pending=service.read('fake','fake');latest().emit('message',{type:'result',result:'ok'});assert.equal(await pending,'ok');
  await wait(100);
+});
+
+test('screen-read worker ownership is retained until terminate finishes',async()=>{
+ let release!:()=>void,entered!:()=>void;const draining=new Promise<void>(r=>release=r),started=new Promise<void>(r=>entered=r);
+ class SlowTerminateWorker extends EventEmitter{terminated=false;constructor(){super();latestWorkers.push(this);}async terminate(){this.terminated=true;entered();await draining;return 0;}}
+ const latestWorkers:SlowTerminateWorker[]=[],service=createBossWorkerService({WorkerClass:SlowTerminateWorker,validate:false}),first=service.read('fake','fake'),worker=latestWorkers[0];
+ worker.emit('message',{type:'result',result:'complete'});await started;
+ assert.throws(()=>service.read('fake','fake'),/zaten sürüyor/);let settled=false;first.finally(()=>{settled=true;});await new Promise(r=>setImmediate(r));assert.equal(settled,false);
+ release();assert.equal(await first,'complete');assert.equal(worker.terminated,true);
+});
+
+test('a worker that ignores cancellation times out as undrained and poisons the device lease',async()=>{
+ const {createDeviceReadGate}=require('../electron/device-read-gate.cjs'),service=setup(300,80,20),withRead=createDeviceReadGate((device:string)=>device),worker=(()=>{const pending=withRead('device-a',()=>service.read('fake','fake'));return {pending,worker:latest()};})();
+ worker.worker.autoCancel=false;
+ await assert.rejects(worker.pending,(error:any)=>error.code==='SCREEN_READ_UNDRAINED'&&/sonlandıramadı/.test(error.message));assert.equal(worker.worker.terminated,true);
+ await assert.rejects(withRead('device-a',async()=>'unsafe'),/güvenli biçimde sonlanmadı/);
+ assert.equal(await withRead('device-b',async()=>'independent'),'independent');
 });

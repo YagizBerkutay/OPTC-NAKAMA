@@ -6,3 +6,9 @@ test('only identical pixels and OCR options share work, and callers cannot mutat
 test('failed OCR retries normally and bounded cache evicts old images',async()=>{
  let reads=0;const read=cacheOCR(async()=>{if(++reads===1)throw Error('failure');return {text:'ok'};},{entries:1});await assert.rejects(read(Buffer.from('a')),/failure/);await read(Buffer.from('a'));await read(Buffer.from('b'));await read(Buffer.from('a'));assert.equal(reads,4);
 });
+
+test('coalesced OCR cancellation is per caller and only aborts backend work when all callers leave',async()=>{
+ let reads=0,backendSignal!:AbortSignal,finish!:(value:any)=>void;const read=cacheOCR((_image:any,options:any)=>{reads++;backendSignal=options.signal;return new Promise(resolve=>{finish=resolve;});}),image=Buffer.from('shared'),aController=new AbortController(),bController=new AbortController();
+ const a=read(image,{signal:aController.signal}).then(()=>false,()=>true),b=read(image,{signal:bController.signal});await new Promise(r=>setImmediate(r));aController.abort();assert.equal(await Promise.race([a,new Promise(r=>setTimeout(()=>r(false),100))]),true);assert.equal(backendSignal.aborted,false);finish({text:'ok'});assert.deepEqual(await b,{text:'ok'});assert.equal(reads,1);
+ const cController=new AbortController(),retryImage=Buffer.from('all-abort'),next=read(retryImage,{signal:cController.signal}).then(()=>false,()=>true);await new Promise(r=>setImmediate(r));cController.abort();assert.equal(await Promise.race([next,new Promise(r=>setTimeout(()=>r(false),100))]),true);assert.equal(backendSignal.aborted,true);finish({text:'late'});await new Promise(r=>setImmediate(r));const retry=read(retryImage);await new Promise(r=>setImmediate(r));finish({text:'retry'});assert.deepEqual(await retry,{text:'retry'});assert.equal(reads,3);
+});

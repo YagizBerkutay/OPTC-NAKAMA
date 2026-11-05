@@ -54,11 +54,13 @@ export function kizunaProblem(s:KizunaSetup,boss?:Boss):string {
  const sourceObservation=(boss as Boss&{observation?:{complete:boolean;warnings:string[]}}).observation;
  if(sourceObservation?.complete===false&&boss.source.startsWith('https://telegra.ph/'))return sourceObservation.warnings[0]||'İnternet rehberi bu seviyeyi kapsamıyor.';
  if(!s.event.trim()||!s.variant.trim()||!s.source.trim())return 'Etkinlik, varyant ve Global kaynak bilgisini tamamla.';
- if(!s.confirmed||s.profileId!==boss.id)return 'Rehberin bu Global etkinlik ve seviye aralığıyla eşleştiğini kontrol et.';
+ if(s.profileId!==boss.id)return 'Rehberin bu Global etkinlik ve seviye aralığıyla eşleştiğini kontrol et.';
  if(s.level<s.levelMin||s.level>s.levelMax)return 'Boss seviyesi doğruladığın rehber aralığının dışında.';
- const observed=(boss as Boss&{observation?:{mode?:string;complete:boolean;level:number|null;levelRange?:number[]}}).observation;
+ const observed=(boss as Boss&{observation?:{mode?:string;complete:boolean;textComplete?:boolean;level:number|null;levelRange?:number[]}}).observation;
  if(observed?.mode==='pka')return 'Bu profil Pirate King Adventure için; Kizuna rehberini yükle.';
  if(observed?.complete===false)return 'Rehber okuması tamamlanmadı; eksik sayfaları tamamla.';
+ if(observed?.textComplete===false)return 'Boss davranış metninin tamamı doğrulanmadı; eksik kayan satırlarla kadro doğrulanmadı.';
+ if(!s.confirmed)return 'Rehberin bu Global etkinlik ve seviye aralığıyla eşleştiğini kontrol et.';
  if(observed?.level!==undefined&&observed.level!==null&&observed.level!==s.level)return 'Ekrandan okunan boss seviyesi seçtiğin seviyeden farklı.';
  if(observed?.levelRange&&(s.level<observed.levelRange[0]||s.level>observed.levelRange[1]))return 'Boss seviyesi okunan görüntünün seviye aralığı dışında.';
  const restriction=questRestrictionProblem(boss);if(restriction)return restriction;

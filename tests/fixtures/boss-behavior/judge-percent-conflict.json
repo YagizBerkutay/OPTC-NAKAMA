@@ -1,0 +1,286 @@
+{
+  "existing": [
+    {
+      "kind": "heading",
+      "text": "BEHAVIOR",
+      "position": {
+        "top": 1185,
+        "height": 29.5,
+        "left": 357.5,
+        "page": 1,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 1,
+      "variant": "",
+      "text": "BATTLE 1",
+      "position": {
+        "top": 904,
+        "height": 26.5,
+        "left": 360,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı",
+      "text": "PREEMPTIVE",
+      "position": {
+        "top": 965,
+        "height": 27,
+        "contentLeft": 284.25,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "49 turn(s) Own Type Slots 80% Chance Down",
+      "marquee": {
+        "complete": true,
+        "samples": 5,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 1035.5,
+        "height": 26.5,
+        "left": 184.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Change to a Random Slot",
+      "marquee": {
+        "complete": true,
+        "samples": 3,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 1093.5,
+        "height": 25,
+        "left": 177.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 4,
+      "variant": "1",
+      "text": "BATTLE 4-1",
+      "position": {
+        "top": 1212.75,
+        "height": 26,
+        "left": 340.75,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    }
+  ],
+  "after": [
+    {
+      "kind": "heading",
+      "text": "BEHAVIOR",
+      "position": {
+        "top": 420,
+        "height": 28,
+        "left": 357.5,
+        "page": 3,
+        "edge": true,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 1,
+      "variant": "",
+      "text": "BATTLE 1",
+      "position": {
+        "top": 519,
+        "height": 26.5,
+        "left": 359.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı",
+      "text": "PREEMPTIVE",
+      "position": {
+        "top": 583,
+        "height": 21.75,
+        "contentLeft": 283.75,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "49 turn(s) Own Type Slots §0% Chance Down",
+      "marquee": {
+        "complete": true,
+        "samples": 9,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 650,
+        "height": 26.5,
+        "left": 177,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "GLcé•4f",
+      "position": {
+        "top": 664,
+        "height": 12.5,
+        "left": 122,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Change to a Random Slot",
+      "marquee": {
+        "complete": true,
+        "samples": 3,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 708.5,
+        "height": 24,
+        "left": 177.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "invalidBattle",
+      "text": "BATTLE a- 1",
+      "position": {
+        "top": 827.5,
+        "height": 26,
+        "left": 340.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "starting",
+      "label": "STARTING STATE Technical Gunman",
+      "text": "STARTING STATE Technical Gunman",
+      "marquee": {
+        "complete": true,
+        "samples": 3,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 891.75,
+        "height": 20.25,
+        "left": 292.5,
+        "contentLeft": 280,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "99 turn(s) Slot Barrier ([PSY] Slots 1 time(s))",
+      "marquee": {
+        "complete": true,
+        "samples": 9,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 958,
+        "height": 27.5,
+        "left": 178.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "starting",
+      "label": "STARTING STATE Technical Gunman",
+      "text": "STARTING STATE Technical Gunman",
+      "marquee": {
+        "complete": true,
+        "samples": 3,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 1039.75,
+        "height": 20,
+        "left": 292.5,
+        "contentLeft": 280.25,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "99 turn(s) Slot Barrier ([DEX] Slots 1 time(s))",
+      "marquee": {
+        "complete": true,
+        "samples": 9,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 1106,
+        "height": 26.5,
+        "left": 178.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "starting",
+      "label": "STARTING STATE Technical Gunman",
+      "text": "STARTING STATE Technical Gunman",
+      "marquee": {
+        "complete": true,
+        "samples": 3,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 1185.75,
+        "height": 22.25,
+        "left": 292.5,
+        "contentLeft": 280.25,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    }
+  ]
+}

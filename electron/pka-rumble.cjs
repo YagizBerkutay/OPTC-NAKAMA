@@ -34,17 +34,18 @@ async function readBonus(s,io,check=()=>{}){
  return values;
 }
 function createPkaRumbleReader(io){
- let active;const wait=io.wait||pause,detailsCache=new Map();
+ let active,restartPending=false;const wait=io.wait||pause,detailsCache=new Map();
  const cancel=()=>{if(active)active.cancelled=true;return true;};
- async function read(input,progress=()=>{}){
-  if(active){if(!active.cancelled)throw Error('PKA Rumble okuması sürüyor.');await active.finished;}
+ async function read(input,progress=()=>{},onObserve){
+  if(active){if(!active.cancelled||restartPending)throw Error('PKA Rumble okuması sürüyor.');restartPending=true;try{await active.finished;}finally{restartPending=false;}}
   if(!input||typeof input.exe!=='string'||typeof input.device!=='string'||input.refresh!==undefined&&typeof input.refresh!=='boolean')throw Error('PKA Rumble okuma isteği geçersiz.');
+  if(restartPending)throw Error('PKA Rumble okuması sürüyor.');
   let finish;const token={cancelled:false,finished:new Promise(r=>finish=r)};active=token;
   const check=()=>{if(token.cancelled)throw Error('PKA Rumble okuma iptal edildi.');},update=t=>{check();progress(t);};
   const observe=async()=>{check();const s=await io.capture(input.exe,input.device);s.ocr=await io.ocr(s.image);check();if(kind(s)==='unknown'){
    const head=await io.ocr(s.image,{crop:crop(s,.02,.165,.72,.062),scale:2});s.ocr.text+='\n'+head.text;if(!/Oppone/i.test(s.ocr.text)){const line=await io.line(await sharp(s.image).extract(crop(s,.02,.178,.60,.039)).png().toBuffer());s.ocr.text+='\n'+line.text;}
    if(/Oppone/i.test(s.ocr.text)){const button=await io.ocr(s.image,{crop:crop(s,.02,.79,.21,.105),scale:2});s.ocr.text+='\n'+button.text;}
-  }return s;};
+  }onObserve?.(s.image,s.ocr);return s;};
   const screen=s=>kind(s)==='info'?'info':kind(s)==='detail'?'detail':/Type Bonus/i.test(s.ocr.text)&&/Buddy Character Stats/i.test(s.ocr.text)?'bonus':/Oppone/i.test(s.ocr.text)&&/BONUS/i.test(s.ocr.text)?'opponent':'unknown';
   const settle=async expected=>{let previous,unchanged=Date.now();for(;;){const s=await observe();if(screen(s)===expected)return s;const signature=s.ocr.text.replace(/\d+:\d+/g,'');if(previous!==signature)unchanged=Date.now();else if(Date.now()-unchanged>10000&&!/CONNECTING|LOADING/i.test(signature))throw Error('PKA Rumble bilgi ekranı doğrulanamadı: '+expected);previous=signature;await wait(300);check();}};
   const move=async(s,action)=>{check();await io.pkaInput(input.exe,input.device,s,action,{check,screen:screen(s)});check();await wait(350);};

@@ -1,0 +1,646 @@
+{
+  "existing": [
+    {
+      "kind": "heading",
+      "text": "BEHAVIOR",
+      "position": {
+        "top": 1185,
+        "height": 29.5,
+        "left": 357.5,
+        "page": 1,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 1,
+      "variant": "",
+      "text": "BATTLE 1",
+      "position": {
+        "top": -243.5,
+        "height": 26.5,
+        "left": 359.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı",
+      "text": "PREEMPTIVE",
+      "position": {
+        "top": -181.75,
+        "height": 26.25,
+        "contentLeft": 284,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "09 turn(s) Own Type Slots 80% Chance Down",
+      "marquee": {
+        "complete": true,
+        "samples": 7
+      },
+      "position": {
+        "top": -112.5,
+        "height": 27,
+        "left": 177,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Change to a Random Slot",
+      "marquee": {
+        "complete": true,
+        "samples": 3
+      },
+      "position": {
+        "top": -54,
+        "height": 24.5,
+        "left": 177.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 4,
+      "variant": "1",
+      "text": "BATTLE 4-1",
+      "position": {
+        "top": 64.5,
+        "height": 26.5,
+        "left": 340.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "starting",
+      "label": "STARTING STATE Technical Gunman",
+      "text": "STARTING STATE Technical Gunman",
+      "marquee": {
+        "complete": true,
+        "samples": 3
+      },
+      "position": {
+        "top": 127.5,
+        "height": 22,
+        "left": 292.5,
+        "contentLeft": 280.25,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "99 turn(s) Slot Barrier ([PSY] Slots 1 time(s))",
+      "marquee": {
+        "complete": true,
+        "samples": 7
+      },
+      "position": {
+        "top": 195.5,
+        "height": 27,
+        "left": 187.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "starting",
+      "label": "STARTING STATE Technical Gunman",
+      "text": "STARTING STATE Technical Gunman",
+      "marquee": {
+        "complete": true,
+        "samples": 3
+      },
+      "position": {
+        "top": 277,
+        "height": 20.25,
+        "left": 292.5,
+        "contentLeft": 280,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "99 turn(s) Slot Barrier ([DEX] Slots 1 time(s))",
+      "marquee": {
+        "complete": true,
+        "samples": 7
+      },
+      "position": {
+        "top": 343.5,
+        "height": 27,
+        "left": 187.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "starting",
+      "label": "STARTING STATE Technical Gunman",
+      "text": "STARTING STATE Technical Gunman",
+      "marquee": {
+        "complete": true,
+        "samples": 3
+      },
+      "position": {
+        "top": 425,
+        "height": 20,
+        "left": 292.5,
+        "contentLeft": 280,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "99 turn(s) Slot Barrier ( [STR] Slots 1 time(s))",
+      "marquee": {
+        "complete": true,
+        "samples": 6
+      },
+      "position": {
+        "top": 491.5,
+        "height": 27,
+        "left": 187.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı",
+      "text": "PREEMPTIVE",
+      "position": {
+        "top": 570.25,
+        "height": 26.25,
+        "contentLeft": 284,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Left-Column [STR] [DEX] [QCK] [PSY] [INT] [G] [RCV] [TND] [BOMB]Slots to [BLOCK] Slots",
+      "marquee": {
+        "complete": true,
+        "samples": 11
+      },
+      "position": {
+        "top": 643,
+        "height": 21,
+        "left": 177.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "6 turn(s) Top-Row Despair",
+      "marquee": {
+        "complete": true,
+        "samples": 3
+      },
+      "position": {
+        "top": 694.5,
+        "height": 26.5,
+        "left": 178,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "5 turn(s) Lock Slots",
+      "marquee": {
+        "complete": true,
+        "samples": 3
+      },
+      "position": {
+        "top": 750.5,
+        "height": 27,
+        "left": 178.5,
+        "page": 2,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 4,
+      "variant": "2",
+      "text": "BATTLE 4-2",
+      "position": {
+        "top": 482.5,
+        "height": 26,
+        "left": 340.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "starting",
+      "label": "STARTING STATE Technical Gunman",
+      "text": "STARTING STATE Technical Gunman",
+      "marquee": {
+        "complete": true,
+        "samples": 3,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 547,
+        "height": 20,
+        "left": 292.5,
+        "contentLeft": 280,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "99 turn(s) Slot Barrier ( [QCK] Slots 1 time(s))",
+      "marquee": {
+        "complete": true,
+        "samples": 7,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 613.5,
+        "height": 27,
+        "left": 187.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "starting",
+      "label": "STARTING STATE Technical Gunman",
+      "text": "STARTING STATE Technical Gunman",
+      "marquee": {
+        "complete": true,
+        "samples": 3,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 694.75,
+        "height": 20.25,
+        "left": 292.5,
+        "contentLeft": 280,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "99 turn(s) Slot Barrier ( [INT] Slots 1 time(s))",
+      "marquee": {
+        "complete": true,
+        "samples": 7,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 761,
+        "height": 27,
+        "left": 196,
+        "page": 3,
+        "edge": false,
+        "rightClipped": true
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "starting",
+      "label": "STARTING STATE Technical Gunman",
+      "text": "STARTING STATE Technical Gunman",
+      "marquee": {
+        "complete": true,
+        "samples": 3,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 842.75,
+        "height": 20,
+        "left": 292.5,
+        "contentLeft": 280.25,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "99 turn(s) Slot Barrier ( [STR] Slots 1 time(s))",
+      "marquee": {
+        "complete": true,
+        "samples": 8,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 909,
+        "height": 27,
+        "left": 187.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı",
+      "text": "PREEMPTIVE",
+      "position": {
+        "top": 987.5,
+        "height": 27,
+        "contentLeft": 284,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Left-Column [STR] [DEX] [QCK] [PSY] [INT] [G] [RCV] [TND] [BOMB]Slots to [BLOCK] Slots",
+      "pixelDiscovered": true,
+      "marquee": {
+        "complete": true,
+        "samples": 13,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 1057,
+        "height": 26,
+        "left": 176,
+        "page": 3,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "6 turn(s) Top-Row Despair",
+      "marquee": {
+        "complete": true,
+        "samples": 3,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 1112,
+        "height": 27,
+        "left": 178,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "5 turn(s) Lock Slots",
+      "marquee": {
+        "complete": true,
+        "samples": 3,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 1168,
+        "height": 27,
+        "left": 178.5,
+        "page": 3,
+        "edge": false,
+        "rightClipped": false
+      }
+    }
+  ],
+  "after": [
+    {
+      "kind": "event",
+      "trigger": "starting",
+      "label": "STARTING STATE Technical Gunman",
+      "text": "STARTING STATE Technical Gunman",
+      "marquee": {
+        "complete": true,
+        "samples": 3,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 461.75,
+        "height": 22.75,
+        "left": 292.5,
+        "contentLeft": 280,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "99 turn(s) Slot Barrier ( [STR] Slots 1 time(s))",
+      "marquee": {
+        "complete": true,
+        "samples": 5,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 531,
+        "height": 26.5,
+        "left": 178,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "preemptive",
+      "label": "İlk saldırı",
+      "text": "PREEMPTIVE",
+      "position": {
+        "top": 612,
+        "height": 21.5,
+        "contentLeft": 283.75,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "Left-Column [STR] [DEX] '[QCK] [PSY] [INT] [G] [RCV] [TND] [BOMB]Slots to [BLOCK] Slots",
+      "marquee": {
+        "complete": true,
+        "samples": 15,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 682.5,
+        "height": 20.5,
+        "left": 180,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "6 turn(s) Top-Row Despair",
+      "marquee": {
+        "complete": true,
+        "samples": 3,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 733.5,
+        "height": 27,
+        "left": 178,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "5 turn(s) Lock Slots",
+      "marquee": {
+        "complete": true,
+        "samples": 3,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 789.5,
+        "height": 27,
+        "left": 178.5,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "battle",
+      "number": 4,
+      "variant": "3",
+      "text": "BATTLE 4-3",
+      "position": {
+        "top": 912.5,
+        "height": 26,
+        "left": 340.5,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "starting",
+      "label": "STARTING STATE Technical Gunman",
+      "text": "STARTING STATE Technical Gunman",
+      "marquee": {
+        "complete": true,
+        "samples": 3,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 977,
+        "height": 20,
+        "left": 292.5,
+        "contentLeft": 280,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "99 turn(s) Slot Barrier ([PSY] Slots 1 time(s))",
+      "marquee": {
+        "complete": true,
+        "samples": 10,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 1043,
+        "height": 27.5,
+        "left": 178,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "event",
+      "trigger": "starting",
+      "label": "STARTING STATE Technical Gunman",
+      "text": "STARTING STATE Technical Gunman",
+      "marquee": {
+        "complete": true,
+        "samples": 3,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 1124.75,
+        "height": 20.25,
+        "left": 292.5,
+        "contentLeft": 280,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    },
+    {
+      "kind": "line",
+      "text": "99 turn(s) Slot Barrier ( [INT] Slots 1 time(s))",
+      "marquee": {
+        "complete": true,
+        "samples": 10,
+        "method": "pixels"
+      },
+      "position": {
+        "top": 1191,
+        "height": 27.5,
+        "left": 178,
+        "page": 4,
+        "edge": false,
+        "rightClipped": false
+      }
+    }
+  ],
+  "evidence": {
+    "range": {
+      "verified": true,
+      "min": 357.71621621621625,
+      "max": 389
+    }
+  }
+}

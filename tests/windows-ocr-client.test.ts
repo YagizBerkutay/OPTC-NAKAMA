@@ -18,6 +18,18 @@ test('one failed image does not discard other queued requests or restart the OCR
  const {client,spawned}=harness();try{const a=client.read('missing.png'),rejected=assert.rejects(a,/missing image/),b=client.read('valid.png'),child=spawned[0];child.stdout.write(JSON.stringify({id:child.requests[0].id,error:'missing image'})+'\n');child.stdout.write(JSON.stringify({id:child.requests[1].id,result:value})+'\n');await rejected;assert.deepEqual(await b,value);assert.equal(spawned.length,1);}finally{client.close();}
 });
 
+test('aborting one pending OCR request preserves other work and ignores only its late reply',async()=>{
+ const {client,spawned}=harness(),controller=new AbortController();let drained=false;try{const a=assert.rejects(client.read('a',{signal:controller.signal,onDrained:()=>{drained=true;}} as any),/cancel/i),b=client.read('b'),child=spawned[0],aId=child.requests[0].id,bId=child.requests[1].id;controller.abort();await a;assert.equal(drained,false);child.stdout.write(JSON.stringify({id:aId,result:value})+'\n');assert.equal(drained,true);child.stdout.write(JSON.stringify({id:bId,result:{...value,text:'Bind'}})+'\n');assert.equal((await b).text,'Bind');assert.equal(spawned.length,1);assert.equal(child.kills,0);}finally{client.close();}
+});
+
+test('aborting the last native OCR request retires its process and drains file cleanup before reuse',async()=>{
+ const {client,spawned}=harness(),controller=new AbortController();let drained=false;try{const read=assert.rejects(client.read('a',{signal:controller.signal,onDrained:()=>{drained=true;}} as any),/cancel/i);controller.abort();await read;assert.equal(spawned[0].kills,1);await new Promise(r=>setImmediate(r));assert.equal(drained,true);const next=client.read('b'),child=spawned[1];child.stdout.write(JSON.stringify({id:child.requests[0].id,result:value})+'\n');assert.deepEqual(await next,value);}finally{client.close();}
+});
+
+test('a retired process exit cannot drain a newer worker request',async()=>{
+ const {client,spawned}=harness(),controller=new AbortController();let drained=false;try{const oldRead=assert.rejects(client.read('old',{signal:controller.signal} as any),/cancel/i),old=spawned[0];old.kill=()=>{old.kills++;};controller.abort();await oldRead;const current=client.read('current',{onDrained:()=>{drained=true;}} as any),child=spawned[1];old.emit('exit',0);assert.equal(drained,false);child.stdout.write(JSON.stringify({id:child.requests[0].id,result:value})+'\n');assert.deepEqual(await current,value);assert.equal(drained,true);}finally{client.close();}
+});
+
 test('timeout cancels all queued work and the next read starts a fresh process',async()=>{
  const {client,spawned}=harness({timeout:15});try{const jobs=Promise.allSettled([client.read('a'),client.read('b')]),results=await jobs;assert.ok(results.every(r=>r.status==='rejected'&&/timed out/.test(r.reason.message)));assert.equal(spawned[0].kills,1);const next=client.read('c'),child=spawned[1];child.stdout.write(JSON.stringify({id:child.requests[0].id,result:value})+'\n');assert.deepEqual(await next,value);}finally{client.close();}
 });

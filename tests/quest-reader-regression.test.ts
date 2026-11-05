@@ -4,11 +4,25 @@ import fs from 'node:fs';
 import {createRequire} from 'node:module';
 const require=createRequire(import.meta.url),sharp=require('sharp');
 const {modalIdentity}=require('../electron/boss-behavior-core.cjs');
-const {headerHash,sameHeader}=require('../electron/boss-behavior.cjs');
+const {headerHash,sameHeader,createBehaviorReader}=require('../electron/boss-behavior.cjs');
 const {selectionButtons,createQuestRestrictionReader}=require('../electron/quest-restrictions.cjs');
 const {readRequirementButton}=require('../electron/quest-requirement-button.cjs');
 const load=(name:string)=>({image:fs.readFileSync(new URL('./fixtures/boss-behavior/'+name+'.png',import.meta.url)),ocr:JSON.parse(fs.readFileSync(new URL('./fixtures/boss-behavior/'+name+'.json',import.meta.url),'utf8'))});
 const hash=(p:ReturnType<typeof load>)=>headerHash(p.image,p.ocr.width,p.ocr.height,modalIdentity(p.ocr),p.ocr);
+test('Judge title omitted by full-screen OCR is recovered from the actual title pixels',{skip:process.platform!=='win32'},async()=>{
+ const {enrichTitle}=require('../electron/behavior-page.cjs');
+ const {closeOCR}=require('../electron/rule-ocr.cjs');
+ const title=fs.readFileSync(new URL('./fixtures/pka-header/judge-title.png',import.meta.url));
+ const image=await sharp({create:{width:900,height:1600,channels:3,background:'black'}}).composite([{input:title,left:99,top:152}]).png().toBuffer();
+ const lines=[['Difficulty 1 1',268],['QUEST GUIDE',345],['OK',1330]].map(([text,y])=>({text,words:[{text,x:300,y,width:200,height:30}]}));
+ const raw={width:900,height:1600,lines,text:lines.map(line=>line.text).join('\n')};
+ try{
+  assert.equal(modalIdentity(raw),null);
+  const identity=modalIdentity(await enrichTitle(image,raw));
+  assert.equal(identity?.title,'Clash!! Judge: Tyrannical Father');
+  assert.equal(identity?.difficulty,11);
+ }finally{await closeOCR();}
+});
 test('real Clash title moving 14 pixels is the same quest; difficulty and different title remain guarded',async()=>{
  const a=load('clash-moving-title-a'),b=load('clash-moving-title-b');
  const before=await hash(a),after=await hash(b);assert.equal(sameHeader(before,after),true);
@@ -68,6 +82,29 @@ test('recorded Clash CONNECTING frame waits for the same modal instead of becomi
  let index=0,pending=2;const inputs:string[]=[],progress:string[]=[];
  const reader=createBehaviorReader({capture:async()=>({image:Buffer.from([pending?253+pending--:index]),width:900,height:1600}),ocr:async(b:Buffer)=>b[0]===255?loading:b[0]===254?restart:pages[b[0]],scrollbar:async(b:Buffer)=>({known:true,top:b[0]===0,bottom:b[0]===4}),headerHash:async()=>'same',difficulty:async()=>9,input:async(_e:string,_d:string,a:string)=>{inputs.push(a);index++;},wait:async()=>{}});
  const result=await reader.read('adb','device',(t:string)=>progress.push(t));assert.equal(result.stages.length,5);assert.equal(result.observation.complete,true);assert.ok(progress.some(t=>t.includes('yükleniyor')));assert.deepEqual(inputs,['down','down','down','down']);
+});
+test('a partial QUEST GUIDE transition retries until its identity is readable, but unknown screens fail before input',async()=>{
+ const loading=JSON.parse(fs.readFileSync(new URL('./fixtures/boss-behavior/clash-connecting.json',import.meta.url),'utf8')),partial={...loading,text:'QUEST GUIDE',lines:loading.lines.filter((line:any)=>/QUEST GUIDE/i.test(line.text))},pages=[0,2,4,6,8].map(n=>JSON.parse(fs.readFileSync(new URL('./fixtures/boss-behavior/page-'+n+'.json',import.meta.url),'utf8')));
+ const {createBehaviorReader}=require('../electron/boss-behavior.cjs');let index=0,first=true,inputs:string[]=[],captures=0;
+ const reader=createBehaviorReader({capture:async()=>({image:Buffer.from([captures++]),width:900,height:1600}),ocr:async(image:Buffer)=>{if(first){first=false;return partial;}return pages[index];},scrollbar:async(image:Buffer)=>({known:true,top:index===0,bottom:index===4}),headerHash:async()=>'same',difficulty:async()=>9,input:async(_e:string,_d:string,a:string)=>{inputs.push(a);index++;},wait:async()=>{}});
+ const result=await reader.read('adb','device');assert.equal(result.stages.length,5);assert.ok(captures>1);assert.deepEqual(inputs,['down','down','down','down']);
+ const wrongInputs:string[]=[],wrong={width:900,height:1600,text:'Settings',lines:[{text:'Settings',words:[{text:'Settings',x:20,y:100,width:150,height:30}]}]};
+ const wrongReader=createBehaviorReader({capture:async()=>({image:Buffer.from([0]),width:900,height:1600}),ocr:async()=>wrong,scrollbar:async()=>({known:true,top:true,bottom:true}),headerHash:async()=>'same',difficulty:async()=>9,input:async(_e:string,_d:string,a:string)=>wrongInputs.push(a)});
+ await assert.rejects(wrongReader.read('adb','device'),/farklı ekrana/);assert.deepEqual(wrongInputs,[]);
+});
+test('cancelling a boss read aborts only its active OCR waiter and prevents input',async()=>{
+ let entered!:()=>void,signal:AbortSignal|undefined,inputs:string[]=[];const started=new Promise<void>(r=>entered=r),reader=createBehaviorReader({capture:async()=>({image:Buffer.from([0]),width:900,height:1600}),ocr:async(_image:Buffer,options:any)=>{signal=options?.signal;entered();return new Promise((_resolve,reject)=>signal?.addEventListener('abort',()=>reject(Error('OCR request cancelled.')),{once:true}));},scrollbar:async()=>({known:true,top:true,bottom:true}),headerHash:async()=>'same',difficulty:async()=>9,input:async(_e:string,_d:string,a:string)=>inputs.push(a)});
+ const read=reader.read('adb','device');await started;reader.cancel();await assert.rejects(read,/cancel/i);assert.equal(signal?.aborted,true);assert.deepEqual(inputs,[]);
+});
+test('the same read signal reaches deferred OCR in prepare, restrictions and PKA phases',async()=>{
+ const fixture=load('clash-lucci-split-title').ocr,pka=JSON.parse(fs.readFileSync(new URL('./fixtures/pka-guide/page-5.json',import.meta.url),'utf8'));
+ async function cancelledAt(io:any,started:Promise<void>){const reader=createBehaviorReader({capture:async()=>({image:Buffer.from([0]),width:900,height:1600}),ocr:async()=>fixture,scrollbar:async()=>({known:true,top:true,bottom:true}),headerHash:async()=>'same',difficulty:async()=>9,...io}),read=reader.read('adb','device');await started;reader.cancel();await assert.rejects(read,/cancel/i);}
+ for(const phase of ['prepare','restrictions','pka']){let signal:AbortSignal|undefined,enter!:()=>void;const entered=new Promise<void>(r=>enter=r),wait=async(check:any)=>{signal=check.signal;enter();return new Promise((_resolve,reject)=>signal?.addEventListener('abort',()=>reject(Error('OCR request cancelled.')),{once:true}));},io:any={};
+  if(phase==='prepare')io.prepare=async(_e:string,_d:string,check:any)=>wait(check);
+  if(phase==='restrictions')io.readRestrictions=async(_e:string,_d:string,_first:any,_identity:any,check:any)=>wait(check);
+  if(phase==='pka'){io.ocr=async()=>pka;io.readPKA=async(_e:string,_d:string,_first:any,check:any)=>wait(check);}
+  await cancelledAt(io,entered);assert.equal(signal?.aborted,true,phase+' should receive the active read signal');
+ }
 });
 test('legacy modal adapters also reject a different boss even when their pixel signature is reused',()=>{
  const {sameQuestModal}=require('../electron/quest-header.cjs'),identity=modalIdentity(load('clash-moving-title-a').ocr),snap={identity,header:'same'};

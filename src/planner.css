@@ -29,3 +29,4 @@
 .pka-boost-group{padding:16px 0}
 .pka-boost-group p:has(>.tag){display:flex;flex-wrap:wrap;gap:6px}
 .pka-page .actions button{min-height:44px}
+.gp-settings{border:0;margin:0;padding:0;min-width:0}

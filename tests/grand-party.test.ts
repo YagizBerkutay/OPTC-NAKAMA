@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import {createRequire} from 'node:module';
 import { newOwned, validateState, emptyState, type Character } from '../src/model';
 import { candidates, skillAt, type PlannerData, type PlannerUnit } from '../src/planning';
 import { OCTOBER_GP_SEASON, NEUTRAL_SEASON, gpLeader, gpAura, gpBurstValue, gpConditionText, grandObjective, planGrandParty, gpCandidates, rumbleEXPotential } from '../src/grand-party';
@@ -23,6 +24,17 @@ test('October boost requires an eligible leader and supplies a shared third Burs
   assert.equal(gpAura(normal,members.slice(8,13),members,f.data,OCTOBER_GP_SEASON),gpAura(normal,members.slice(8,13),members,f.data,NEUTRAL_SEASON));
   assert.ok(gpAura(eligible,members.slice(8,13),members,f.data,OCTOBER_GP_SEASON)>gpAura(eligible,members.slice(8,13),members,f.data,NEUTRAL_SEASON)+200);
   assert.equal(gpLeader(members[8],f.data,'power',{...OCTOBER_GP_SEASON,leaderMatch:'all'})!.seasonal,false);
+});
+
+test('live GP leader classes gate both Burst and teammate tag bonuses independently',()=>{
+  const {parseGrandPartyRules}=createRequire(import.meta.url)('../electron/grand-party-rules-core.cjs');
+  const season=parseGrandPartyRules('If leader is Driven/Slasher, [Elbaph Arc] [Revolutionary Army] [Royalty] teammates DEF Up Lv.5, Special CT Speed Up Lv.5, team HP, ATK, SPD, RCV Up Lv.5, GP Burst Launch Requirement -40%, GP Burst Uses +1 (Special Rule will only affect the Combat Power); During the last 30 s of battle, Special CT Speed Up & Damage Up!').season;
+  const f=fixture();f.characters[0].classes=['Driven'];f.data.units['2'].tags=['Royalty'];
+  const members=candidates(f.box,f.characters,f.data,'power'),eligible=gpLeader(members[0],f.data,'power',season)!,ineligible=gpLeader(members[8],f.data,'power',season)!;
+  assert.equal(eligible.uses,3);assert.equal(ineligible.uses,2);
+  assert.equal(gpAura(ineligible,members.slice(0,5),members,f.data,season),gpAura(ineligible,members.slice(0,5),members,f.data,NEUTRAL_SEASON));
+  const bonus=(index:number)=>gpAura(eligible,[members[index]],members,f.data,season)-gpAura(eligible,[members[index]],members,f.data,NEUTRAL_SEASON);
+  assert.equal(bonus(1)-bonus(2),35,'only the observed teammate tag receives DEF and CT bonuses');
 });
 
 test('GP levels and uses are separate from Rumble special levels; LLB unlock is respected',()=>{

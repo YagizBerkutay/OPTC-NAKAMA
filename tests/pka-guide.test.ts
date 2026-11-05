@@ -12,6 +12,31 @@ test('PKA guide has its own modal geometry without inventing a star difficulty o
  const changed=page(5);changed.lines=changed.lines.filter((l:any)=>!l.text.startsWith('Vs.'));assert.equal(core.modalIdentity(changed),null);
 });
 
+test('PKA requires independent zero-shift pixel evidence as well as any known stable scrollbar before settling',async()=>{
+ const first={image:Buffer.from('frame-0'),index:0},barPositions=[50,34,18,18,18,18],pixelShifts=[201,null,null,null,null],reads:any[]=[];let captureIndex=0;
+ const settled=await pka.settleGuideScroll(first,{body:{left:98,top:394,width:705,height:845},capture:async(options:any)=>{const frame={image:Buffer.from('frame-'+(++captureIndex)),index:captureIndex,pixelsOnly:!!options?.pixelsOnly};reads.push(frame);return frame;},scrollbar:async(frame:any)=>({known:true,thumbTop:barPositions[frame.index]??18,thumbBottom:(barPositions[frame.index]??18)+190}),measure:async()=>{const shift=pixelShifts.shift();return Number.isFinite(shift)?{shift,verified:true}:null;},alignment:{evidence:async()=>({shift:0,verified:true})},check(){},progress(){},wait:async()=>{}});
+ assert.equal(settled.pixelsOnly,false,'The settled baseline must be a fresh full OCR capture');assert.ok(captureIndex>=4,'It must discard the moving-scroll captures until the thumb settles');assert.ok(reads.filter(frame=>frame.pixelsOnly).length>=3);
+ await assert.rejects(pka.settleGuideScroll(first,{body:{left:98,top:394,width:705,height:845},capture:async(options:any)=>{if(!options?.pixelsOnly)throw Error('sameGuide rejected wrong title or level');return {image:Buffer.from('same'),pixelsOnly:true};},scrollbar:async()=>({known:true,thumbTop:12,thumbBottom:202}),measure:async()=>({shift:0,verified:true}),alignment:{evidence:async()=>({shift:0,verified:true})},check(){},progress(){},wait:async()=>{}}),/sameGuide rejected/);
+});
+
+test('The real 457px stationary-text alignment is not accepted as a settled PKA page when icon measurement is unknown',async()=>{
+ const tracking=require('../electron/behavior-tracking.cjs'),body={left:98,top:418,width:705,height:846},images=[2,3].map(n=>fs.readFileSync(new URL(`./fixtures/kizuna/scroll-static-${n}.png`,import.meta.url))),pageTokens=[2,3].map(n=>JSON.parse(fs.readFileSync(new URL(`./fixtures/kizuna/scroll-static-${n}.json`,import.meta.url),'utf8')).map(({position,...token}:any)=>core.positioned(token,position)));
+ let canceled=false,proof:any,captures=0;const alignment={evidence:async(...args:any[])=>{proof=await tracking.createScrollAlignment().evidence(...args);canceled=true;return proof;}};
+ await assert.rejects(pka.settleGuideScroll({image:images[0],index:0},{body,capture:async()=>({image:images[1],index:++captures}),scrollbar:require('../electron/scrollbar.cjs').scrollbar,measure:tracking.estimateScroll,alignment,tokens:(frame:any)=>pageTokens[frame.index||0],check(){if(canceled)throw Error('cancelled after real movement proof');},progress(){},wait:async()=>{}}),/cancelled after real movement proof/);
+ assert.equal(proof?.verified,true);assert.equal(proof.shift,457);assert.equal(captures,1,'A known body movement must be discarded before any fresh full OCR baseline');
+});
+
+test('Same title and selected range cannot verify first-page start after the expanded header scrolls out of view',{skip:process.platform!=='win32'},async()=>{
+ const sharp=require('sharp'),image=fs.readFileSync(new URL('./fixtures/pka-guide/expanded-80-99.png',import.meta.url)),body=core.modalIdentity(page(5)).body;
+ assert.ok(await pka.verifySettledBand(image,body,[80,99]),'the fully visible unique expanded range is the start proof');
+ const midBody=await sharp(image).extract({left:0,top:400,width:900,height:1200}).extend({top:0,bottom:400,left:0,right:0,background:'black'}).png().toBuffer();
+ await assert.rejects(pka.verifySettledBand(midBody,body,[80,99]),/seviye aralığı/,'same title and range are insufficient when the physical range header is clipped');
+});
+
+test('A settled PKA frame must still show the exact selected range, even when the boss title is unchanged',{skip:process.platform!=='win32'},async()=>{const image=fs.readFileSync(new URL('./fixtures/pka-guide/expanded-80-99.png',import.meta.url)),body=core.modalIdentity(page(5)).body,items=await pka.bands(image,body),band=pka.verifySettledBand&&await pka.verifySettledBand(image,body,[80,99]);assert.ok(band?.expanded);await assert.rejects(pka.verifySettledBand(image,body,[100,149]),/seviye aralığı/);});
+
+test('Stable scrollbar and same title do not prove zero body motion; cancellation exits the PKA settle wait',async()=>{let checks=0,captures=0;const messages:string[]=[],first={image:Buffer.from('frame-0')};await assert.rejects(pka.settleGuideScroll(first,{body:{left:0,top:0,width:600,height:800},capture:async()=>{captures++;return {image:Buffer.from('moving-'+captures)};},scrollbar:async()=>({known:true,thumbTop:18,thumbBottom:202}),measure:async()=>null,alignment:{evidence:async()=>null},check(){if(++checks===5)throw Error('cancelled');},progress(text:string){messages.push(text);},wait:async()=>{}}),/cancelled/);assert.ok(captures>0);assert.deepEqual(messages,['PKA · kaydırma konumu ölçülemedi; yeni okunabilir görüntü bekleniyor…']);});
+
 test('A missing animated home anchor is recovered only from all three fixed image regions',async()=>{
  const snap={ocr:{text:'PIRATE KING HELP ADV. STAMINA'},width:900,height:1600,image:Buffer.from('fixture')};let calls=0;
  assert.equal(await pka.verifyPKAHome(snap,async()=>({text:['PIRATE KING','HELP LIST','ADV. STAMINA'][calls++]})),true);assert.equal(calls,3);
@@ -29,6 +54,14 @@ test('a level accordion just below GUIDE tabs does not turn the same PKA into a 
 });
 test('Current PKA range pixels include both endpoints for one-, two- and three-digit bands',{skip:process.platform!=='win32'},async()=>{const image=fs.readFileSync(new URL('./fixtures/pka-guide/current-bands.png',import.meta.url)),items=await pka.bands(image,{left:98,top:394,width:705,height:845});assert.equal(items.length,7);assert.deepEqual(await pka.rangeNumber(image,items[0]),[1,59]);assert.deepEqual(await pka.rangeNumber(image,items[3]),[100,149]);assert.deepEqual(await pka.rangeNumber(image,items[6]),[250,300]);});
 test('An expanded bright header retains the previously verified band only with a complete independent reread and matching native tail',{skip:process.platform!=='win32'},async()=>{const image=fs.readFileSync(new URL('./fixtures/pka-guide/current-expanded-range.png',import.meta.url)),items=await pka.bands(image,{left:98,top:394,width:705,height:845});assert.equal(items.length,1);assert.equal(items[0].expanded,true);assert.deepEqual(await pka.rangeNumber(image,items[0],[1,59]),[1,59]);assert.notDeepEqual(await pka.rangeNumber(image,items[0],[2,59]),[2,59]);});
+
+test('A real top-clipped 100–149 header reads its full visible digits instead of cropping their tops away',{skip:process.platform!=='win32'},async()=>{
+ try{const image=fs.readFileSync(new URL('./fixtures/pka-guide/clipped-top-range-100-149.png',import.meta.url)),items=await pka.bands(image,{left:98,top:394,width:705,height:845});
+ assert.equal(items.length,1);assert.equal(items[0].clippedTop,true);assert.equal(items[0].expanded,false);
+ assert.deepEqual(await pka.rangeNumber(image,items[0],[100,149]),[100,149]);
+ assert.notDeepEqual(await pka.rangeNumber(image,items[0],[100,199]),[100,199]);
+ }finally{await require('../electron/rule-ocr.cjs').closeOCR();}
+});
 test('PKA clipping excludes other level ranges and never merges their repeated Battle 1',()=>{
  const o=page(5),identity=core.modalIdentity(o),tokens=pka.clipBand(o,identity,803,1238);assert.ok(tokens.some((t:any)=>t.kind==='battle'&&t.number===1));assert.ok(tokens.every((t:any)=>t.position.top>=803));
  const clipped=pka.clipBand(o,identity,803,1000);assert.ok(clipped.every((t:any)=>t.position.top<1000));assert.ok(!clipped.some((t:any)=>t.kind==='battle'&&t.number===3));

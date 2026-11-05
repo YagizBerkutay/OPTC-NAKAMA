@@ -39,7 +39,7 @@ function durationEffects(text){
     if(/immun(?:e|ity)|resist(?:ance)?|remove|recover|reduce.*duration/i.test(line))continue;
     const matching=patterns.filter(([key,re])=>re.test(line)&&!(key==='damageReduction'&&/Slot Damage Reduction/i.test(line))&&!(key==='bind'&&/Special|Slot|Orb|Ship/i.test(line))&&!(key==='poison'&&/Poison.*(?:Slot|Orb)|(?:Slot|Orb).*\[POISON\]/i.test(line)));
     if(!matching.length)continue;
-    const before=line.match(/\b(\d{1,2})\s*turn(?:\(s\)|s)?\b/i),after=line.match(/(?:for|duration[: ]+)\s*(\d{1,2})\s*turn/i);const number=Number(before?.[1]||after?.[1]);
+    const before=line.match(/(?<![\w.,/])(\d{1,2})(?![\w.,/])\s*turn(?:\(s\)|s)?\b/i),after=line.match(/(?:for\s+|duration[: ]+)(\d{1,2})(?![\w.,/])\s*turn/i);const number=Number(before?.[1]||after?.[1]);
     const condition=line.replace(/\(?take damage when performing PERFEC[TIl](?: attacks?)?\)?/gi,'');
     if(!number||number>99||/\bif\b|\bwhen\b|\bchance\b/i.test(condition)){unreadable.push(line);continue;}
     for(const [key]of matching)result.set(key,Math.max(result.get(key)||0,number));
@@ -55,7 +55,7 @@ function pageTokens(ocr,identity){
     // 0, 8 or @; these pixels are not a duration or a damage value. Only remove
     // small isolated glyphs wholly in that gutter, never words in the text lane.
     const words=r.words.filter(w=>!(w.x+w.width<ocr.width*.19&&(w.text.length===1||/^[\d@O()]+$/i.test(w.text))));
-    return {kind:'line',text:words.map(w=>w.text).join(' ').trim()};
+    return {kind:'line',text:words.map(w=>w.text).join(' ').trim(),...(r.words.some(w=>w.effectProofRequired)?{requiresEffectProof:true,requiresEffectCondition:r.words.some(w=>w.effectProofConditionRequired)}:{})};
   });tokens.forEach((t,i)=>{
     let words=t.kind==='line'?list[i].words.filter(w=>!(w.x+w.width<ocr.width*.19&&(w.text.length===1||/^[\d@O()]+$/i.test(w.text)))):list[i].words;
     const labelWords=t.kind==='event'?words.filter(w=>/^(?:PRE[ -]?EMPTIVE|STARTING|STATE|INTERRUPTION?|DEFEATED|DEFEAT|TURN)$/i.test(w.text)):[];
@@ -139,7 +139,7 @@ function conflictingNumbers(a,b){
   return !long.some((_,i)=>i+short.length<=long.length&&short.every((n,j)=>n===long[i+j]));
 }
 function numericFragment(a,b){return a.kind==='line'&&b.kind==='line'&&((/^\s*\d+\s*$/.test(a.text)&&/[a-z]/i.test(b.text))||(/^\s*\d+\s*$/.test(b.text)&&/[a-z]/i.test(a.text)));}
-function mergeByPosition(existing,next,evidence,onAlignment){
+function mergeByPosition(existing,next,evidence,onAlignment,retainNumericConflicts){
   const page=existing.at(-1)?.position?.page;if(!page||!next.every(t=>t.position))return null;
   const previous=existing.map((t,index)=>({t,index})).filter(v=>v.t.position?.page===page);
   const verified=Number.isFinite(evidence?.shift)&&evidence.verified===true;
@@ -149,7 +149,7 @@ function mergeByPosition(existing,next,evidence,onAlignment){
   const shifts=[];
   for(const {t}of previous)for(const n of next)if(exact(t,n)){
     const shift=t.position.top-n.position.top;
-    if(shift>=-4&&shift<=600&&!shifts.some(v=>Math.abs(v-shift)<=4))shifts.push(shift);
+    if(shift>=-4&&shift<=600&&!shifts.includes(shift))shifts.push(shift);
   }
   const candidates=shifts.map(shift=>{
     const used=new Set(),matches=[];
@@ -159,7 +159,8 @@ function mergeByPosition(existing,next,evidence,onAlignment){
   const best=candidates[0];
   const shift=verified?evidence.shift:best?.shift;
   if(shift===undefined)return null;
-  if(!verified&&candidates[1]&&best.matches.length-candidates[1].matches.length<2)throw Error('Kaydırma konumu belirsiz; sayfalar güvenle birleştirilemedi.');
+  const runner=best&&candidates.find(candidate=>Math.abs(candidate.shift-best.shift)>8);
+  if(!verified&&runner&&best.matches.length-runner.matches.length<2)throw Error('Kaydırma konumu belirsiz; sayfalar güvenle birleştirilemedi.');
   const joined=[...existing],pending=[];
   // A row temporarily omitted by OCR remains in the same physical list.
   // Reproject it as well, so a dropped final marquee does not lose the current
@@ -175,6 +176,10 @@ function mergeByPosition(existing,next,evidence,onAlignment){
     if(matches.length>1)return null;
     if(matches.length){
       const p=matches[0];
+      if(retainNumericConflicts&&p.t.kind==='battle'&&n.kind==='invalidBattle'){
+        const damaged=n.text.match(/^BATTLE\s+[a-z?]+(?:\s*-\s*(\d+))?$/i);
+        if(damaged&&Number(damaged[1]||0)===Number(p.t.variant||0))continue;
+      }
       if(p.t.kind!==n.kind)return null;
       if(p.t.kind==='battle'&&(p.t.number!==n.number||p.t.variant!==n.variant))return null;
       if(p.t.kind==='event'&&(p.t.trigger!==n.trigger||p.t.battleTurn!==n.battleTurn))return null;
@@ -182,6 +187,21 @@ function mergeByPosition(existing,next,evidence,onAlignment){
       // row. preferRow already keeps that full reading; apply the same rule
       // before checking numbers rather than rejecting an unreadable half glyph.
       if(!(n.kind==='line'&&n.position.edge)&&conflictingNumbers(p.t,n)){
+        if(retainNumericConflicts&&n.kind==='line'){
+          const damagedPercent=/§(?=\d*%)/.exec(n.text);
+          if(p.t.marquee?.complete&&damagedPercent){
+            const i=damagedPercent.index;
+            if(/\d/.test(p.t.text[i]||'')&&p.t.text.slice(0,i)===n.text.slice(0,i)&&p.t.text.slice(i+1)===n.text.slice(i+1)){
+              joined[p.index]=positioned({...p.t},n.position);
+              continue;
+            }
+          }
+          const shape=text=>text.replace(/[§\d.,]+/g,'').replace(/\s+/g,' ').trim().toLowerCase();
+          if(shape(p.t.text)===shape(n.text)){
+            joined[p.index]=positioned({...p.t,marquee:{complete:false,samples:p.t.marquee?.samples||0},numericConflict:n.text},n.position);
+            continue;
+          }
+        }
         // A tracked but incomplete horizontal fragment cannot overrule an
         // already observed row. Retain it as partial if neither is complete.
         // Untracked / complete conflicting values still fail the old guard.
@@ -219,13 +239,13 @@ function clippedLine(a,b){
   const trim=s=>normalize(s.replace(/^\s*\d+\s*(?=turn)/i,'')),x=trim(a.text),y=trim(b.text),short=x.length<y.length?x:y,long=x.length<y.length?y:x;
   return short.length>=16&&short.length>=long.length*.45&&long.startsWith(short);
 }
-function mergeTokens(existing,next,evidence,onAlignment){
+function mergeTokens(existing,next,evidence,onAlignment,retainNumericConflicts=false){
   if(!existing.length)return [...next];
   const clean=next.filter(t=>t.kind!=='heading');let overlap=0;
   if(existing.every(t=>t.kind==='heading'))return [...existing,...clean];
   // Three distinct stable rows must establish one unambiguous vertical shift.
   // This identifies physical rows even when their marquee text changes.
-  const positionedMerge=mergeByPosition(existing,clean,evidence,onAlignment);if(positionedMerge)return positionedMerge;
+  const positionedMerge=mergeByPosition(existing,clean,evidence,onAlignment,retainNumericConflicts);if(positionedMerge)return positionedMerge;
   for(let n=1;n<=Math.min(existing.length,clean.length);n++)if(existing.slice(-n).every((t,i)=>t.kind===clean[i].kind&&normalize(t.text)===normalize(clean[i].text))&&orderedBattles([...existing,...clean.slice(n)]))overlap=n;
   if(overlap)return [...existing.slice(0,-overlap),...existing.slice(-overlap).map((t,i)=>preferRow(t,clean[i])),...clean.slice(overlap)];
   // Scrolling marquee text can be clipped differently in adjacent screenshots.
@@ -261,7 +281,7 @@ function encounterFromTokens(identity,tokens,metadata){
   const stages=[],warnings=[],seen=new Set();let stage,event,sourceBattle='',lastNumber=0;
   const marquees=tokens.filter(t=>t.marquee);
   const partial=marquees.filter(t=>!t.marquee.complete);
-  for(const t of partial)warnings.push('Kayan satırın tamamı doğrulanamadı · '+t.text);
+  for(const t of partial)warnings.push(t.numericConflict?'Sayı doğrulanamadı · '+t.text+' / '+t.numericConflict:'Kayan satırın tamamı doğrulanamadı · '+t.text);
   if(tokens.some(t=>t.numericFragment))warnings.push('Kayan satırın yalnız sayısı görünen eksik görüntüsü kullanılmadı; aynı konumdaki metinli okuma korundu.');
   for(const token of tokens){
     if(token.kind==='invalidBattle')throw Error('Bir Battle başlığı okunamadı; aşamalar birleştirilmedi. Yeniden okut.');
